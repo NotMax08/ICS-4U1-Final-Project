@@ -14,9 +14,12 @@ public class Player extends ScrollingActor {
     // State
     private boolean onGround = false;
     private boolean inDoor = false;
+    private boolean direction = true; // false = left, true = right
 
     // Counting variables
     private int fallCount = 0;
+    private int moveCount = 0;
+    private int movingIndex = 0;
 
     // Set Inventory
     private InventoryDisplay inventory;
@@ -29,6 +32,7 @@ public class Player extends ScrollingActor {
         img.fillRect(0, 0, 30, 40);
         setImage(img);
          */
+        setInventory(inventory);
         GreenfootImage image = new GreenfootImage("standingRight.png");
         image.scale(50,100);
         setImage(image);
@@ -45,11 +49,17 @@ public class Player extends ScrollingActor {
     private void handleInput() {
         // Horizontal movement
         if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
+            direction = false;
             velocityX = -MOVE_SPEED;
+            movingAnimation();
         } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+            direction = true;
             velocityX = MOVE_SPEED;
+            movingAnimation();
         } else {
             velocityX = 0;
+            
+            // set standing image according to direction (true or false)
         }
 
         // Jump
@@ -65,7 +75,7 @@ public class Player extends ScrollingActor {
 
         // Access Inventory
         if ((Greenfoot.isKeyDown("tab")) && !inventory.isFull()){
-
+            
         }
     }
 
@@ -82,6 +92,21 @@ public class Player extends ScrollingActor {
         }else{
             // stun when landed
             // use boolean
+            fallCount = 0;
+        }
+    }
+    
+    private void movingAnimation(){
+        if(movingIndex == 1){
+            if(direction){
+                
+            }else{
+                
+            }
+        }
+        moveCount++;
+        if(moveCount % 3 == 0){
+            movingIndex++;
         }
     }
 
