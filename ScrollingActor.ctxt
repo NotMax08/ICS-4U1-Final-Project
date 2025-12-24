@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=ScrollingActor
+comment1.params=camera
+comment1.target=ScrollingActor(Camera)
+comment2.params=x\ y
+comment2.target=void\ setWorldPosition(int,\ int)
+comment3.params=dx\ dy
+comment3.target=void\ moveWorld(int,\ int)
+comment4.params=
+comment4.target=void\ updateScreenPosition()
+comment5.params=
+comment5.target=int\ getWorldX()
+comment6.params=
+comment6.target=int\ getWorldY()
+numComments=7

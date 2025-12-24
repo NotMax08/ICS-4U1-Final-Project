@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Camera
+comment1.params=screenW\ screenH\ worldW\ worldH
+comment1.target=Camera(int,\ int,\ int,\ int)
+comment2.params=worldX\ worldY
+comment2.target=void\ centerOn(int,\ int)
+comment3.params=
+comment3.target=int\ getX()
+comment4.params=
+comment4.target=int\ getY()
+comment5.params=worldX
+comment5.target=int\ worldToScreenX(int)
+comment6.params=worldY
+comment6.target=int\ worldToScreenY(int)
+comment7.params=worldX\ worldY\ width\ height
+comment7.target=boolean\ isVisible(int,\ int,\ int,\ int)
+numComments=8

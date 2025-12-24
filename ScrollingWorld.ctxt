@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=ScrollingWorld
+comment1.params=
+comment1.target=ScrollingWorld()
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ updateAllActors()
+comment4.params=worldX\ worldY\ width\ height
+comment4.target=void\ addPlatformAtWorldPos(int,\ int,\ int,\ int)
+numComments=5

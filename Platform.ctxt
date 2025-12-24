@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Platform
+comment1.params=camera\ width\ height
+comment1.target=Platform(Camera,\ int,\ int)
+comment2.params=
+comment2.target=int\ getWidth()
+comment3.params=
+comment3.target=int\ getHeight()
+numComments=4
