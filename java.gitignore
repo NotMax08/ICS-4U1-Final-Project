@@ -1,0 +1,31 @@
+# Compiled class files
+*.class
+*.ctxt
+
+# BlueJ/Greenfoot files
+*.bluej
+*.greenfoot
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Log files
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# Greenfoot specific
+standalone.properties
