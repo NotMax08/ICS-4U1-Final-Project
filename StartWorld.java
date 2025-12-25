@@ -18,7 +18,7 @@ public class StartWorld extends World
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
         super(600, 400, 1); 
         setBackground(startworld);
-        //Button start = new Button ();
-        
+        Button start = new Button ("Start", 50, 100, Color.WHITE, 4, Color.BLACK, 20, Color.BLACK, "startworld", false );
+        addObject(start,getWidth()/2,(getHeight()/4) * 3); 
     }
 }
