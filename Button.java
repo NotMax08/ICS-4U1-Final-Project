@@ -29,13 +29,8 @@ public class Button extends Actor
     private boolean toggleable;
     private GreenfootImage normalImage;
     private GreenfootImage selectedImage;
-    GreenfootSound click = new GreenfootSound("mouseclick.mp3");
-    GreenfootImage chiu = new GreenfootImage("chiu.png");
-    GreenfootImage jayden = new GreenfootImage("jayden.png");
-    GreenfootImage paul = new GreenfootImage("chapman.png");
-    GreenfootImage left = new GreenfootImage("leftbubble.png");
-    GreenfootImage right = new GreenfootImage("rightbubble.png");
-    GreenfootImage middle = new GreenfootImage ("middlebubble.png");
+    //GreenfootSound click = new GreenfootSound("mouseclick.mp3");
+    
     private int clickCounter = 0;
     /**
      * Accepts paramaters to fully customize a button and has a toggleable boolean that 
@@ -153,7 +148,7 @@ public class Button extends Actor
                 toggleSelection();
             }
             handleClick();
-            click.play();
+            //click.play();
         }
     }
     
@@ -182,34 +177,20 @@ public class Button extends Actor
     public boolean isSelected(){
         return isSelected;
     }
-    /**
-     * Draws the survivors in the StartWorld for the dialogue.
-     */
-    public void drawSurvivors(){
-        World world = getWorld();
-        chiu.scale(200,200);
-        paul.scale(200,200);
-        jayden.scale(200,200);
-        world.getBackground().drawImage(chiu, (getWorld().getWidth()/3) - 100, 500);
-        world.getBackground().drawImage(jayden, (getWorld().getWidth()/2) - 100, 500);
-        world.getBackground().drawImage(paul, ((getWorld().getWidth()/3) * 2) - 100, 500);
-    }
+    
     /**
      * 
      * Handles actions when clicking all buttons in this project. Uses buttonID to 
      * ensure each button functions as intended when clicked.
      */
     public void handleClick(){
-        /*
+        
         // The button in ChooseWorld that leads to the GameWorld
-        if(buttonID.equals("simulation")){
-            World currentWorld = getWorld();
-            if(currentWorld instanceof ChooseWorld){
-                ChooseWorld chooseWorld = (ChooseWorld) currentWorld;
-                chooseWorld.startSimulation();
-            }
+        if(buttonID.equals("startworld")){
+            Greenfoot.setWorld(new ScrollingWorld());
             return;
         }
+        /*
         //The button on the end screen that returns to the start
         if(buttonID.equals("backtostart")){
             Greenfoot.setWorld(new StartWorld());
