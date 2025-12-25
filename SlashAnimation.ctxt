@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=SlashAnimation
+comment0.text=\r\n\ Sword\ slashing\ animation\ effect\r\n\ \r\n\ @author\ Abithan,\ altered\ by\ Paul\ and\ Claude\r\n\ \r\n
+comment1.params=
+comment1.target=SlashAnimation()
+comment1.text=\r\n\ Constructor\ -\ Simple\ version\ with\ default\ settings\r\n
+comment2.params=numFrames\ speed
+comment2.target=SlashAnimation(int,\ int)
+comment2.text=\r\n\ Constructor\ -\ Customizable\ version\r\n\ \r\n\ @param\ numFrames\ Number\ of\ animation\ frames\ (images)\r\n\ @param\ speed\ Acts\ between\ frame\ changes\ (lower\ \=\ faster)\r\n
+comment3.params=
+comment3.target=void\ animateSlash()
+comment3.text=\r\n\ Animate\ the\ sword\ slash\ by\ switching\ frames.\r\n
+comment4.params=
+comment4.target=void\ act()
+comment4.text=\r\n\ Cycles\ through\ the\ various\ frames\ for\ the\ animation.\r\n
+numComments=5

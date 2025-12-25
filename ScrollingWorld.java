@@ -1,5 +1,8 @@
 import greenfoot.*;
-
+/**
+ * @author Paul assisted by Claude
+ * 
+ */
 // ===== MAIN WORLD CLASS =====
 public class ScrollingWorld extends World {
     private Camera camera;

@@ -1,6 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
-// ===== PLATFORM CLASS =====
+/**
+ * @author Paul
+ */
 class Platform extends ScrollingActor {
     private int width, height;
     

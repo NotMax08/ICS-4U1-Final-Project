@@ -1,6 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
-// ===== PLAYER CLASS =====
+/**
+ * @author Paul
+ */
 class Player extends ScrollingActor {
     private int velocityY = 0;
     private boolean onGround = false;

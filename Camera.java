@@ -1,5 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+/**
+ * @author Claude
+ */
 // ===== CAMERA CLASS =====
 class Camera {
     private int x, y; // Camera position in world coordinates
