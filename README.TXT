@@ -1,12 +1,11 @@
-------------------------------------------------------------------------
-This is the project README file. Here, you should describe your project.
-Tell the reader (someone who does not know anything about this project)
-all they need to know. The comments should usually include at least:
-------------------------------------------------------------------------
+Hollow Knight Inspired Platformer
+Group Members: Paul, Max, Julian, Robin
 
-PROJECT TITLE:
-PURPOSE OF PROJECT:
-VERSION or DATE:
-HOW TO START THIS PROJECT:
-AUTHORS:
-USER INSTRUCTIONS:
+Features:
+2D Array system that forms a grid in each room, different numbers mean empty space, platforms and boundaries
+Player has a needle as a weapon that deals melee damage and has a weapon upgrade to be found as well as a ranged ability.
+4 different enemies including one boss.
+Gravity system for player jumping.
+Health system for player and enemies.
+Soul system to gather energy when player hits enemies and charges to heal or used ranged ability if unlocked.
+
