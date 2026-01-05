@@ -38,6 +38,11 @@ class Player extends ScrollingActor {
             velocityY = JUMP_STRENGTH;
             onGround = false;
         }
+        
+        // Speeding up fall
+        if(Greenfoot.isKeyDown("down") || Greenfoot.isKeyDown("s") && !onGround){
+            velocityY += GRAVITY;
+        }
     }
     
     private void applyGravity() {
