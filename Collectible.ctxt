@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Collectible
+comment1.params=camera
+comment1.target=Collectible(Camera)
+comment2.params=
+comment2.target=void\ act()
+comment3.params=player
+comment3.target=boolean\ intersects(Player)
+numComments=4
