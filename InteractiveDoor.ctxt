@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=InteractiveDoor
+comment0.text=\r\n\ Doorways\ to\ new\ rooms\ opened\ by\ pressing\ key\ on\ keyboard.\r\n\ \r\n\ @author\ Paul\ \r\n
+comment1.params=height\ width
+comment1.target=InteractiveDoor(int,\ int)
+numComments=2
