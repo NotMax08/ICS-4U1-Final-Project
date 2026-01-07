@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=Crawler
+comment0.text=\n\ Crawler\ -\ Ground\ enemy\ that\ patrols\ platforms\ and\ chases\ player\n\ \n\ @author\ Max\ Yuan\n\ @version\ 1.0\n
+comment1.params=camera
+comment1.target=Crawler(Camera)
+comment10.params=dmg
+comment10.target=void\ takeDamage(int)
+comment2.params=
+comment2.target=void\ idleBehavior()
+comment3.params=
+comment3.target=void\ patrol()
+comment4.params=
+comment4.target=void\ chase()
+comment5.params=
+comment5.target=void\ attack()
+comment6.params=
+comment6.target=void\ flipImage()
+comment7.params=
+comment7.target=boolean\ isBlocked()
+comment8.params=
+comment8.target=void\ fall()
+comment9.params=
+comment9.target=boolean\ onGround()
+numComments=11
