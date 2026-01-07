@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=ScrollingWorld
-comment0.text=\r\n\ @author\ Paul\ assisted\ by\ Claude\r\n\ \r\n
+comment0.text=\n\ @author\ Paul\ assisted\ by\ Claude\n\ \n
 comment1.params=
 comment1.target=ScrollingWorld()
 comment2.params=
@@ -11,12 +11,4 @@ comment4.params=worldX\ worldY\ width\ height
 comment4.target=void\ addPlatformAtWorldPos(int,\ int,\ int,\ int)
 comment5.params=
 comment5.target=Camera\ getCamera()
-comment6.params=worldX
-comment6.target=int\ worldToTileX(int)
-comment7.params=worldY
-comment7.target=int\ worldToTileY(int)
-comment8.params=tileX
-comment8.target=int\ tileToWorldX(int)
-comment9.params=tileY
-comment9.target=int\ tileToWorldY(int)
-numComments=10
+numComments=6
