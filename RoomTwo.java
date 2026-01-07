@@ -11,11 +11,11 @@ public class RoomTwo extends GameWorld {
         initializeMapGrid();
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 100, 1200);
+            transferPlayer(existingPlayer, 100, 900);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(100, 1200);
+            player.setWorldPosition(100, 900);
         }
         
         if (camera != null && player != null) {
