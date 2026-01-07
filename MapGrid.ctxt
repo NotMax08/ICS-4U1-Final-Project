@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=MapGrid
+comment0.text=\r\n\ Grid\ to\ be\ called\ for\ each\ world.\ \r\n\ \r\n\ @author\ Paul\r\n\ \r\n
+comment1.params=TILE_WIDTH\ TILE_HEIGHT\ WORLD_WIDTH\ WORLD_HEIGHT\ WALLS\ PLATFORM\ DOOR\ BREAKABLE\ wallsDataX\ platformDataX\ doorDataX\ breakableDataX\ wallsDataY\ platformDataY\ doorDataY\ breakableDataY
+comment1.target=MapGrid(int,\ int,\ int,\ int,\ boolean,\ boolean,\ boolean,\ boolean,\ int[],\ int[],\ int[],\ int[],\ int[],\ int[],\ int[],\ int[])
+comment1.text=\r\n\ @author\ Paul\r\n\ Create\ a\ 2d\ array\ to\ be\ used\ for\ each\ separate\ room.\ Accepts\ parameters\ and\ arrays\ from\ world\ class\ \r\n\ where\ it\ is\ called\ to\ be\ used\ to\ fill\ the\ 2d\ array\ for\ different\ block\ types\ for\ the\ player\ to\ interact\r\n\ with.\ Has\ barrier\ walls\ for\ edge\ of\ map,\ platforms\ to\ jump\ on,\ doors\ to\ move\ rooms\ and\ breakable\ objects\ \r\n\ to\ interact\ with.\ \\\r\n\ \r\n\ Note\:\ A\ lot\ of\ the\ code\ here\ assumes\ perfect\ arrays\ from\ the\ user\ meaning\ no\ overlap\ in\ tiles,\r\n\ not\ calling\ for\ tiles\ out\ of\ bounds,\ dividing\ world\ to\ perfect\ tiles,\ etc.\ This\ is\ intentional.\r\n\ \r\n\ @param\ TILE_WIDTH\ is\ width\ of\ each\ tile\ in\ grid\r\n\ @param\ TILE_HEIGHT\ is\ height\ of\ tile\ in\ grid\r\n\ @param\ WORLD_WIDTH\ is\ width\ of\ world\ to\ use\ to\ calculate\ how\ many\ tiles\ in\ grid\r\n\ @param\ WOLRD_HEIGTH\ is\ height\ of\ world\ to\ help\ caluclate\ num\ tiles\r\n\ @param\ WALLS\ is\ boolean\ if\ border\ walls\ exist\r\n\ @param\ PLATFORM\ is\ boolean\ if\ platforms\ exist\r\n\ @param\ DOOR\ is\ boolean\ if\ there\ are\ doors\ in\ the\ world\r\n\ @param\ BREAKABLE\ is\ boolean\ if\ there\ are\ breakable\ objects\r\n\ @param\ wallsDataX\ is\ array\ with\ x\ values\ in\ grid\ for\ walls\r\n\ @param\ platformDataX\ is\ array\ with\ x\ values\ for\ paltforms\ in\ grid\r\n\ @param\ doorDataX\ is\ array\ with\ x\ values\ for\ door\ tiles\ in\ grid\r\n\ @param\ breakableDataX\ is\ array\ with\ x\ value\ for\ breakables\ in\ grid\r\n\ @param\ wallsDataY\ is\ array\ with\ y\ values\ for\ walls\ in\ grid\r\n\ @param\ platformDataY\ is\ array\ with\ y\ values\ for\ platforms\ in\ grid\r\n\ @param\ doorDataY\ is\ array\ with\ y\ values\ for\ doors\ in\ grid\r\n\ @param\ breakableDataY\ is\ array\ with\ y\ values\ for\ breakables\ in\ grid\r\n
+comment2.params=
+comment2.target=void\ loadLevelData()
+comment3.params=
+comment3.target=int[][]\ getTileMap()
+comment4.params=x\ y
+comment4.target=int\ getTileAt(int,\ int)
+comment5.params=
+comment5.target=int\ getTilesWide()
+comment6.params=
+comment6.target=int\ getTilesHigh()
+comment7.params=
+comment7.target=int\ getTileWidth()
+comment8.params=
+comment8.target=int\ getTileHeight()
+numComments=9

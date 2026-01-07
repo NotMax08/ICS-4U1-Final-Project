@@ -16,6 +16,10 @@ public class ScrollingWorld extends World {
     private static final int SCREEN_WIDTH = 800;
     private static final int SCREEN_HEIGHT = 600;
     
+    private int[][] tileMap;
+    private static final int TILE_SIZE = 40; // Size of each tile in world coords
+    private static final int TILES_WIDE = WORLD_WIDTH / TILE_SIZE;  // 50 tiles
+    private static final int TILES_HIGH = WORLD_HEIGHT / TILE_SIZE; // 30 tiles
     public ScrollingWorld() {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         
@@ -70,5 +74,20 @@ public class ScrollingWorld extends World {
     
     public Camera getCamera() {
         return camera;
+    }
+        public int worldToTileX(int worldX) {
+        return worldX / TILE_SIZE;
+    }
+    
+    public int worldToTileY(int worldY) {
+        return worldY / TILE_SIZE;
+    }
+    
+    public int tileToWorldX(int tileX) {
+        return tileX * TILE_SIZE;
+    }
+    
+    public int tileToWorldY(int tileY) {
+        return tileY * TILE_SIZE;
     }
 }
