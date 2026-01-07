@@ -1,0 +1,27 @@
+#BlueJ class context
+comment0.target=GameWorld
+comment1.params=
+comment1.target=GameWorld()
+comment10.params=tileX
+comment10.target=int\ tileToWorldX(int)
+comment11.params=tileY
+comment11.target=int\ tileToWorldY(int)
+comment12.params=
+comment12.target=void\ initializeMapGrid()
+comment2.params=
+comment2.target=void\ act()
+comment3.params=
+comment3.target=void\ updateBackground()
+comment4.params=
+comment4.target=void\ updateAllActors()
+comment5.params=existingPlayer\ startX\ startY
+comment5.target=void\ transferPlayer(Player,\ int,\ int)
+comment6.params=
+comment6.target=Camera\ getCamera()
+comment7.params=
+comment7.target=MapGrid\ getMapGrid()
+comment8.params=worldX
+comment8.target=int\ worldToTileX(int)
+comment9.params=worldY
+comment9.target=int\ worldToTileY(int)
+numComments=13

@@ -127,7 +127,7 @@ public class Player extends ScrollingActor {
     }
     // Check if a specific world coordinate contains a solid tile
     private boolean checkTileAt(int worldX, int worldY) {
-        RoomOne world = (RoomOne) getWorld();
+        GameWorld world = (GameWorld) getWorld();
         if (world == null) return false;
         
         int tileX = world.worldToTileX(worldX);
@@ -139,7 +139,7 @@ public class Player extends ScrollingActor {
         return tileType == 1 || tileType == 2 ;
     }
     private boolean checkDoorAt(int worldX, int worldY){
-        RoomOne world = (RoomOne) getWorld();
+        GameWorld world = (GameWorld) getWorld();
         if (world == null) return false;
         
         int tileX = world.worldToTileX(worldX);
@@ -150,7 +150,16 @@ public class Player extends ScrollingActor {
         
         return tileType == 3 ;
     }
-    
+    private void enterDoor() {
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null) return;
+        
+        if (world instanceof RoomOne) {
+            Greenfoot.setWorld(new RoomTwo(this)); // Pass player to new world
+        } else if (world instanceof RoomTwo) {
+            Greenfoot.setWorld(new RoomOne(this)); // Pass player back
+        }
+    }
     // Getters
     public boolean isOnGround() {
         return onGround;
