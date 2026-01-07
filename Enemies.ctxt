@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.target=Enemies
+comment0.text=\n\ Write\ a\ description\ of\ class\ Enemies\ here.\n\ \n\ @author\ Max\ Yuan\ \n\ @version\ (a\ version\ number\ or\ a\ date)\n
+comment1.params=camera\ img\ health\ damage\ detectionRange\ attackRange
+comment1.target=Enemies(Camera,\ greenfoot.GreenfootImage,\ int,\ int,\ int,\ int)
+comment10.params=dmg
+comment10.target=void\ takeDamage(int)
+comment11.params=
+comment11.target=void\ die()
+comment2.params=
+comment2.target=void\ patrol()
+comment3.params=
+comment3.target=void\ chase()
+comment4.params=
+comment4.target=void\ attack()
+comment5.params=
+comment5.target=void\ idleBehavior()
+comment6.params=
+comment6.target=void\ act()
+comment7.params=
+comment7.target=void\ detectPlayer()
+comment8.params=
+comment8.target=void\ updateState()
+comment9.params=
+comment9.target=void\ executeBehavior()
+numComments=12
