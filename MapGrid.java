@@ -88,14 +88,14 @@ public class MapGrid
                 tileMap[x][y] = 0;
             }
         }
-        if (hasWalls && wallsX != null && wallsY != null && wallsX.length == wallsY.length){
+        if (hasWalls && wallsX != null && wallsY != null ){
             for(int i = 0 ; i < wallsX.length; i++){
                 if(wallsX[i] >= 0 && wallsX[i] < TILES_WIDE && wallsY[i] >= 0 && wallsY[i] < TILES_HIGH){
                     tileMap[wallsX[i]][wallsY[i]] = 1;
                 }
             }
         }
-        if (hasPlatform && platformX != null && platformY != null && platformX.length == platformY.length){
+        if (hasPlatform && platformX != null && platformY != null ){
             for(int i = 0 ; i < platformX.length; i++){
                 if(platformX[i] >= 0 && platformX[i] < TILES_WIDE && platformY[i] >= 0 && platformY[i] < TILES_HIGH){
                     tileMap[platformX[i]][platformY[i]] = 2;
@@ -103,14 +103,14 @@ public class MapGrid
                 
             }
         }
-        if (hasDoor && doorX != null && doorY != null && doorX.length == doorY.length){
+        if (hasDoor && doorX != null && doorY != null ){
             for(int i = 0 ; i < doorX.length; i++){
                 if(doorX[i] >= 0 && doorX[i] < TILES_WIDE && doorY[i] >= 0 && doorY[i] < TILES_HIGH){
                     tileMap[doorX[i]][doorY[i]] = 3;
                 }
             }
         }
-        if (hasBreakable && breakableX != null && breakableY != null && breakableX.length == breakableY.length){
+        if (hasBreakable && breakableX != null && breakableY != null ){
             for(int i = 0 ; i < breakableX.length; i++){
                 if(breakableX[i] >= 0 && breakableX[i] < TILES_WIDE && breakableY[i] >= 0 && breakableY[i] < TILES_HIGH){
                     tileMap[breakableX[i]][breakableY[i]] = 4;

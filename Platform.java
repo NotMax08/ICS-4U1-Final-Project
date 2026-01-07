@@ -15,9 +15,21 @@ class Platform extends ScrollingActor {
         img.fillRect(0, 0, width, height);
         setImage(img);
     }
-    
-    public int getWidth() { return width; }
-    public int getHeight() { return height; }
+    public boolean containsWorldPoint(int worldX, int worldY) {
+        RoomOne world = (RoomOne) getWorld();
+        int tileX = world.worldToTileX(worldX);
+        int tileY = world.worldToTileY(worldY);
+        
+        // Check tile if is platform
+        int tileType = world.getMapGrid().getTileAt(tileX, tileY);
+        return tileType == 2; // 2 = platform
+    }
+    public int getWidth() { 
+        return width; 
+    }
+    public int getHeight() { 
+        return height; 
+    }
 }
 
 

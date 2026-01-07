@@ -1,13 +1,19 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 /**
  * @author Paul
  */
-class Player extends ScrollingActor {
-    private int velocityY = 0;
+public class Player extends ScrollingActor {
+    // Movement constants
+    private double velocityX = 0;
+    private double velocityY = 0;
+    private static final double GRAVITY = 1;
+    private static final double JUMP_STRENGTH = -25;
+    private static final double MOVE_SPEED = 5;
+    private static final double MAX_FALL_SPEED = 100;
+    
+    // State
     private boolean onGround = false;
-    private static final int GRAVITY = 1;
-    private static final int JUMP_STRENGTH = -25;
-    private static final int MOVE_SPEED = 5;
+    private boolean inDoor = false;
     
     public Player(Camera camera) {
         super(camera);
@@ -20,71 +26,145 @@ class Player extends ScrollingActor {
     public void act() {
         handleInput();
         applyGravity();
-        checkCollisions();
-        updateScreenPosition();
+        checkDoor();
+        moveHorizontal();
+        moveVertical();
     }
     
     private void handleInput() {
         // Horizontal movement
         if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
-            moveWorld(-MOVE_SPEED, 0);
-        }
-        if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
-            moveWorld(MOVE_SPEED, 0);
+            velocityX = -MOVE_SPEED;
+        } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+            velocityX = MOVE_SPEED;
+        } else {
+            velocityX = 0;
         }
         
-        // Jumping
-        if (Greenfoot.isKeyDown("space") && onGround) {
+        // Jump
+        if ((Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("w") || Greenfoot.isKeyDown("space")) && onGround) {
             velocityY = JUMP_STRENGTH;
             onGround = false;
-        }
-        
-        // Speeding up fall
-        if(Greenfoot.isKeyDown("down") || Greenfoot.isKeyDown("s") && !onGround){
-            velocityY += GRAVITY;
         }
     }
     
     private void applyGravity() {
         velocityY += GRAVITY;
-        moveWorld(0, velocityY);
-    }
-    
-    private void checkCollisions() {
-        onGround = false;
-        
-        // Check collision with platforms
-        for (Object obj : getWorld().getObjects(Platform.class)) {
-            Platform platform = (Platform) obj;
-            
-            if (isCollidingWith(platform)) {
-                // Landing on top
-                if (velocityY > 0 && worldY < platform.getWorldY()) {
-                    worldY = platform.getWorldY() - platform.getHeight() / 2 - 20;
-                    velocityY = 0;
-                    onGround = true;
-                }
-                // Hitting from below
-                else if (velocityY < 0 && worldY > platform.getWorldY()) {
-                    worldY = platform.getWorldY() + platform.getHeight() / 2 + 20;
-                    velocityY = 0;
-                }
-            }
+        if (velocityY > MAX_FALL_SPEED) {
+            velocityY = MAX_FALL_SPEED;
         }
     }
     
-    private boolean isCollidingWith(Platform platform) {
-        int px = worldX;
-        int py = worldY;
-        int pw = 30;
-        int ph = 40;
+    private void moveHorizontal() {
+        // Try to move horizontally
+        int targetX = (int)(worldX + velocityX);
         
-        int bx = platform.getWorldX();
-        int by = platform.getWorldY();
-        int bw = platform.getWidth();
-        int bh = platform.getHeight();
+        if (!isSolidAtPosition(targetX, worldY)) {
+            // Path is clear, move freely
+            worldX = targetX;
+        } else {
+            // Hit a wall, slide as close as possible
+            int step = velocityX > 0 ? 1 : -1;
+            while (!isSolidAtPosition(worldX + step, worldY)) {
+                worldX += step;
+            }
+            velocityX = 0;
+        }
+    }
+    
+    private void moveVertical() {
+        // Try to move vertically
+        int targetY = (int)(worldY + velocityY);
         
-        return px - pw/2 < bx + bw/2 && px + pw/2 > bx - bw/2 &&
-               py - ph/2 < by + bh/2 && py + ph/2 > by - bh/2;
+        if (!isSolidAtPosition(worldX, targetY)) {
+            // Path is clear, move freely
+            worldY = targetY;
+            onGround = false;
+        } else {
+            // Hit floor or ceiling, slide as close as possible
+            int step = velocityY > 0 ? 1 : -1;
+            while (!isSolidAtPosition(worldX, worldY + step)) {
+                worldY += step;
+            }
+            
+            // Check if we landed on ground
+            if (velocityY > 0) {
+                onGround = true;
+            }
+            velocityY = 0;
+        }
+    }
+    private void checkDoor(){
+        if (isDoorAtPosition(worldX, worldY)) {
+            inDoor = true;
+            
+            Greenfoot.setWorld(new RoomTwo());
+        } else {
+            inDoor = false;
+        }
+    }
+    // Check if the player's hitbox at this position would collide with solid tiles
+    private boolean isSolidAtPosition(int posX, int posY) {
+        int halfWidth = getImage().getWidth() / 2;
+        int halfHeight = getImage().getHeight() / 2;
+        
+        // Check four corners of the hitbox (inset by 1 pixel for tighter collision)
+        return checkTileAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left
+               checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right
+               checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left
+               checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1);    // Bottom-right
+    }
+    private boolean isDoorAtPosition(int posX, int posY) {
+        int halfWidth = getImage().getWidth() / 2;
+        int halfHeight = getImage().getHeight() / 2;
+        
+        // Check four corners and center
+        return checkDoorAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left
+               checkDoorAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right
+               checkDoorAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left
+               checkDoorAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
+               checkDoorAt(posX, posY);                                      // Center
+    }
+    // Check if a specific world coordinate contains a solid tile
+    private boolean checkTileAt(int worldX, int worldY) {
+        RoomOne world = (RoomOne) getWorld();
+        if (world == null) return false;
+        
+        int tileX = world.worldToTileX(worldX);
+        int tileY = world.worldToTileY(worldY);
+        
+        int tileType = world.mapGrid.getTileAt(tileX, tileY);
+        
+        // Type 1 = walls, Type 2 = platforms, Type 3 = doors
+        return tileType == 1 || tileType == 2 ;
+    }
+    private boolean checkDoorAt(int worldX, int worldY){
+        RoomOne world = (RoomOne) getWorld();
+        if (world == null) return false;
+        
+        int tileX = world.worldToTileX(worldX);
+        int tileY = world.worldToTileY(worldY);
+        
+        int tileType = world.mapGrid.getTileAt(tileX, tileY);
+        
+        
+        return tileType == 3 ;
+    }
+    
+    // Getters
+    public boolean isOnGround() {
+        return onGround;
+    }
+    
+    public boolean isInDoor(){
+        return inDoor;
+    }
+    
+    public double getVelocityX() {
+        return velocityX;
+    }
+    
+    public double getVelocityY() {
+        return velocityY;
     }
 }

@@ -1,10 +1,12 @@
 #BlueJ class context
 comment0.target=Platform
-comment0.text=\n\ @author\ Paul\n
+comment0.text=\r\n\ @author\ Paul\r\n
 comment1.params=camera\ width\ height
 comment1.target=Platform(Camera,\ int,\ int)
-comment2.params=
-comment2.target=int\ getWidth()
+comment2.params=worldX\ worldY
+comment2.target=boolean\ containsWorldPoint(int,\ int)
 comment3.params=
-comment3.target=int\ getHeight()
-numComments=4
+comment3.target=int\ getWidth()
+comment4.params=
+comment4.target=int\ getHeight()
+numComments=5
