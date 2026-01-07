@@ -1,6 +1,9 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
- * @author Paul
+ * The class that the player controls 
+ * 
+ * 
+ * @author Paul & Robin
  */
 class Player extends ScrollingActor {
     private int velocityY = 0;
