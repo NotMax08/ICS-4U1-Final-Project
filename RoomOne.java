@@ -22,7 +22,9 @@ public class RoomOne extends GameWorld {
         }
         
         createPlatformVisuals();
-        
+        Crawler enemy = new Crawler(camera);
+        addObject(enemy, SCREEN_WIDTH/2 , SCREEN_HEIGHT/2);
+        enemy.setWorldPosition(500, 1200);
         // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
@@ -44,7 +46,7 @@ public class RoomOne extends GameWorld {
             {1500, 200, 300, 20},
             {700, 1100, 300, 20},
             {900, 850, 300, 20},
-            {700, 600, 300, 20},
+            {800, 700, 300, 20},
             {2000, 1000, 300, 20},
             {625, 1300, 1250, 40}  
         };
@@ -154,9 +156,9 @@ public class RoomOne extends GameWorld {
             {1500, 200, 300, 20},
             {700, 1100, 300, 20},
             {900, 850, 300, 20},
-            {700, 600, 300, 20},
+            {800, 700, 300, 20},
             {2000, 1000, 300, 20},
-            {625, 1300, 1250, 40}  
+            {625, 1300, 1250, 40}   
         };
         
         for (int[] region : platformRegions) {
