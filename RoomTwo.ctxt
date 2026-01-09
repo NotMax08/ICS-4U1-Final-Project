@@ -1,5 +1,6 @@
 #BlueJ class context
 comment0.target=RoomTwo
+comment0.text=\n\ \n\ @author\ Paul\ assisted\ by\ Claude\n
 comment1.params=existingPlayer
 comment1.target=RoomTwo(Player)
 comment2.params=
@@ -8,4 +9,6 @@ comment3.params=
 comment3.target=void\ act()
 comment4.params=
 comment4.target=void\ initializeMapGrid()
-numComments=5
+comment5.params=
+comment5.target=void\ createPlatformVisuals()
+numComments=6

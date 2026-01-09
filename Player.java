@@ -1,6 +1,6 @@
 import greenfoot.*;
 /**
- * @author Paul & Robin
+ * @author Paul & Robin with help from Claude
  */
 public class Player extends ScrollingActor {
     // Movement constants
@@ -15,39 +15,67 @@ public class Player extends ScrollingActor {
     private boolean onGround = false;
     private boolean inDoor = false;
     private boolean direction = true; // false = left, true = right
+    private boolean isStunned = false;
 
     // Counting variables
     private int fallCount = 0;
-    private int moveCount = 0;
-    private int movingIndex = 0;
+    private int stunTimer = 0;
+    private int animationCounter = 0;
+    private int currentFrame = 0;
+    private static final int ANIMATION_SPEED = 5; 
+    private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
+    private static final int STUN_DURATION = 30; // Acts to remain stunned
 
     // Set Inventory
     private InventoryDisplay inventory;
-    
-    // Animation Frames
+
+    // Player image constants
+    private static int P_WIDTH = 50;
+    private static int P_HEIGHT = 100;
+
+    // Load animation frames
     private GreenfootImage standingRight = new GreenfootImage("standingRight.png");
-    private GreenfootImage standingLeft;
-    private GreenfootImage runningR1;
-    private GreenfootImage runningR2;
-    private GreenfootImage runningR3;
-    private GreenfootImage runningR4;
+    private GreenfootImage standingLeft = new GreenfootImage("standingLeft.png");
+
+    private GreenfootImage runningR1 = new GreenfootImage("running1.png");
+    private GreenfootImage runningR2 = new GreenfootImage("running2.png");
+    private GreenfootImage runningR3 = new GreenfootImage("running3.png");
+    private GreenfootImage runningR4 = new GreenfootImage("running4.png");
+    private GreenfootImage[] runningRight;
+
     private GreenfootImage runningL1;
+    private GreenfootImage runningL2;
+    private GreenfootImage runningL3;
+    private GreenfootImage runningL4;
+    private GreenfootImage[] runningLeft;
     
+    private GreenfootImage jumpR1 = new GreenfootImage("jump1.png");
+    private GreenfootImage jumpR2 = new GreenfootImage("jump2.png");
+    private GreenfootImage[] jumpRight;
+    
+    private GreenfootImage jumpL1;
+    private GreenfootImage jumpL2;
+    private GreenfootImage[] jumpLeft;
+    
+    private GreenfootImage fallR1 = new GreenfootImage("fall1.png");
+    private GreenfootImage fallR2 = new GreenfootImage("fall2.png");
+    private GreenfootImage[] fallRight;
+    
+    private GreenfootImage fallL1;
+    private GreenfootImage fallL2;
+    private GreenfootImage[] fallLeft;
 
     public Player(Camera camera) {
         super(camera);
-        /*
-        GreenfootImage img = new GreenfootImage(30, 40);
-        img.setColor(Color.BLUE);
-        img.fillRect(0, 0, 30, 40);
-        setImage(img);
-         */
-        setInventory(inventory);
-        
-        standingRight.scale(50,100);
-        
+        setInventory(inventory); 
+
+        scaleImages(); 
+        createMirroredImages();
+        setupAnimationArrays();
+
         setImage(standingRight);
     }
+
     public void act() {
         handleInput();
         applyGravity();
@@ -56,23 +84,72 @@ public class Player extends ScrollingActor {
         moveHorizontal();
         moveVertical();
     }
+    
+    private void scaleImages(){
+        standingRight.scale(P_WIDTH,P_HEIGHT);
+        standingLeft.scale(P_WIDTH,P_HEIGHT);
+        runningR1.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        runningR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        runningR3.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        runningR4.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        jumpR1.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        jumpR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        fallR1.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        fallR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
+    }
+    
+    private void createMirroredImages(){
+        // Create mirrored versions for left-facing animation
+        runningL1 = new GreenfootImage(runningR1);
+        runningL1.mirrorHorizontally();
+        
+        runningL2 = new GreenfootImage(runningR2);
+        runningL2.mirrorHorizontally();
+        
+        runningL3 = new GreenfootImage(runningR3);
+        runningL3.mirrorHorizontally();
+        
+        runningL4 = new GreenfootImage(runningR4);
+        runningL4.mirrorHorizontally();
+        
+        jumpL1 = new GreenfootImage(jumpR1);
+        jumpL1.mirrorHorizontally();
+        
+        jumpL2 = new GreenfootImage(jumpR2);
+        jumpL2.mirrorHorizontally();
+        
+        fallL1 = new GreenfootImage(fallR1);
+        fallL1.mirrorHorizontally();
+        
+        fallL2 = new GreenfootImage(fallR2);
+        fallL2.mirrorHorizontally();
+    }
+    
+    private void setupAnimationArrays() {
+        // Create animation arrays for easy cycling
+        runningRight = new GreenfootImage[]{runningR1, runningR2, runningR3, runningR4};
+        runningLeft = new GreenfootImage[]{runningL1, runningL2, runningL3, runningL4};
+    }
 
     private void handleInput() {
         // Horizontal movement
         if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
             direction = false;
             velocityX = -MOVE_SPEED;
-            movingAnimation();
+            animateRunning();
         } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
             direction = true;
             velocityX = MOVE_SPEED;
-            movingAnimation();
+            animateRunning();
         } else {
             velocityX = 0;
-            if(!direction){
-
+            if(velocityY == 0){
+                if(!direction){
+                    setImage(standingLeft);
+                }else{
+                    setImage(standingRight);
+                }
             }
-            // set standing image according to direction (true or false)
         }
 
         // Jump
@@ -86,6 +163,28 @@ public class Player extends ScrollingActor {
             velocityY += GRAVITY;
         }
     }
+    
+    private void animateRunning(){
+        animationCounter++;
+        
+        // Change frame based on animation speed
+        if (animationCounter >= ANIMATION_SPEED) {
+            animationCounter = 0;
+            currentFrame++;
+            
+            // Loop back to first frame
+            if (currentFrame >= 4) {
+                currentFrame = 0;
+            }
+        }
+        
+        // Set the appropriate frame based on direction
+        if (direction) {
+            setImage(runningRight[currentFrame]);
+        } else {
+            setImage(runningLeft[currentFrame]);
+        }
+    }
 
     private void applyGravity() {
         velocityY += GRAVITY;
@@ -95,26 +194,22 @@ public class Player extends ScrollingActor {
     }
 
     private void checkFall(){
-        if(fallCount < 100 && !onGround){
+        if (!onGround && velocityY > 0) {
+            // Player is falling - increment fall counter
             fallCount++;
-        }else{
-            // stun when landed
-            // use boolean
-            fallCount = 0;
-        }
-    }
-    
-    private void movingAnimation(){
-        if(movingIndex == 1){
-            if(direction){
+        } else if (fallCount > 0) {
+            // Player just landed - check if fall was long enough to cause stun
+            if (fallCount >= FALL_DAMAGE_THRESHOLD) {
+                isStunned = true;
+                stunTimer = STUN_DURATION;
                 
-            }else{
-                
+                // Visual feedback - flash the player red
+                GreenfootImage currentImage = getImage();
+                currentImage.setTransparency(150); // Make slightly transparent
             }
-        }
-        moveCount++;
-        if(moveCount % 3 == 0){
-            movingIndex++;
+            
+            // Reset fall counter
+            fallCount = 0;
         }
     }
 

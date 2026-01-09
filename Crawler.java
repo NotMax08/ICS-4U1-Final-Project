@@ -102,7 +102,7 @@ public class Crawler extends Enemies
         Player player = (Player) getOneIntersectingObject(Player.class);
         if (player != null) {
             //player.takeDamage(damage);
-            System.out.println("bam");
+            //System.out.println("bam");
         }
         
         // Keep chasing while in attack range
