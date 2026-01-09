@@ -292,5 +292,6 @@ public class RoomTwo extends GameWorld {
             door.setWorldPosition(worldX, worldY);
         }
     }
+
 }
 
