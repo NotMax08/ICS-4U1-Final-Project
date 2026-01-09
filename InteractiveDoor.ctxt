@@ -1,6 +1,12 @@
 #BlueJ class context
 comment0.target=InteractiveDoor
-comment0.text=\r\n\ Doorways\ to\ new\ rooms\ opened\ by\ pressing\ key\ on\ keyboard.\r\n\ \r\n\ @author\ Paul\ \r\n
-comment1.params=height\ width
-comment1.target=InteractiveDoor(int,\ int)
-numComments=2
+comment0.text=\r\n\ @author\ Paul\r\n
+comment1.params=camera\ width\ height
+comment1.target=InteractiveDoor(Camera,\ int,\ int)
+comment2.params=worldX\ worldY
+comment2.target=boolean\ containsWorldPoint(int,\ int)
+comment3.params=
+comment3.target=int\ getWidth()
+comment4.params=
+comment4.target=int\ getHeight()
+numComments=5

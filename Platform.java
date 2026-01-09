@@ -16,7 +16,7 @@ class Platform extends ScrollingActor {
         setImage(img);
     }
     public boolean containsWorldPoint(int worldX, int worldY) {
-        RoomOne world = (RoomOne) getWorld();
+        GameWorld world = (GameWorld) getWorld();
         int tileX = world.worldToTileX(worldX);
         int tileY = world.worldToTileY(worldY);
         

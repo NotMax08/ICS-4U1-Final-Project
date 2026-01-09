@@ -127,6 +127,8 @@ public class RoomOne extends GameWorld {
         }
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
+        int[] interactiveX = new int[0];
+        int[] interactiveY = new int[0];
         
         mapGrid = new MapGrid(
             TILE_SIZE,
@@ -137,6 +139,7 @@ public class RoomOne extends GameWorld {
             true,
             true,
             false,
+            false,
             wallsX,
             platformX,
             doorX,
@@ -144,7 +147,9 @@ public class RoomOne extends GameWorld {
             wallsY,
             platformY,
             doorY,
-            breakableY
+            breakableY,
+            interactiveX,
+            interactiveY
         );
     }
     
@@ -158,7 +163,7 @@ public class RoomOne extends GameWorld {
             {900, 850, 300, 20},
             {800, 700, 300, 20},
             {2000, 1000, 300, 20},
-            {625, 1300, 1250, 40}   
+            {625, 1300, 1250, 40}     
         };
         
         for (int[] region : platformRegions) {
