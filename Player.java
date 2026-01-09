@@ -23,6 +23,16 @@ public class Player extends ScrollingActor {
 
     // Set Inventory
     private InventoryDisplay inventory;
+    
+    // Animation Frames
+    private GreenfootImage standingRight = new GreenfootImage("standingRight.png");
+    private GreenfootImage standingLeft;
+    private GreenfootImage runningR1;
+    private GreenfootImage runningR2;
+    private GreenfootImage runningR3;
+    private GreenfootImage runningR4;
+    private GreenfootImage runningL1;
+    
 
     public Player(Camera camera) {
         super(camera);
@@ -33,9 +43,10 @@ public class Player extends ScrollingActor {
         setImage(img);
          */
         setInventory(inventory);
-        GreenfootImage image = new GreenfootImage("standingRight.png");
-        image.scale(50,100);
-        setImage(image);
+        
+        standingRight.scale(50,100);
+        
+        setImage(standingRight);
     }
     public void act() {
         handleInput();
@@ -58,7 +69,9 @@ public class Player extends ScrollingActor {
             movingAnimation();
         } else {
             velocityX = 0;
-            
+            if(!direction){
+
+            }
             // set standing image according to direction (true or false)
         }
 
@@ -71,11 +84,6 @@ public class Player extends ScrollingActor {
         // Fall faster
         if ((Greenfoot.isKeyDown("down") || Greenfoot.isKeyDown("s") && !onGround)){
             velocityY += GRAVITY;
-        }
-
-        // Access Inventory
-        if ((Greenfoot.isKeyDown("tab")) && !inventory.isFull()){
-            
         }
     }
 
