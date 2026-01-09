@@ -23,10 +23,13 @@ public class MapGrid
     private int [] platformY;
     private int [] doorY;
     private int [] breakableY;
+    private int [] interactiveX;
+    private int [] interactiveY;
     private boolean hasWalls;
     private boolean hasPlatform;
     private boolean hasDoor;
     private boolean hasBreakable;
+    private boolean hasInteractiveDoor;
     /**
      * @author Paul
      * Create a 2d array to be used for each separate room. Accepts parameters and arrays from world class 
@@ -45,6 +48,7 @@ public class MapGrid
      * @param PLATFORM is boolean if platforms exist
      * @param DOOR is boolean if there are doors in the world
      * @param BREAKABLE is boolean if there are breakable objects
+     * @param INTERACTIVE_DOOR is a boolean if there are interactive doors
      * @param wallsDataX is array with x values in grid for walls
      * @param platformDataX is array with x values for paltforms in grid
      * @param doorDataX is array with x values for door tiles in grid
@@ -53,8 +57,10 @@ public class MapGrid
      * @param platformDataY is array with y values for platforms in grid
      * @param doorDataY is array with y values for doors in grid
      * @param breakableDataY is array with y values for breakables in grid
+     * @param interactiveDoorDataX is array with x values for interactive doors in grid
+     * @param interactiveDoorDataY is array with y values for interactive doors in grid
      */
-    public MapGrid(int TILE_WIDTH, int TILE_HEIGHT, int WORLD_WIDTH, int WORLD_HEIGHT, boolean WALLS, boolean PLATFORM, boolean DOOR, boolean BREAKABLE,int wallsDataX[], int platformDataX[], int doorDataX[], int breakableDataX[], int wallsDataY[], int platformDataY[], int doorDataY[], int breakableDataY[])
+    public MapGrid(int TILE_WIDTH, int TILE_HEIGHT, int WORLD_WIDTH, int WORLD_HEIGHT, boolean WALLS, boolean PLATFORM, boolean DOOR, boolean BREAKABLE,boolean INTERACTIVE_DOOR, int wallsDataX[], int platformDataX[], int doorDataX[], int breakableDataX[], int wallsDataY[], int platformDataY[], int doorDataY[], int breakableDataY[], int interactiveDoorDataX[], int interactiveDoorDataY[])
     {
         tileWidth = TILE_WIDTH;
         tileHeight = TILE_HEIGHT;
@@ -68,10 +74,13 @@ public class MapGrid
         platformY = platformDataY;
         doorY = doorDataY;
         breakableY = breakableDataY;
+        interactiveX = interactiveDoorDataX;
+        interactiveY = interactiveDoorDataY;
         hasWalls = WALLS;
         hasPlatform = PLATFORM;
         hasDoor = DOOR;
         hasBreakable = BREAKABLE;
+        hasInteractiveDoor = INTERACTIVE_DOOR;
         
         
         TILES_WIDE = worldWidth / tileWidth;  

@@ -13,8 +13,8 @@ public class RoomTwo extends GameWorld {
         
         initializeMapGrid();
         createPlatformVisuals();
-        InteractiveDoor doorOne = new InteractiveDoor(30,50);
-        addObject(doorOne, 240,875);
+        createInteractiveDoorVisuals();
+        
         
         if (existingPlayer != null) {
             transferPlayer(existingPlayer, 525, 900);
@@ -43,7 +43,7 @@ public class RoomTwo extends GameWorld {
     }
     
     protected void initializeMapGrid() {
-        // Analyze the actual visible platforms in the image
+        // Platforms in world coordinates
         int[][] platformData = {
                // Bottom main floor 
             {250, 1060, 520, 40},
@@ -159,6 +159,58 @@ public class RoomTwo extends GameWorld {
         
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
+        //Interactive Doors
+        int[][] interactiveData = {
+            {250, 820, 80, 140},   //Left door
+            {700, 1130, 80, 140},  //Middle door
+            {2330, 810, 80, 140}   // Right door 
+        };
+        
+        // Convert doors to tiles
+        int totalInteractiveTiles = 0;
+        
+        for (int[] door : interactiveData) {
+            int worldX = door[0];
+            int worldY = door[1];
+            int width = door[2];
+            int height = door[3];
+            
+            int startTileX = worldToTileX(worldX - width/2);
+            int endTileX = worldToTileX(worldX + width/2);
+            int startTileY = worldToTileY(worldY - height/2);
+            int endTileY = worldToTileY(worldY + height/2);
+            
+            int tilesWide = Math.max(1, endTileX - startTileX + 1);
+            int tilesHigh = Math.max(1, endTileY - startTileY + 1);
+            totalInteractiveTiles += tilesWide * tilesHigh;
+        }
+        
+        int[] interactiveX = new int[totalInteractiveTiles];
+        int[] interactiveY = new int[totalInteractiveTiles];
+        
+        int doorIndex = 0;
+        for (int[] door : interactiveData) {
+            int worldX = door[0];
+            int worldY = door[1];
+            int width = door[2];
+            int height = door[3];
+            
+            int startTileX = worldToTileX(worldX - width/2);
+            int endTileX = worldToTileX(worldX + width/2);
+            int startTileY = worldToTileY(worldY - height/2);
+            int endTileY = worldToTileY(worldY + height/2);
+            
+            for (int tileX = startTileX; tileX <= endTileX; tileX++) {
+                for (int tileY = startTileY; tileY <= endTileY; tileY++) {
+                    if (doorIndex < interactiveX.length) {
+                        interactiveX[doorIndex] = tileX;
+                        interactiveY[doorIndex] = tileY;
+                        doorIndex++;
+                    }
+                }
+            }
+        }
+        
         
         mapGrid = new MapGrid(
             TILE_SIZE,
@@ -169,6 +221,7 @@ public class RoomTwo extends GameWorld {
             true,
             true,
             false,
+            true,
             wallsX,
             platformX,
             doorX,
@@ -176,7 +229,9 @@ public class RoomTwo extends GameWorld {
             wallsY,
             platformY,
             doorY,
-            breakableY
+            breakableY,
+            interactiveX,
+            interactiveY
         );
     }
     private void createPlatformVisuals() {
@@ -218,6 +273,23 @@ public class RoomTwo extends GameWorld {
             Platform platform = new Platform(camera, width, height);
             addObject(platform, 0, 0);
             platform.setWorldPosition(worldX, worldY);
+        }
+    }
+    private void createInteractiveDoorVisuals() {
+        int[][] doorRegions = {
+            {250, 820, 80, 140},   //Left door
+            {700, 1130, 80, 140},  //Middle door
+            {2330, 810, 80, 140}   // Right door       
+        };
+        for(int[] region : doorRegions) {
+            int worldX = region[0];
+            int worldY = region[1];
+            int width = region[2];
+            int height = region[3];
+            
+            InteractiveDoor door = new InteractiveDoor(camera, width, height);
+            addObject(door, 0, 0);
+            door.setWorldPosition(worldX, worldY);
         }
     }
 }
