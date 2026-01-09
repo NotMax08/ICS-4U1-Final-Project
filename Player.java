@@ -48,22 +48,22 @@ public class Player extends ScrollingActor {
     private GreenfootImage runningL3;
     private GreenfootImage runningL4;
     private GreenfootImage[] runningLeft;
-    
+
     private GreenfootImage jumpR1 = new GreenfootImage("jump1.png");
     private GreenfootImage jumpR2 = new GreenfootImage("jump2.png");
-    private GreenfootImage[] jumpRight;
-    
+    private GreenfootImage[] jumpingRight;
+
     private GreenfootImage jumpL1;
     private GreenfootImage jumpL2;
-    private GreenfootImage[] jumpLeft;
-    
+    private GreenfootImage[] jumpingLeft;
+
     private GreenfootImage fallR1 = new GreenfootImage("fall1.png");
     private GreenfootImage fallR2 = new GreenfootImage("fall2.png");
-    private GreenfootImage[] fallRight;
-    
+    private GreenfootImage[] fallingRight;
+
     private GreenfootImage fallL1;
     private GreenfootImage fallL2;
-    private GreenfootImage[] fallLeft;
+    private GreenfootImage[] fallingLeft;
 
     public Player(Camera camera) {
         super(camera);
@@ -77,6 +77,17 @@ public class Player extends ScrollingActor {
     }
 
     public void act() {
+        // If stunned, count down stun timer and don't allow movement
+        if (isStunned) {
+            stunTimer--;
+            if (stunTimer <= 0) {
+                isStunned = false;
+            }
+            applyGravity();
+            moveVertical(); // Still affected by gravity while stunned
+            return; // Skip normal input handling
+        }
+
         handleInput();
         applyGravity();
         checkFall();
@@ -84,11 +95,11 @@ public class Player extends ScrollingActor {
         moveHorizontal();
         moveVertical();
     }
-    
+
     private void scaleImages(){
         standingRight.scale(P_WIDTH,P_HEIGHT);
         standingLeft.scale(P_WIDTH,P_HEIGHT);
-        runningR1.scale(P_WIDTH + 30,P_HEIGHT - 20);
+        runningR1.scale(P_WIDTH + 30,P_HEIGHT - 20); // Wider for running pose
         runningR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
         runningR3.scale(P_WIDTH + 30,P_HEIGHT - 20);
         runningR4.scale(P_WIDTH + 30,P_HEIGHT - 20);
@@ -97,57 +108,81 @@ public class Player extends ScrollingActor {
         fallR1.scale(P_WIDTH + 30,P_HEIGHT - 20);
         fallR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
     }
-    
+
     private void createMirroredImages(){
         // Create mirrored versions for left-facing animation
         runningL1 = new GreenfootImage(runningR1);
         runningL1.mirrorHorizontally();
-        
+
         runningL2 = new GreenfootImage(runningR2);
         runningL2.mirrorHorizontally();
-        
+
         runningL3 = new GreenfootImage(runningR3);
         runningL3.mirrorHorizontally();
-        
+
         runningL4 = new GreenfootImage(runningR4);
         runningL4.mirrorHorizontally();
-        
+
         jumpL1 = new GreenfootImage(jumpR1);
         jumpL1.mirrorHorizontally();
-        
+
         jumpL2 = new GreenfootImage(jumpR2);
         jumpL2.mirrorHorizontally();
-        
+
         fallL1 = new GreenfootImage(fallR1);
         fallL1.mirrorHorizontally();
-        
+
         fallL2 = new GreenfootImage(fallR2);
         fallL2.mirrorHorizontally();
     }
-    
+
     private void setupAnimationArrays() {
         // Create animation arrays for easy cycling
         runningRight = new GreenfootImage[]{runningR1, runningR2, runningR3, runningR4};
         runningLeft = new GreenfootImage[]{runningL1, runningL2, runningL3, runningL4};
+        jumpingRight = new GreenfootImage[]{jumpR1, jumpR2};
+        jumpingLeft = new GreenfootImage[]{jumpL1, jumpL2};
+        fallingRight = new GreenfootImage[]{fallR1, fallR2};
+        fallingLeft = new GreenfootImage[]{fallL1, fallL2};
     }
 
     private void handleInput() {
-        // Horizontal movement
-        if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
-            direction = false;
-            velocityX = -MOVE_SPEED;
-            animateRunning();
-        } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
-            direction = true;
-            velocityX = MOVE_SPEED;
-            animateRunning();
-        } else {
-            velocityX = 0;
-            if(velocityY == 0){
-                if(!direction){
-                    setImage(standingLeft);
-                }else{
-                    setImage(standingRight);
+        if(!onGround){
+            if(velocityY < 0){
+                animateJumping();
+            }else{
+                animateFalling();
+            }
+
+            // Moving in the air
+            if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
+                direction = false;
+                velocityX = -MOVE_SPEED * 0.8; // Slightly reduced air control
+            } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+                direction = true;
+                velocityX = MOVE_SPEED * 0.8;
+            } else {
+                velocityX = 0;
+            }
+        }else{
+
+            // Horizontal movement
+            if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
+                direction = false;
+                velocityX = -MOVE_SPEED;
+                animateRunning();
+            } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+                direction = true;
+                velocityX = MOVE_SPEED;
+                animateRunning();
+            } else {
+                velocityX = 0;
+                if(velocityY == 0){
+                    if(!direction){
+                        setImage(standingLeft);
+                    }else{
+                        setImage(standingRight);
+                    }
                 }
             }
         }
@@ -163,26 +198,70 @@ public class Player extends ScrollingActor {
             velocityY += GRAVITY;
         }
     }
-    
+
     private void animateRunning(){
         animationCounter++;
-        
+
         // Change frame based on animation speed
         if (animationCounter >= ANIMATION_SPEED) {
             animationCounter = 0;
             currentFrame++;
-            
+
             // Loop back to first frame
             if (currentFrame >= 4) {
                 currentFrame = 0;
             }
         }
-        
+
         // Set the appropriate frame based on direction
         if (direction) {
             setImage(runningRight[currentFrame]);
         } else {
             setImage(runningLeft[currentFrame]);
+        }
+    }
+    
+    private void animateJumping(){
+        animationCounter++;
+        
+        // Change frame based on animation speed
+        if(animationCounter >= ANIMATION_SPEED * 2) {
+            animationCounter = 0;
+            currentFrame++;
+            
+            // Loop back to first frame
+            if(currentFrame >= 2){
+                currentFrame = 0;
+            }
+        }
+        
+        // Set frame based on direction
+        if(direction){
+            setImage(jumpingRight[currentFrame]);
+        }else{
+            setImage(jumpingLeft[currentFrame]);
+        }
+    }
+    
+    private void animateFalling(){
+        animationCounter++;
+        
+        // Change frame based on animation speed
+        if(animationCounter >= ANIMATION_SPEED * 2) {
+            animationCounter = 0;
+            currentFrame++;
+            
+            // Loop back to first frame
+            if(currentFrame >= 2){
+                currentFrame = 0;
+            }
+        }
+        
+        // Set frame based on direction
+        if(direction){
+            setImage(fallingRight[currentFrame]);
+        }else{
+            setImage(fallingLeft[currentFrame]);
         }
     }
 
@@ -202,12 +281,12 @@ public class Player extends ScrollingActor {
             if (fallCount >= FALL_DAMAGE_THRESHOLD) {
                 isStunned = true;
                 stunTimer = STUN_DURATION;
-                
+
                 // Visual feedback - flash the player red
                 GreenfootImage currentImage = getImage();
                 currentImage.setTransparency(150); // Make slightly transparent
             }
-            
+
             // Reset fall counter
             fallCount = 0;
         }
