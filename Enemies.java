@@ -21,12 +21,17 @@ public abstract class Enemies extends ScrollingActor
     protected boolean isFacingRight; // Track which way we're facing
     protected int velY;
     
+    // Attack cooldown tracking (shared by all enemies)
+    protected int attackCooldownTimer = 0;
+    protected boolean isInAttackCooldown = false;
+    
     //fsm for enemy behaviour
     protected enum ENEMY_BEHAVIOUR { 
         IDLE,
         PATROL,
         CHASE, 
-        ATTACK, 
+        ATTACK_ANIMATION,  // New state for forced animation
+        ATTACK_COOLDOWN,   // New state for cooldown period
         HURT, 
         DEAD 
     }
@@ -50,7 +55,8 @@ public abstract class Enemies extends ScrollingActor
     
     protected abstract void patrol();
     protected abstract void chase();
-    protected abstract void attack();
+    protected abstract void attackAnimation();
+    protected abstract void attackCooldown();
     protected abstract void idleBehavior();
     
     
@@ -63,6 +69,27 @@ public abstract class Enemies extends ScrollingActor
         detectPlayer();
         updateState();
         executeBehavior();
+        updateAttackCooldown(); // Handle cooldown transition
+    }
+    
+    /**
+     * Handles attack cooldown and transitions back to chase
+     */
+    protected void updateAttackCooldown() {
+        if (attackCooldownTimer > 0) {
+            attackCooldownTimer--;
+            isInAttackCooldown = true;
+            
+            // When cooldown finishes, transition back to chase if still aggro
+            if (attackCooldownTimer == 0) {
+                isInAttackCooldown = false;
+                if (isAggro && target != null) {
+                    behaviour = ENEMY_BEHAVIOUR.CHASE;
+                } else {
+                    behaviour = ENEMY_BEHAVIOUR.IDLE;
+                }
+            }
+        }
     }
     
     protected void updateState() {
@@ -87,23 +114,25 @@ public abstract class Enemies extends ScrollingActor
     
             case CHASE:
                 if (!isAggro || target == null) {
-                    //if loses sight of target, then switch to patrol
+                    //if loses sight of target, then switch to idle
                     behaviour = ENEMY_BEHAVIOUR.IDLE;
-                } else if (distanceToTarget <= attackRange) {
-                    //if in attack range then attack
-                    behaviour = ENEMY_BEHAVIOUR.ATTACK;
+                } else if (distanceToTarget <= attackRange && !isInAttackCooldown) {
+                    //if in attack range then start attack animation (only if not on cooldown)
+                    behaviour = ENEMY_BEHAVIOUR.ATTACK_ANIMATION;
                 }
                 break;
                 
-            case ATTACK:
-                if (!isAggro || target == null || distanceToTarget > attackRange) {
-                    //if no longer is in agro and no target while greater than attack range, we chase
-                    behaviour = ENEMY_BEHAVIOUR.CHASE;
-                }
+            case ATTACK_ANIMATION:
+                // LOCKED STATE - cannot exit until animation completes
+                // Animation will transition to ATTACK_COOLDOWN when done
+                break;
+                
+            case ATTACK_COOLDOWN:
+                // LOCKED STATE - cannot exit until cooldown finishes
+                // updateAttackCooldown() handles transition
                 break;
                 
             case HURT:
-
                 if (health <= 0){
                     behaviour = ENEMY_BEHAVIOUR.DEAD;
                 }
@@ -124,8 +153,11 @@ public abstract class Enemies extends ScrollingActor
             case CHASE: 
                 chase(); 
                 break;
-            case ATTACK: 
-                attack(); 
+            case ATTACK_ANIMATION: 
+                attackAnimation(); 
+                break;
+            case ATTACK_COOLDOWN:
+                attackCooldown();
                 break;
             case DEAD:
                 die();
