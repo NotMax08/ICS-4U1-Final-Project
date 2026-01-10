@@ -14,6 +14,7 @@ class Platform extends ScrollingActor {
         img.setColor(Color.GREEN);
         img.fillRect(0, 0, width, height);
         setImage(img);
+        
     }
     public boolean containsWorldPoint(int worldX, int worldY) {
         GameWorld world = (GameWorld) getWorld();

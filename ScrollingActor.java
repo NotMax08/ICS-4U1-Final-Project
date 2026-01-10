@@ -1,4 +1,6 @@
 import greenfoot.*;
+import java.util.*;
+
 /**
  * @author Claude
  */
@@ -32,5 +34,164 @@ public abstract class ScrollingActor extends Actor {
     
     public void setCamera(Camera newCamera) {
         this.camera = newCamera;
+    }
+    
+    @Override
+    public int getX(){
+        return worldX;
+    }
+    
+    @Override
+    public int getY(){
+        return worldY;
+    }
+    
+    /**
+     * Get one object at a world coordinate offset
+     */
+    protected <T> T getOneObjectAtWorldOffset(int dx, int dy, Class<T> cls) {
+        int checkX = worldX + dx;
+        int checkY = worldY + dy;
+        
+        List<T> objects = getWorld().getObjects(cls);
+        for (T obj : objects) {
+            if (obj instanceof ScrollingActor) {
+                ScrollingActor scrollObj = (ScrollingActor) obj;
+                
+                // Calculate world bounds of the object
+                int objLeft = scrollObj.getWorldX() - scrollObj.getImage().getWidth() / 2;
+                int objRight = scrollObj.getWorldX() + scrollObj.getImage().getWidth() / 2;
+                int objTop = scrollObj.getWorldY() - scrollObj.getImage().getHeight() / 2;
+                int objBottom = scrollObj.getWorldY() + scrollObj.getImage().getHeight() / 2;
+                
+                // Check if point is inside object bounds
+                if (checkX >= objLeft && checkX <= objRight &&
+                    checkY >= objTop && checkY <= objBottom) {
+                    return obj;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Get all objects at a world coordinate offset
+     */
+    protected <T> List<T> getObjectsAtWorldOffset(int dx, int dy, Class<T> cls) {
+        List<T> result = new ArrayList<>();
+        int checkX = worldX + dx;
+        int checkY = worldY + dy;
+        
+        List<T> objects = getWorld().getObjects(cls);
+        for (T obj : objects) {
+            if (obj instanceof ScrollingActor) {
+                ScrollingActor scrollObj = (ScrollingActor) obj;
+                
+                int objLeft = scrollObj.getWorldX() - scrollObj.getImage().getWidth() / 2;
+                int objRight = scrollObj.getWorldX() + scrollObj.getImage().getWidth() / 2;
+                int objTop = scrollObj.getWorldY() - scrollObj.getImage().getHeight() / 2;
+                int objBottom = scrollObj.getWorldY() + scrollObj.getImage().getHeight() / 2;
+                
+                if (checkX >= objLeft && checkX <= objRight &&
+                    checkY >= objTop && checkY <= objBottom) {
+                    result.add(obj);
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Get objects in world coordinate range (radius-based)
+     */
+    protected <T> List<T> getObjectsInWorldRange(int range, Class<T> cls) {
+        List<T> result = new ArrayList<>();
+        List<T> objects = getWorld().getObjects(cls);
+        
+        for (T obj : objects) {
+            if (obj instanceof ScrollingActor) {
+                ScrollingActor scrollObj = (ScrollingActor) obj;
+                
+                // Calculate distance in world coordinates
+                int dx = scrollObj.getWorldX() - worldX;
+                int dy = scrollObj.getWorldY() - worldY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance <= range && obj != this) {
+                    result.add(obj);
+                }
+            }
+        }
+        
+        // Sort by distance (closest first)
+        result.sort((a, b) -> {
+            ScrollingActor sa = (ScrollingActor) a;
+            ScrollingActor sb = (ScrollingActor) b;
+            
+            double distA = Math.hypot(sa.getWorldX() - worldX, sa.getWorldY() - worldY);
+            double distB = Math.hypot(sb.getWorldX() - worldX, sb.getWorldY() - worldY);
+            
+            return Double.compare(distA, distB);
+        });
+        
+        return result;
+    }
+    
+    /**
+     * Get intersecting objects (checking world coordinate bounding boxes)
+     */
+    protected <T> List<T> getIntersectingWorldObjects(Class<T> cls) {
+        List<T> result = new ArrayList<>();
+        List<T> objects = getWorld().getObjects(cls);
+        
+        // This actor's world bounds
+        int myLeft = worldX - getImage().getWidth() / 2;
+        int myRight = worldX + getImage().getWidth() / 2;
+        int myTop = worldY - getImage().getHeight() / 2;
+        int myBottom = worldY + getImage().getHeight() / 2;
+        
+        for (T obj : objects) {
+            if (obj == this) continue;
+            
+            if (obj instanceof ScrollingActor) {
+                ScrollingActor scrollObj = (ScrollingActor) obj;
+                
+                int objLeft = scrollObj.getWorldX() - scrollObj.getImage().getWidth() / 2;
+                int objRight = scrollObj.getWorldX() + scrollObj.getImage().getWidth() / 2;
+                int objTop = scrollObj.getWorldY() - scrollObj.getImage().getHeight() / 2;
+                int objBottom = scrollObj.getWorldY() + scrollObj.getImage().getHeight() / 2;
+                
+                // Check for AABB collision
+                if (myLeft < objRight && myRight > objLeft &&
+                    myTop < objBottom && myBottom > objTop) {
+                    result.add(obj);
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Get one intersecting object
+     */
+    protected <T> T getOneIntersectingWorldObject(Class<T> cls) {
+        List<T> intersecting = getIntersectingWorldObjects(cls);
+        return intersecting.isEmpty() ? null : intersecting.get(0);
+    }
+    
+    /**
+     * Check if touching another actor in world coordinates
+     */
+    protected boolean isTouchingWorldObject(Class<?> cls) {
+        return getOneIntersectingWorldObject(cls) != null;
+    }
+    
+    /**
+     * Get world distance to another ScrollingActor
+     */
+    protected double getWorldDistanceTo(ScrollingActor other) {
+        int dx = other.getWorldX() - worldX;
+        int dy = other.getWorldY() - worldY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 }
