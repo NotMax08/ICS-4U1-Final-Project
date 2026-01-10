@@ -9,4 +9,6 @@ comment3.params=
 comment3.target=void\ initializeMapGrid()
 comment4.params=
 comment4.target=void\ createPlatformVisuals()
-numComments=5
+comment5.params=
+comment5.target=void\ createInteractiveDoorVisuals()
+numComments=6

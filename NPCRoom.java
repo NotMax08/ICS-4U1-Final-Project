@@ -1,66 +1,56 @@
 import greenfoot.*;
 /**
- * @author Paul assisted by Claude
  * 
+ * @author Paul assisted by Claude
  */
-public class RoomOne extends GameWorld {
+public class NPCRoom extends GameWorld {
     
-    public RoomOne(Player existingPlayer) {
-        super(); 
+    public NPCRoom(Player existingPlayer) {
+        super(); // This creates the camera
         
-        fullBackground = new GreenfootImage("roomone.jpg");
+        fullBackground = new GreenfootImage("npcroom.jpg");
         fullBackground.scale(WORLD_WIDTH, WORLD_HEIGHT);
         
         initializeMapGrid();
+        createPlatformVisuals();
+        createInteractiveDoorVisuals();
+        
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 100, 1200);
+            transferPlayer(existingPlayer, 525, 900);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(100, 1200);
+            player.setWorldPosition(525, 900);
         }
         
-        
-        
-        createPlatformVisuals();
-        Crawler enemy = new Crawler(camera);
-        addObject(enemy, SCREEN_WIDTH/2 , SCREEN_HEIGHT/2);
-        enemy.setWorldPosition(500, 1200);
-        // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
             updateAllActors();
             updateBackground();
         }
-        
-        Crawler crawler = new Crawler(camera);
-        addObject(crawler, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);  // Temporary screen pos
-        crawler.setWorldPosition(600, 900);
     }
     
-    public RoomOne() {
+    public NPCRoom() {
         this(null);
+    }
+    
+    // Override act() to add null check
+    public void act() {
+        if (camera != null && player != null) {
+            super.act(); // Call GameWorld's act()
+        }
     }
     
     protected void initializeMapGrid() {
         // Platforms in world coordinates
         int[][] platformData = {
-            {200, 400, 300, 20},
-            {600, 300, 200, 20},
-            {1000, 500, 400, 20},
-            {1500, 200, 300, 20},
-            {700, 1100, 300, 20},
-            {900, 850, 300, 20},
-            {800, 700, 300, 20},
-            {2000, 1000, 300, 20},
-            {625, 1300, 1250, 40}  
+            
         };
         
-        // Convert platforms to tile coordinates
+        // Convert platforms to tiles
         int totalPlatformTiles = 0;
         
-        // First pass: count tiles
         for (int[] platform : platformData) {
             int worldX = platform[0];
             int worldY = platform[1];
@@ -71,17 +61,15 @@ public class RoomOne extends GameWorld {
             int endTileX = worldToTileX(worldX + width/2);
             int startTileY = worldToTileY(worldY - height/2);
             int endTileY = worldToTileY(worldY + height/2);
-            
-            int tilesWide = endTileX - startTileX + 1;
-            int tilesHigh = endTileY - startTileY + 1;
+        
+            int tilesWide = Math.max(1, endTileX - startTileX + 1);
+            int tilesHigh = Math.max(1, endTileY - startTileY + 1);
             totalPlatformTiles += tilesWide * tilesHigh;
         }
         
-        // Create arrays for platform tiles
         int[] platformX = new int[totalPlatformTiles];
         int[] platformY = new int[totalPlatformTiles];
         
-        // Second pass: fill arrays
         int index = 0;
         for (int[] platform : platformData) {
             int worldX = platform[0];
@@ -96,46 +84,60 @@ public class RoomOne extends GameWorld {
             
             for (int tileX = startTileX; tileX <= endTileX; tileX++) {
                 for (int tileY = startTileY; tileY <= endTileY; tileY++) {
-                    platformX[index] = tileX;
-                    platformY[index] = tileY;
-                    index++;
+                    if (index < platformX.length) {
+                        platformX[index] = tileX;
+                        platformY[index] = tileY;
+                        index++;
+                    }
                 }
             }
         }
         
-        // Create border walls (leaving space for doors on top and right)
-        int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2);
-        int[] wallsX = new int[wallTileCount/2];
-        int[] wallsY = new int[wallTileCount/2];
+        // Walls - only outer boundaries and major vertical barriers
+        java.util.ArrayList<Integer> wallXList = new java.util.ArrayList<>();
+        java.util.ArrayList<Integer> wallYList = new java.util.ArrayList<>();
         
-        index = 0;
-        // Bottom walls only (no top wall for door)
-        for (int x = 0; x < TILES_WIDE; x++) {
-            wallsX[index] = x;
-            wallsY[index] = TILES_HIGH - 1;
-            index++;
-        }
-        
-        // Left wall only (no right wall for door)
+        // Left wall (x=0, all y)
         for (int y = 0; y < TILES_HIGH; y++) {
-            wallsX[index] = 0;
-            wallsY[index] = y;
-            index++;
+            wallXList.add(0);
+            wallYList.add(y);
         }
         
-        int[] doorX = new int[60];
-        int[] doorY = new int[60];
-        index = 60;
-        for(int i = 0; i < doorX.length; i++){
-            doorX[i] = index;
-            doorY[i] = 1;
-            index++;
+        // Right wall (x=124, all y)
+        for (int y = 0; y < TILES_HIGH; y++) {
+            wallXList.add(TILES_WIDE - 1);
+            wallYList.add(y);
         }
+        
+        // Top wall (y=0, all x)
+        for (int x = 1; x < TILES_WIDE - 1; x++) {
+            wallXList.add(x);
+            wallYList.add(0);
+        }
+        
+        // Bottom wall (y=70, all x)
+        for (int x = 1; x < TILES_WIDE - 1; x++) {
+            wallXList.add(x);
+            wallYList.add(TILES_HIGH - 1);
+        }
+        
+        int[] wallsX = new int[wallXList.size()];
+        int[] wallsY = new int[wallYList.size()];
+        for (int i = 0; i < wallXList.size(); i++) {
+            wallsX[i] = wallXList.get(i);
+            wallsY[i] = wallYList.get(i);
+        }
+        
+        // Doors at left and right sides
+        int[] doorX = new int[]{0, TILES_WIDE - 1};
+        int[] doorY = new int[]{35, 35}; // Mid-height doors
+        
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
         //Interactive Doors
         int[][] interactiveData = {
             
+            {2330, 610, 80, 140}   // Right door 
         };
         
         // Convert doors to tiles
@@ -182,6 +184,8 @@ public class RoomOne extends GameWorld {
                 }
             }
         }
+        
+        
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
@@ -191,7 +195,7 @@ public class RoomOne extends GameWorld {
             true,
             true,
             false,
-            false,
+            true,
             wallsX,
             platformX,
             doorX,
@@ -204,18 +208,9 @@ public class RoomOne extends GameWorld {
             interactiveY
         );
     }
-    
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            {200, 400, 300, 20},
-            {600, 300, 200, 20},
-            {1000, 500, 400, 20},
-            {1500, 200, 300, 20},
-            {700, 1100, 300, 20},
-            {900, 850, 300, 20},
-            {800, 700, 300, 20},
-            {2000, 1000, 300, 20},
-            {625, 1300, 1250, 40}     
+            
         };
         
         for (int[] region : platformRegions) {
@@ -223,7 +218,7 @@ public class RoomOne extends GameWorld {
             int worldY = region[1];
             int width = region[2];
             int height = region[3];
-            
+        
             Platform platform = new Platform(camera, width, height);
             addObject(platform, 0, 0);
             platform.setWorldPosition(worldX, worldY);
@@ -231,9 +226,8 @@ public class RoomOne extends GameWorld {
     }
     private void createInteractiveDoorVisuals() {
         int[][] doorRegions = {
-            {250, 820, 80, 140},   //Left door
-            {700, 1130, 80, 140},  //Middle door
-            {2330, 810, 80, 140}   // Right door       
+            
+            {2330, 610, 80, 140}   // Right door       
         };
         for(int[] region : doorRegions) {
             int worldX = region[0];
@@ -247,3 +241,4 @@ public class RoomOne extends GameWorld {
         }
     }
 }
+

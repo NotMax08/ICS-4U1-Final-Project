@@ -17,6 +17,9 @@ public abstract class Enemies extends ScrollingActor
     protected Actor target; 
     protected GreenfootImage character;
     protected ArrayList<Player> detections;
+    protected int direction; // 1 = right, -1 = left
+    protected boolean isFacingRight; // Track which way we're facing
+    protected int velY;
     
     //fsm for enemy behaviour
     protected enum ENEMY_BEHAVIOUR { 
@@ -39,7 +42,10 @@ public abstract class Enemies extends ScrollingActor
         this.detectionRange = detectionRange;
         this.attackRange = attackRange;
         this.isAggro = false;
+        this.direction = 1; // Start moving right
+        this.isFacingRight = true; // Start facing right
         setImage(img);
+        System.out.println("--------------");
     }
     
     protected abstract void patrol();
@@ -57,20 +63,6 @@ public abstract class Enemies extends ScrollingActor
         detectPlayer();
         updateState();
         executeBehavior();
-    }
-    
-    protected void detectPlayer() {
-        detections = (ArrayList) getObjectsInRange(detectionRange, Player.class);
-    
-        // set target to closest player
-        if (!detections.isEmpty()) {
-            target = detections.get(0); // get closest player
-            isAggro = true;
-        } else {
-            target = null;
-            isAggro = false;
-        }
-        
     }
     
     protected void updateState() {
@@ -138,6 +130,53 @@ public abstract class Enemies extends ScrollingActor
             case DEAD:
                 die();
                 break;
+        }
+    }
+    
+    // Generic helper methods that can be used by all enemies
+    protected void flipImage() {
+        getImage().mirrorHorizontally();
+        isFacingRight = !isFacingRight;
+    }
+    
+    //will only be used when the player is directly on top of the mob
+    protected void faceRight(){
+        isFacingRight = true;
+    }
+ 
+    protected void fall(int gravity) {
+        if (!onGround()) {
+            //enemy is supposed to be falling right now
+            
+            setWorldPosition(getX(), getY() + gravity);
+        }
+        
+        
+        if (onGround()){
+            velY = 0;
+        } else {
+            velY += gravity;
+            //gravity is too strong so i just did a scalar here
+            setWorldPosition(getX(), getY() + (int) (velY / 2.4));
+        }
+    }
+     
+    protected boolean onGround(){ return getOneObjectAtWorldOffset(0, getImage().getHeight()/2 +  3, Platform.class) != null;}
+    
+    protected boolean isBlocked(int checkDistance) {
+        return getOneObjectAtWorldOffset(direction * checkDistance, 0, Platform.class) != null;
+    }
+    
+    protected void detectPlayer() {
+        
+        detections = (ArrayList<Player>) getObjectsInWorldRange(detectionRange, Player.class);
+        
+        if (!detections.isEmpty()) {
+            target = detections.get(0); // Already sorted by distance!
+            isAggro = true;
+        } else {
+            target = null;
+            isAggro = false;
         }
     }
     
