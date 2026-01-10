@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * @author Claude
  */
-public abstract class ScrollingActor extends Actor {
+public abstract class ScrollingActor extends SuperSmoothMover {
     protected int worldX, worldY;
     protected Camera camera;
     

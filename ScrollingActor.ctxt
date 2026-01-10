@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=ScrollingActor
-comment0.text=\r\n\ @author\ Claude\r\n
+comment0.text=\n\ @author\ Claude\n
 comment1.params=camera
 comment1.target=ScrollingActor(Camera)
 comment10.params=dx\ dy\ cls
