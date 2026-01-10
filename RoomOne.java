@@ -34,9 +34,6 @@ public class RoomOne extends GameWorld {
             updateBackground();
         }
         
-        Crawler crawler = new Crawler(camera);
-        addObject(crawler, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);  // Temporary screen pos
-        crawler.setWorldPosition(600, 900);
     }
     
     public RoomOne() {

@@ -12,7 +12,7 @@ public class Crawler extends Enemies
     public static final int CRAWLER_HEALTH = 50;
     public static final int CRAWLER_DAMAGE = 10;
     public static final int CRAWLER_DETECTION_RANGE = 300;
-    public static final int CRAWLER_ATTACK_RANGE = 30;
+    public static final int CRAWLER_ATTACK_RANGE = 70;
     public static final int PATROL_SPEED = 1;
     public static final int CHASE_SPEED = 3;
     public static final int MAX_IDLE_TIME = 120; 
@@ -26,18 +26,27 @@ public class Crawler extends Enemies
     private int patrolTimer;
 
     //image stuff
-    public static final int IMAGE_WIDTH = 128;   // Adjustable uniform width
-    public static final int IMAGE_HEIGHT = 128;  // Adjustable uniform height
-    public static final int FADE_SPEED = 15; // Higher = faster fade
-    public static final int ANIMATION_SPEED = 10; // Frames between animation changes
+    public static final int IMAGE_WIDTH = 192;
+    public static final int IMAGE_HEIGHT = 192;
+    public static final int FADE_SPEED = 15;
+    public static final int ANIMATION_SPEED = 10;
+    public static final int ATTACK_ANIMATION_SPEED = 12;
+    public static final int ATTACK_COOLDOWN = 120;
+    
     private GreenfootImage normalIdleImage;
     private GreenfootImage alertIdleImage;
     private ArrayList<GreenfootImage> alertWalkingImages = new ArrayList<>();
     private ArrayList<GreenfootImage> normalWalkingImages = new ArrayList<>();
-    private int currentAlpha = 0; // 0 = normal, 255 = alert
+    private ArrayList<GreenfootImage> attackImages = new ArrayList<>();
+    
+    private int currentAlpha = 0;
     private boolean isAlert = false;
     private int animationCounter = 0;
     private int currentFrame = 0;
+    
+    // Attack state tracking
+    private int attackFrame = 0;
+    private int attackAnimationCounter = 0;
     
     public Crawler(Camera camera) {
         super(camera, 
@@ -51,23 +60,23 @@ public class Crawler extends Enemies
         this.idleTimer = 0;
         this.patrolTimer = 0;
         
-        // Store idle images with uniform size
         normalIdleImage = getUniformImage("Crawler.png");
         alertIdleImage = getUniformImage("AlertCrawler.png");
         
-        // Create arrays of walking image animations with uniform size
         normalWalkingImages.add(getUniformImage("CrawlerWalking.png"));
         normalWalkingImages.add(getUniformImage("CrawlerWalking2.png"));
         
         alertWalkingImages.add(getUniformImage("AlertCrawlerWalking.png"));
         alertWalkingImages.add(getUniformImage("AlertCrawlerWalking2.png"));
         
+        attackImages.add(getUniformImage("CrawlerAttack1.png"));
+        attackImages.add(getUniformImage("CrawlerAttack2.png"));
+        attackImages.add(getUniformImage("CrawlerAttack3.png"));
+        attackImages.add(getUniformImage("CrawlerAttack4.png"));
+        
         behaviour = ENEMY_BEHAVIOUR.IDLE;
     }
     
-    /**
-     * Load and resize image to uniform dimensions
-     */
     private static GreenfootImage getUniformImage(String filename) {
         GreenfootImage img = new GreenfootImage(filename);
         img.scale(IMAGE_WIDTH, IMAGE_HEIGHT);
@@ -76,27 +85,62 @@ public class Crawler extends Enemies
     
     @Override
     public void act() {
-        super.act(); // Call parent act first
-        updateAnimation(); // Update animation frame
-        updateImageTransition(); // Then update image fade
+        super.act();
+        updateAnimation();
+        updateImageTransition();
     }
     
     @Override
     protected void flipImage() {
         isFacingRight = !isFacingRight;
-        // Don't flip the stored images anymore - let updateImageTransition handle it
     }
     
     private void updateAnimation() {
+        // Reset attack animation when entering ATTACK_ANIMATION state fresh
+        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION && attackFrame == 0 && attackAnimationCounter == 0) {
+            // Starting fresh attack
+        }
+        
+        // Handle attack animation - FORCED to complete
+        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
+            attackAnimationCounter++;
+            if (attackAnimationCounter >= ATTACK_ANIMATION_SPEED) {
+                attackAnimationCounter = 0;
+                attackFrame++;
+                
+                // Check if attack animation is complete
+                if (attackFrame >= attackImages.size()) {
+                    attackFrame = attackImages.size() - 1; // Hold on last frame
+                    
+                    // Deal damage on last frame
+                    Player player = (Player) getOneIntersectingWorldObject(Player.class);
+                    if (player != null) {
+                        //player.takeDamage(damage);
+                    }
+                    
+                    // Transition to cooldown state
+                    behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
+                    attackCooldownTimer = ATTACK_COOLDOWN;
+                    isInAttackCooldown = true;
+                }
+            }
+            return; // Don't update walking animation during attack
+        }
+        
+        // Reset attack animation when NOT in attack states
+        if (behaviour != ENEMY_BEHAVIOUR.ATTACK_ANIMATION && behaviour != ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
+            attackFrame = 0;
+            attackAnimationCounter = 0;
+        }
+        
         // Only animate when moving (patrol or chase)
         if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
             animationCounter++;
             if (animationCounter >= ANIMATION_SPEED) {
                 animationCounter = 0;
-                currentFrame = (currentFrame + 1) % 2; // Toggle between 0 and 1
+                currentFrame = (currentFrame + 1) % 2;
             }
         } else {
-            // Reset to idle when not moving
             currentFrame = 0;
             animationCounter = 0;
         }
@@ -104,7 +148,9 @@ public class Crawler extends Enemies
     
     private void updateImageTransition() {
         // Determine if we should be in alert mode
-        boolean shouldBeAlert = (behaviour == ENEMY_BEHAVIOUR.CHASE || behaviour == ENEMY_BEHAVIOUR.ATTACK);
+        boolean shouldBeAlert = (behaviour == ENEMY_BEHAVIOUR.CHASE || 
+                                behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || 
+                                behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN);
         
         // Fade towards target state
         if (shouldBeAlert && currentAlpha < 255) {
@@ -114,39 +160,34 @@ public class Crawler extends Enemies
         }
         
         // Select base images based on current state
-        GreenfootImage normalBase;
-        GreenfootImage alertBase;
-        
-        if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
-            // Use walking animation
-            normalBase = normalWalkingImages.get(currentFrame);
-            alertBase = alertWalkingImages.get(currentFrame);
-        } else {
-            // Use idle images
-            normalBase = normalIdleImage;
-            alertBase = alertIdleImage;
-        }
-        
-        // Create blended image (already uniform size)
         GreenfootImage finalImage;
-        if (currentAlpha > 0) {
-            // Create a copy of normal image
-            GreenfootImage blended = new GreenfootImage(normalBase);
-            
-            // Create alert overlay with appropriate transparency
-            GreenfootImage overlay = new GreenfootImage(alertBase);
-            overlay.setTransparency(currentAlpha);
-            
-            // Draw alert image over normal image
-            blended.drawImage(overlay, 0, 0);
-            
-            finalImage = blended;
+        
+        // Use attack animation if in attack states
+        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
+            finalImage = new GreenfootImage(attackImages.get(attackFrame));
         } else {
-            // Just use normal image
-            finalImage = new GreenfootImage(normalBase);
+            GreenfootImage normalBase;
+            GreenfootImage alertBase;
+            
+            if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
+                normalBase = normalWalkingImages.get(currentFrame);
+                alertBase = alertWalkingImages.get(currentFrame);
+            } else {
+                normalBase = normalIdleImage;
+                alertBase = alertIdleImage;
+            }
+            
+            if (currentAlpha > 0) {
+                GreenfootImage blended = new GreenfootImage(normalBase);
+                GreenfootImage overlay = new GreenfootImage(alertBase);
+                overlay.setTransparency(currentAlpha);
+                blended.drawImage(overlay, 0, 0);
+                finalImage = blended;
+            } else {
+                finalImage = new GreenfootImage(normalBase);
+            }
         }
         
-        // Apply facing direction AFTER creating the image
         if (!isFacingRight) {
             finalImage.mirrorHorizontally();
         }
@@ -157,7 +198,6 @@ public class Crawler extends Enemies
     @Override
     protected void idleBehavior() {
         idleTimer++;
-        
         if (idleTimer >= MAX_IDLE_TIME) {
             behaviour = ENEMY_BEHAVIOUR.PATROL;
             idleTimer = 0;
@@ -169,7 +209,6 @@ public class Crawler extends Enemies
     protected void patrol() {
         setWorldPosition(worldX + (direction * PATROL_SPEED), worldY);
         
-        // Check for edges or walls
         if (isAtEdge() || isBlocked(WALL_CHECK_DISTANCE)) {
             direction *= -1;
             flipImage();
@@ -181,7 +220,6 @@ public class Crawler extends Enemies
             patrolTimer = 0;
         }
         
-        // Apply gravity
         fall(GRAVITY);
     }
     
@@ -191,7 +229,6 @@ public class Crawler extends Enemies
         
         int targetX = ((ScrollingActor)target).getWorldX();
         
-        //added this condition so it doesn't flip back and forth when player is directly above the enemy
         if (!(Math.abs(targetX - worldX) < 5)){
             if (targetX > worldX) {
                 direction = 1;
@@ -208,30 +245,36 @@ public class Crawler extends Enemies
             } 
         }
         
-        // Check for obstacles
         if (isBlocked(WALL_CHECK_DISTANCE)) {
             direction *= -1;
             flipImage();
         }
         
-        // Apply gravity
         fall(GRAVITY);
     }
     
     @Override
-    protected void attack() {
-        Player player = (Player) getOneIntersectingWorldObject(Player.class);
-        if (player != null) {
-            //player.takeDamage(damage);
-        }
-        
-        chase();
+    protected void attackAnimation() {
+        // Stay still during attack animation, just apply gravity
+        fall(GRAVITY);
+    }
+    
+    @Override
+    protected void attackCooldown() {
+        // Stay still during cooldown, hold last attack frame
+        fall(GRAVITY);
     }
     
     @Override
     protected void takeDamage(int dmg) {
         health -= dmg;
         behaviour = ENEMY_BEHAVIOUR.HURT;
+        
+        // Reset attack state when hurt
+        attackFrame = 0;
+        attackAnimationCounter = 0;
+        attackCooldownTimer = 0;
+        isInAttackCooldown = false;
         
         setWorldPosition(worldX + (direction * -KNOCKBACK_DISTANCE), worldY - KNOCKBACK_HEIGHT);
         
