@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.*;
 /**
  * Crawler - Ground enemy that patrols platforms and chases player
  * 
@@ -25,16 +26,22 @@ public class Crawler extends Enemies
     private int patrolTimer;
 
     //image stuff
-    public static final int RESIZE = 8;
+    public static final int IMAGE_WIDTH = 128;   // Adjustable uniform width
+    public static final int IMAGE_HEIGHT = 128;  // Adjustable uniform height
     public static final int FADE_SPEED = 15; // Higher = faster fade
-    private GreenfootImage normalImage;
-    private GreenfootImage alertImage;
+    public static final int ANIMATION_SPEED = 10; // Frames between animation changes
+    private GreenfootImage normalIdleImage;
+    private GreenfootImage alertIdleImage;
+    private ArrayList<GreenfootImage> alertWalkingImages = new ArrayList<>();
+    private ArrayList<GreenfootImage> normalWalkingImages = new ArrayList<>();
     private int currentAlpha = 0; // 0 = normal, 255 = alert
     private boolean isAlert = false;
+    private int animationCounter = 0;
+    private int currentFrame = 0;
     
     public Crawler(Camera camera) {
         super(camera, 
-              getNewImage("Crawler.png"),
+              getUniformImage("Crawler.png"),
               CRAWLER_HEALTH,
               CRAWLER_DAMAGE,
               CRAWLER_DETECTION_RANGE,
@@ -44,26 +51,33 @@ public class Crawler extends Enemies
         this.idleTimer = 0;
         this.patrolTimer = 0;
         
-        // Store both images
-        normalImage = getNewImage("Crawler.png");
-        alertImage = getNewImage("AlertCrawler.png");
+        // Store idle images with uniform size
+        normalIdleImage = getUniformImage("Crawler.png");
+        alertIdleImage = getUniformImage("AlertCrawler.png");
+        
+        // Create arrays of walking image animations with uniform size
+        normalWalkingImages.add(getUniformImage("CrawlerWalking.png"));
+        normalWalkingImages.add(getUniformImage("CrawlerWalking2.png"));
+        
+        alertWalkingImages.add(getUniformImage("AlertCrawlerWalking.png"));
+        alertWalkingImages.add(getUniformImage("AlertCrawlerWalking2.png"));
         
         behaviour = ENEMY_BEHAVIOUR.IDLE;
     }
     
-    private static GreenfootImage getNewImage(String filename){
-        GreenfootImage currentImage = new GreenfootImage(filename);
-        double width = currentImage.getWidth();
-        double height = currentImage.getHeight();
-        double newWidth = width / RESIZE;
-        double newHeight = height / RESIZE;
-        currentImage.scale((int)newWidth, (int)newHeight);
-        return currentImage;
+    /**
+     * Load and resize image to uniform dimensions
+     */
+    private static GreenfootImage getUniformImage(String filename) {
+        GreenfootImage img = new GreenfootImage(filename);
+        img.scale(IMAGE_WIDTH, IMAGE_HEIGHT);
+        return img;
     }
     
     @Override
     public void act() {
         super.act(); // Call parent act first
+        updateAnimation(); // Update animation frame
         updateImageTransition(); // Then update image fade
     }
     
@@ -71,6 +85,21 @@ public class Crawler extends Enemies
     protected void flipImage() {
         isFacingRight = !isFacingRight;
         // Don't flip the stored images anymore - let updateImageTransition handle it
+    }
+    
+    private void updateAnimation() {
+        // Only animate when moving (patrol or chase)
+        if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
+            animationCounter++;
+            if (animationCounter >= ANIMATION_SPEED) {
+                animationCounter = 0;
+                currentFrame = (currentFrame + 1) % 2; // Toggle between 0 and 1
+            }
+        } else {
+            // Reset to idle when not moving
+            currentFrame = 0;
+            animationCounter = 0;
+        }
     }
     
     private void updateImageTransition() {
@@ -84,14 +113,28 @@ public class Crawler extends Enemies
             currentAlpha = Math.max(0, currentAlpha - FADE_SPEED);
         }
         
-        // Create blended image
+        // Select base images based on current state
+        GreenfootImage normalBase;
+        GreenfootImage alertBase;
+        
+        if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
+            // Use walking animation
+            normalBase = normalWalkingImages.get(currentFrame);
+            alertBase = alertWalkingImages.get(currentFrame);
+        } else {
+            // Use idle images
+            normalBase = normalIdleImage;
+            alertBase = alertIdleImage;
+        }
+        
+        // Create blended image (already uniform size)
         GreenfootImage finalImage;
         if (currentAlpha > 0) {
             // Create a copy of normal image
-            GreenfootImage blended = new GreenfootImage(normalImage);
+            GreenfootImage blended = new GreenfootImage(normalBase);
             
             // Create alert overlay with appropriate transparency
-            GreenfootImage overlay = new GreenfootImage(alertImage);
+            GreenfootImage overlay = new GreenfootImage(alertBase);
             overlay.setTransparency(currentAlpha);
             
             // Draw alert image over normal image
@@ -100,7 +143,7 @@ public class Crawler extends Enemies
             finalImage = blended;
         } else {
             // Just use normal image
-            finalImage = new GreenfootImage(normalImage);
+            finalImage = new GreenfootImage(normalBase);
         }
         
         // Apply facing direction AFTER creating the image
