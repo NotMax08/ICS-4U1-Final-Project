@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Enemies
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ Enemies\ here.\r\n\ \r\n\ @author\ Max\ Yuan\ \r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment0.text=\n\ Write\ a\ description\ of\ class\ Enemies\ here.\n\ \n\ @author\ Max\ Yuan\ \n\ @version\ (a\ version\ number\ or\ a\ date)\n
 comment1.params=camera\ img\ health\ damage\ detectionRange\ attackRange
 comment1.target=Enemies(Camera,\ greenfoot.GreenfootImage,\ int,\ int,\ int,\ int)
 comment10.params=dmg
