@@ -37,7 +37,7 @@ public class SlashAnimation extends Actor
         for (int i = 0; i < slashFrames.length; i++)
         {
             slashFrames[i] = new GreenfootImage("images/slash" + i + ".png");
-            slashFrames[i].scale(80, 80);
+            slashFrames[i].scale(160, 80);
         }
         
         setImage(slashFrames[0]);
