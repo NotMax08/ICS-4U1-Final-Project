@@ -156,6 +156,11 @@ public class Player extends ScrollingActor {
     }
 
     private void handleInput() {
+        handleMovement();
+        handleAbility();
+    }
+    
+    private void handleMovement(){
         // check if in air
         if(!onGround){
             // in the air
@@ -166,10 +171,10 @@ public class Player extends ScrollingActor {
             }
 
             // Moving in the air
-            if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
+            if (Greenfoot.isKeyDown("a")) {
                 direction = false;
                 velocityX = -MOVE_SPEED * 0.9; // Slightly reduced horizontal movement speed while in the air
-            } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+            } else if (Greenfoot.isKeyDown("d")) {
                 direction = true;
                 velocityX = MOVE_SPEED * 0.9;
             } else {
@@ -178,11 +183,11 @@ public class Player extends ScrollingActor {
         }else{
             
             // Normal ground movement
-            if (Greenfoot.isKeyDown("left") || Greenfoot.isKeyDown("a")) {
+            if (Greenfoot.isKeyDown("a")) {
                 direction = false;
                 velocityX = -MOVE_SPEED;
                 animateRunning();
-            } else if (Greenfoot.isKeyDown("right") || Greenfoot.isKeyDown("d")) {
+            } else if (Greenfoot.isKeyDown("d")) {
                 direction = true;
                 velocityX = MOVE_SPEED;
                 animateRunning();
@@ -202,7 +207,7 @@ public class Player extends ScrollingActor {
         }
 
         // Jump
-        if ((Greenfoot.isKeyDown("up") || Greenfoot.isKeyDown("w") || Greenfoot.isKeyDown("space")) && onGround) {
+        if ((Greenfoot.isKeyDown("space")) && onGround) {
             velocityY = JUMP_STRENGTH;
             onGround = false;
             // reset frames
@@ -211,9 +216,13 @@ public class Player extends ScrollingActor {
         }
 
         // Fall faster
-        if ((Greenfoot.isKeyDown("down") || Greenfoot.isKeyDown("s") && !onGround)){
+        if ((Greenfoot.isKeyDown("s") && !onGround)){
             velocityY += GRAVITY;
         }
+    }
+    
+    private void handleAbility(){
+        
     }
 
     private void animateRunning(){
