@@ -33,7 +33,8 @@ public class AbilityDisplay extends ScrollingActor
         magicIcon = new GreenfootImage("magicIcon.png");
         magicIcon.scale(85, 85);
         
-        updateDisplay();
+        currentDisplay = new GreenfootImage(85, 85);
+        setImage(currentDisplay);
     }
 
     public void act()

@@ -21,7 +21,7 @@ public class RoomOne extends GameWorld {
             player.setWorldPosition(800, 1200);
         }
         
-        
+        setIcons();
         
         createPlatformVisuals();
         Crawler enemy = new Crawler(camera);

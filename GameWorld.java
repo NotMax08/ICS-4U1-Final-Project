@@ -25,8 +25,6 @@ public abstract class GameWorld extends World {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
 
-        setIcons();
-
         this.setPaintOrder(InventoryDisplay.class, AbilityDisplay.class);
     }
 
@@ -38,7 +36,7 @@ public abstract class GameWorld extends World {
         }
     }
 
-    private void setIcons(){
+    protected void setIcons(){
         // Creates inventory icon
         inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera);
         addObject(inventory, 0, 0);

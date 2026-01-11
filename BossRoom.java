@@ -24,6 +24,8 @@ public class BossRoom extends GameWorld {
             player.setWorldPosition(525, 900);
         }
         
+        setIcons();
+        
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
             updateAllActors();
