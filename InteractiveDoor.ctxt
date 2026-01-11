@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=InteractiveDoor
-comment0.text=\n\ @author\ Paul\n
+comment0.text=\r\n\ @author\ Paul\r\n
 comment1.params=camera\ width\ height
 comment1.target=InteractiveDoor(Camera,\ int,\ int)
 comment2.params=worldX\ worldY
