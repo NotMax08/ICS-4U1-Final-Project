@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * 
  * @author Paul & Claude
  */
-public class InventoryDisplay extends Actor {
+public class InventoryDisplay extends ScrollingActor {
     private GreenfootImage image;
     private ArrayList<InventoryItem> items;
     private int maxSlots = 6;
@@ -22,7 +22,8 @@ public class InventoryDisplay extends Actor {
      * @param screenX X position on screen (not world position)
      * @param screenY Y position on screen (not world position)
      */
-    public InventoryDisplay(int screenX, int screenY) {
+    public InventoryDisplay(int screenX, int screenY, Camera camera) {
+        super(camera);
         this.screenX = screenX;
         this.screenY = screenY;
         this.items = new ArrayList<InventoryItem>();
@@ -34,7 +35,7 @@ public class InventoryDisplay extends Actor {
     
     public void drawImage(){
         image = new GreenfootImage("inventory.png");
-        
+        setImage(image);
     }
     
     /**
@@ -169,7 +170,7 @@ public class InventoryDisplay extends Actor {
             }
         }
         
-        setImage(img);
+        setImage(image);
     }
     
     public int getItemCount() {

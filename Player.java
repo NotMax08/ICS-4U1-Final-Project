@@ -14,8 +14,8 @@ public class Player extends ScrollingActor {
     private double velocityY = 0;
     private static final double GRAVITY = 1;
     private static final double JUMP_STRENGTH = -25;
-    private static final double MOVE_SPEED = 6;
-    private static final double MAX_FALL_SPEED = 100;
+    private static final double MOVE_SPEED = 7.2;
+    private static final double MAX_FALL_SPEED = 24;
 
     // Character constants
     private static final int ANIMATION_SPEED = 4; 
@@ -121,7 +121,7 @@ public class Player extends ScrollingActor {
                 isAttacking = false;
             }
         }
-        
+
         handleInput();
         applyGravity();
         checkFall();
@@ -205,10 +205,10 @@ public class Player extends ScrollingActor {
             // Moving in the air
             if (Greenfoot.isKeyDown("a")) {
                 direction = false;
-                velocityX = -MOVE_SPEED * 0.9; // Slightly reduced horizontal movement speed while in the air
+                velocityX = -MOVE_SPEED * 0.85; // Slightly reduced horizontal movement speed while in the air
             } else if (Greenfoot.isKeyDown("d")) {
                 direction = true;
-                velocityX = MOVE_SPEED * 0.9;
+                velocityX = MOVE_SPEED * 0.85;
             } else {
                 velocityX = 0;
             }
@@ -347,21 +347,11 @@ public class Player extends ScrollingActor {
         if(jumpingAnimCounter.isComplete()) {
             jumpingAnimCounter.reset();
             frameCounter.increment();
-
-            // Loop back to first frame (4 total)
-            if(frameCounter.greaterThan(1)){
-                frameCounter.reset();
-            }
         }
-
-        // remove commented if no index out of bounds gets thrown
-        /*
-        // Safety check 
-        if(currentFrame >= jumpingRight.length){
-        currentFrame = 0;
+        // Loop back to first frame (4 total)
+        if(frameCounter.greaterThan(1)){
+            frameCounter.reset();
         }
-         */
-
         // Set frame based on direction
         if(direction){
             setImage(jumpingRight[frameCounter.getCount()]);
@@ -377,20 +367,12 @@ public class Player extends ScrollingActor {
         if(fallingAnimCounter.isComplete()) {
             fallingAnimCounter.reset();
             frameCounter.increment();
+        }
 
-            // Loop back to first frame (2 total)
-            if(frameCounter.greaterThan(1)){
-                frameCounter.reset();
-            }
+        // Loop back to first frame (2 total)
+        if(frameCounter.greaterThan(1)){
+            frameCounter.reset();
         }
-        
-        //remove as necessary
-        /*
-        // Safety check 
-        if(currentFrame >= fallingRight.length){
-        currentFrame = 0;
-        }
-         */
 
         // Set frame based on direction
         if(direction){
@@ -419,9 +401,7 @@ public class Player extends ScrollingActor {
 
                 // Visual feedback - flash the player red
                 GreenfootImage img = getImage();
-                img.setColor(new Color(255, 0, 0, 100));
-                img.fill();
-                // img.setTransparency(150); // Make slightly transparent
+                img.setTransparency(150); // Make slightly transparent
             }
 
             // Reset fall counter

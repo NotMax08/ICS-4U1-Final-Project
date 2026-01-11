@@ -21,8 +21,10 @@ public abstract class GameWorld extends World {
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
         
         // Creates inventory at top of screen
-        inventory = new InventoryDisplay(SCREEN_WIDTH - 16, SCREEN_HEIGHT - 12);
-        addObject(inventory, SCREEN_WIDTH - 16, SCREEN_HEIGHT - 12);
+        inventory = new InventoryDisplay(SCREEN_WIDTH - 16, SCREEN_HEIGHT - 12, camera);
+        addObject(inventory, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        
+        this.setPaintOrder(InventoryDisplay.class);
     }
     
     public void act() {
