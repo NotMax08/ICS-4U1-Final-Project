@@ -20,9 +20,9 @@ public abstract class GameWorld extends World {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
         
-        // Creates inventory at top of screen
-        inventory = new InventoryDisplay(SCREEN_WIDTH - 16, SCREEN_HEIGHT - 12, camera);
-        addObject(inventory, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        // Creates inventory 
+        inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera);
+        addObject(inventory, 0, 0);
         
         this.setPaintOrder(InventoryDisplay.class);
     }
@@ -57,9 +57,6 @@ public abstract class GameWorld extends World {
         player.setCamera(this.camera);
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(startX, startY);
-        
-        // Player access to inventory
-        player.setInventory(inventory);
     }
     
     public Camera getCamera() { return camera; }
