@@ -14,11 +14,11 @@ public class RoomOne extends GameWorld {
         initializeMapGrid();
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 100, 1200);
+            transferPlayer(existingPlayer, 800, 1200);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(100, 1200);
+            player.setWorldPosition(800, 1200);
         }
         
         
@@ -47,11 +47,16 @@ public class RoomOne extends GameWorld {
             {600, 300, 200, 20},
             {1000, 500, 400, 20},
             {1500, 200, 300, 20},
-            {700, 1100, 300, 20},
-            {900, 850, 300, 20},
-            {800, 700, 300, 20},
-            {2000, 1000, 300, 20},
-            {625, 1300, 1250, 40}  
+            {550, 1100, 500, 20},
+            {890, 740, 360, 20},
+            {510, 740, 280, 20},
+            {1925, 1120, 175, 20},
+            {2200, 980, 380, 20},
+            {1000, 1350, 400, 20},
+            {1730, 1170, 200, 20},
+            {1610, 1220, 150, 20},
+            {1350, 1320, 370, 20},
+            {230, 1030, 150, 20}
         };
         
         // Convert platforms to tile coordinates
@@ -208,11 +213,16 @@ public class RoomOne extends GameWorld {
             {600, 300, 200, 20},
             {1000, 500, 400, 20},
             {1500, 200, 300, 20},
-            {700, 1100, 300, 20},
-            {900, 850, 300, 20},
-            {800, 700, 300, 20},
-            {2000, 1000, 300, 20},
-            {625, 1300, 1250, 40}     
+            {550, 1100, 500, 20},
+            {890, 740, 360, 20},
+            {510, 740, 280, 20},
+            {1925, 1120, 175, 20},
+            {2200, 980, 380, 20},
+            {1000, 1350, 400, 20},
+            {1730, 1170, 200, 20},
+            {1610, 1220, 150, 20},
+            {1350, 1320, 370, 20},
+            {230, 1030, 150, 20}
         };
         
         for (int[] region : platformRegions) {
