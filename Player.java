@@ -21,8 +21,7 @@ public class Player extends ScrollingActor {
     private static final int ANIMATION_SPEED = 4; 
     private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
     private static final int STUN_DURATION = 30; // Acts to remain stunned
-    private static final int ATTACK_COOLDOWN = 20;
-    private static final int BASIC_ATTACK_DURATION = 15; // do we even need this
+    private static final int ATTACK_COOLDOWN = 60;
 
     // Character states 
     private boolean onGround = false;
@@ -279,7 +278,7 @@ public class Player extends ScrollingActor {
         abilityCooldownCounter.set(ATTACK_COOLDOWN);
 
         // slash animation
-        SlashAnimation slash = new SlashAnimation(6,3);
+        SlashAnimation slash = new SlashAnimation(6,4);
 
         // changes depending on which direction the player is facing
         int slashOffsetX = direction ? 30: -30; 

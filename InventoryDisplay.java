@@ -16,7 +16,6 @@ public class InventoryDisplay extends ScrollingActor {
     private int screenX, screenY;
     private boolean isOpen = false;
     private boolean tabWasDown = false;
-    private boolean mouseWasDown = false;
 
     // Inventory utility
     private ArrayList<InventoryItem> items;
@@ -54,16 +53,19 @@ public class InventoryDisplay extends ScrollingActor {
     }
 
     private void checkMouseClick(){
+        boolean mouseClickedInv = Greenfoot.mousePressed(this);
+        boolean mouseIsDown = Greenfoot.mousePressed(null);
+        
         if(!isOpen){
-            if(Greenfoot.mousePressed(this)){
-                isOpen = !isOpen; // Toggle states
-                tabWasDown = !tabWasDown;
+            // Click the icon to switch 
+            if(mouseClickedInv){
+                isOpen = !isOpen; // Toggle on new key press
                 updateImage();
             }
         }else {
-            if(!Greenfoot.mousePressed(this)){
-                isOpen = !isOpen; // Toggle states
-                tabWasDown = !tabWasDown;
+            // Click outside of inventory to switch
+            if(!mouseClickedInv && mouseIsDown){
+                isOpen = !isOpen;
                 updateImage();
             }
         }
@@ -77,7 +79,7 @@ public class InventoryDisplay extends ScrollingActor {
             updateImage();
         }
 
-        // Keep state for next frame
+        // Track state for next frame
         tabWasDown = tabIsDown;
     }
 
