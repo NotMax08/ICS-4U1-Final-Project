@@ -4,7 +4,7 @@ public abstract class GameWorld extends World {
     protected Camera camera;
     protected Player player;
     public MapGrid mapGrid;
-    protected InventoryDisplay inventory;
+    protected IconDisplay inventory;
     
     protected static final int WORLD_WIDTH = 2500;
     protected static final int WORLD_HEIGHT = 1420;
@@ -20,9 +20,11 @@ public abstract class GameWorld extends World {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
         
-        // Creates inventory at top of screen
-        inventory = new InventoryDisplay(SCREEN_WIDTH - 16, SCREEN_HEIGHT - 12);
-        addObject(inventory, SCREEN_WIDTH - 16, SCREEN_HEIGHT - 12);
+        // Creates inventory 
+        inventory = new IconDisplay(60, SCREEN_HEIGHT - 60, camera);
+        addObject(inventory, 0, 0);
+        
+        this.setPaintOrder(IconDisplay.class);
     }
     
     public void act() {
@@ -55,14 +57,11 @@ public abstract class GameWorld extends World {
         player.setCamera(this.camera);
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(startX, startY);
-        
-        // Player access to inventory
-        player.setInventory(inventory);
     }
     
     public Camera getCamera() { return camera; }
     public MapGrid getMapGrid() { return mapGrid; }
-    public InventoryDisplay getInventory() { return inventory;}
+    public IconDisplay getInventory() { return inventory;}
     
     public int worldToTileX(int worldX) { return worldX / TILE_SIZE; }
     public int worldToTileY(int worldY) { return worldY / TILE_SIZE; }
