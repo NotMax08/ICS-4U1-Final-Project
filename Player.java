@@ -36,7 +36,7 @@ public class Player extends ScrollingActor {
     private Counter jumpingAnimCounter;
     private Counter fallingAnimCounter;
     private Counter frameCounter;
-    public static Counter abilityCooldownCounter;
+    private Counter abilityCooldownCounter;
 
     // Player image constants
     private static int P_WIDTH = 50;
@@ -553,7 +553,7 @@ public class Player extends ScrollingActor {
         return velocityY;
     }
     
-    public static int getAbilityCooldown(){
+    public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
 }

@@ -44,10 +44,10 @@ public abstract class GameWorld extends World {
         addObject(inventory, 0, 0);
 
         // Creates ability icons
-        slashIcon = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera);
+        slashIcon = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
         addObject(slashIcon, 0, 0);
 
-        magicIcon = new AbilityDisplay(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, camera);
+        magicIcon = new AbilityDisplay(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, camera, player);
         addObject(magicIcon, 0, 0);
     }
 

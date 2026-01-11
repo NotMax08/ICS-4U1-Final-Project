@@ -12,6 +12,7 @@ public class AbilityDisplay extends ScrollingActor
     private GreenfootImage slashIcon, magicIcon;
     private GreenfootImage currentDisplay;
     private int screenX, screenY;
+    private Player player;
     
     // Image constants
     private static final int ACTIVE_TRANSPARENCY = 240;
@@ -19,10 +20,11 @@ public class AbilityDisplay extends ScrollingActor
     private static final int HIDDEN_TRANSPARENCY = 0;
     private static final int ICON_SPACING = 95; // to change
 
-    public AbilityDisplay(int screenX, int screenY, Camera camera){
+    public AbilityDisplay(int screenX, int screenY, Camera camera, Player player){
         super(camera);
         this.screenX = screenX;
         this.screenY = screenY;
+        this.player = player;
 
         // Scale images
         slashIcon = new GreenfootImage("slashIcon.png");
@@ -42,7 +44,7 @@ public class AbilityDisplay extends ScrollingActor
     
     private void updateDisplay(){
         boolean magicUnlocked = GameWorld.magicUnlocked;
-        int cooldown = Player.getAbilityCooldown();
+        int cooldown = player.getAbilityCooldown();
         boolean onCooldown = cooldown > 0;
         
         int transparency = onCooldown ? COOLDOWN_TRANSPARENCY : ACTIVE_TRANSPARENCY;
@@ -65,7 +67,7 @@ public class AbilityDisplay extends ScrollingActor
     }
 
     private void cycleCooldown(){
-        int num = Player.getAbilityCooldown();
+        int num = player.getAbilityCooldown();
         if(!GameWorld.magicUnlocked){
             magicIcon.setTransparency(0);
             if(num == 0){
