@@ -8,7 +8,6 @@ import greenfoot.*;
  * @author Robin and Paul, assisted by Claude
  */
 public class Player extends ScrollingActor {
-    // Constants
     // Movement constants
     private double velocityX = 0;
     private double velocityY = 0;
@@ -43,8 +42,7 @@ public class Player extends ScrollingActor {
     private static int P_WIDTH = 50;
     private static int P_HEIGHT = 100;
 
-    // Load frames
-    // Standing
+    // Standing Frames
     private GreenfootImage standingRight = new GreenfootImage("standingRight.png");
     private GreenfootImage standingLeft = new GreenfootImage("standingLeft.png");
     // Running Right
@@ -130,6 +128,7 @@ public class Player extends ScrollingActor {
     }
 
     private void scaleImages(){
+        // Character Animation
         // standing images
         standingRight.scale(P_WIDTH,P_HEIGHT);
         standingLeft.scale(P_WIDTH,P_HEIGHT);
