@@ -1,12 +1,16 @@
 import greenfoot.*; 
-import java.awt.Font; // Standard Java Font class
-import java.awt.GraphicsEnvironment; // Used to register the font to the system
-import java.io.InputStream; // Used to load the file so it works on the Gallery
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * TextBox is an Actor that displays text using the 'Press Start 2P' custom font.
  * 
  * @author Julian and Gemini 
+ * 
+ * "Press Start 2P" font by Cody "Zone 38" Cuellar (SIL Open Font License).
  */
 public class TextBox extends Actor
 {
@@ -17,29 +21,36 @@ public class TextBox extends Actor
      */
     static {
         try {
-            // 1. Look for the font file in the project folder
+            //finds font file in project folder
             InputStream is = TextBox.class.getClassLoader().getResourceAsStream("PressStart2P-Regular.ttf");
-            
+
             if (is == null) {
-                // If the file is missing or misspelled, show an error in the terminal
+                // if file is misspelled or missing, show error
                 System.out.println("FILE NOT FOUND: Make sure PressStart2P-Regular.ttf is in the project folder!");
             } else {
-                // 2. Convert the file stream into a Java Font object
+                // convert file into java font objects
                 Font awtFont = Font.createFont(Font.TRUETYPE_FONT, is);
-                
-                // 3. Register the font with the Graphics Environment.
-                // This "installs" it temporarily so Java can find it by its name: "Press Start 2P"
+
+                // Register the font with the Graphics Environment.
+                // This makes the font available to the JVM by its internal name: "Press Start 2P"
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(awtFont);
-                
+
                 // Confirm it worked in the terminal
                 System.out.println("Font loaded successfully: " + awtFont.getName());
             }
-        } catch (Exception e) {
-            // If anything goes wrong (corrupt file, etc.), print the error details
+        } // Correctly closing the try block before catching specific exceptions
+        catch (FontFormatException e) {
+            // specifically handles cases where the file is not a valid font
+            System.out.println("Error: The font file is not formatted correctly.");
+            e.printStackTrace();
+        } 
+        catch (IOException e) {
+            // specifically handles cases where the file cannot be read or found
+            System.out.println("Error: Could not read the font file from the disk.");
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Constructor to create the TextBox
      * 
@@ -50,35 +61,35 @@ public class TextBox extends Actor
     {
         updateImage(text, size);
     }
-    
+
     /**
      * This method creates the visuals of the text
      */
     public void updateImage(String text, int size)
     {
-        // 1. Create a Greenfoot version of the font using the name we registered above
+        // Creates greenfoot version of font using the new name
         greenfoot.Font retroFont = new greenfoot.Font("Press Start 2P", size);
-        
-        // 2. Calculate how big the image needs to be based on the text length
-        // This is a simple estimation: characters * font size
+
+        // calculates how big the image needs to be
+        // this is a simple estimation: characters * font size
         int width = text.length() * size; 
         int height = size + 10; // Add a little extra room for spacing
-        
-        // 3. Safety check: An image must be at least 1 pixel wide or Greenfoot crashes
+
+        // safety check to make sure the program doesnt crash. Has to be atleast 1 pixel wide
         if (width <= 0) width = 1; 
-        
-        // 4. Create a new blank, transparent image (the "canvas")
+
+        // Creates a new blank transparent image to use as the canvas
         GreenfootImage img = new GreenfootImage(width, height);
-        
-        // 5. Apply the font and color settings to the blank image
+
+        // apply the font and color to the blank image
         img.setFont(retroFont);
         img.setColor(Color.WHITE);
-        
-        // 6. Draw the text onto the image
+
+        // draws the text onto the image
         // (text, x-position, y-position)
         img.drawString(text, 0, size);
-        
-        // 7. Tell this Actor to use the image we just created
+
+        // updates the actors appearance to the image we just created
         setImage(img);
     }
 
