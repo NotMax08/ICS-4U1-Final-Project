@@ -36,45 +36,52 @@ class InteractiveDoor extends ScrollingActor {
         if (world == null) return;
         if (isTouching(Player.class)){
             if(id.equals("roomone")){
-                if (world != null) {
-                    
-                    GreenfootImage bg = world.getBackground();
-                    GreenfootImage msgImage = new GreenfootImage("entermsg.png");
-                    bg.drawImage(msgImage, getX() - msgImage.getWidth()/2, getY() - 50);
-                    showingMessage = true;
-                }
-                  if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomTwo());
-                }
-            } else if(id.equals("backtormone")){
-                if (world != null) {
-                    
-                    GreenfootImage bg = world.getBackground();
-                    GreenfootImage msgImage = new GreenfootImage("entermsg.png");
-                    bg.drawImage(msgImage, getX() - msgImage.getWidth()/2, getY() - 50);
-                    showingMessage = true;
-                }
-                  if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomOne());
-                }
-            }else if(id.equals("bossroom")){
-                if (world != null) {
-                    
-                    GreenfootImage bg = world.getBackground();
-                    GreenfootImage msgImage = new GreenfootImage("entermsg.png");
-                    bg.drawImage(msgImage, getX() - msgImage.getWidth()/2, getY() - 50);
-                    showingMessage = true;
-                }
-                  if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new BossRoom());
-                }
-            }else if(id.equals("backtormone")){
                 if (messageActor == null) {
                     messageActor = new Message("entermsg.png");
                     world.addObject(messageActor, getX(), getY() - 80);
                 }
                   if (Greenfoot.isKeyDown("f")) {
+                    Greenfoot.setWorld(new RoomTwo());
+                }
+            } else if(id.equals("backtormone")){
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
+                }
+                  if (Greenfoot.isKeyDown("f")) {
+                    Greenfoot.setWorld(new RoomOne());
+                }
+            }else if(id.equals("enterboss")){
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
+                }
+                  if (Greenfoot.isKeyDown("f")) {
+                    Greenfoot.setWorld(new BossRoom());
+                }
+            }else if(id.equals("npcenter")){
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
+                }
+                if (Greenfoot.isKeyDown("f")) {
                     Greenfoot.setWorld(new NPCRoom());
+                }
+            } else if (id.equals("bossroom")){
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
+                }
+                if (Greenfoot.isKeyDown("f")) {
+                    Greenfoot.setWorld(new RoomTwo());
+                }
+            }else if (id.equals("npcroom")){
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
+                }
+                if (Greenfoot.isKeyDown("f")) {
+                    Greenfoot.setWorld(new RoomTwo());
                 }
             }
             

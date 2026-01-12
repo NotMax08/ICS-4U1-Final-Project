@@ -61,7 +61,7 @@ public class BossRoom extends GameWorld {
     protected void initializeMapGrid() {
         // Platforms in world coordinates (scaled for 800x600 room)
         int[][] platformData = {
-            {400, 580, 780, 40}  // Floor platform - full width near bottom
+            {410, 580, 830, 40}  // Floor platform - full width near bottom
         };
         
         // Convert platforms to tiles
@@ -224,7 +224,7 @@ public class BossRoom extends GameWorld {
     
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            {400, 580, 780, 40}  // Floor platform visual
+            {410, 580, 830, 40}  // Floor platform visual
         };
             
         for (int[] region : platformRegions) {

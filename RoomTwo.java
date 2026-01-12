@@ -163,8 +163,8 @@ public class RoomTwo extends GameWorld {
         int[] breakableY = new int[0];
         //Interactive Doors
         int[][] interactiveData = {
-            {250, 820, 80, 140},   //Left door
-            {700, 1130, 80, 140},  //Middle door
+            {250, 820, 80, 140},   // Left door
+            {700, 1130, 80, 140},  // Middle door
             {2330, 810, 80, 140}   // Right door 
         };
         
