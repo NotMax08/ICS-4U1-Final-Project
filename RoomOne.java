@@ -26,7 +26,7 @@ public class RoomOne extends GameWorld {
         createPlatformVisuals();
         Crawler enemy = new Crawler(camera);
         addObject(enemy, SCREEN_WIDTH/2 , SCREEN_HEIGHT/2);
-        enemy.setWorldPosition(500, 1200);
+        enemy.setWorldPosition(500, 1100 - enemy.getImage().getHeight()/2); 
         // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());

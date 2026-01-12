@@ -50,7 +50,6 @@ public abstract class Enemies extends ScrollingActor
         this.direction = 1; // Start moving right
         this.isFacingRight = true; // Start facing right
         setImage(img);
-        System.out.println("--------------");
     }
     
     protected abstract void patrol();
