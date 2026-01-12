@@ -7,6 +7,7 @@ class InteractiveDoor extends ScrollingActor {
     private String id;
     private GreenfootImage entermsg = new GreenfootImage("entermsg.png");
     private boolean showingMessage = false;
+    private Message messageActor = null;
     public InteractiveDoor(Camera camera, int width, int height, String id) {
         super(camera);
         this.width = width;
@@ -68,12 +69,9 @@ class InteractiveDoor extends ScrollingActor {
                     Greenfoot.setWorld(new BossRoom());
                 }
             }else if(id.equals("backtormone")){
-                if (world != null) {
-                    
-                    GreenfootImage bg = world.getBackground();
-                    GreenfootImage msgImage = new GreenfootImage("entermsg.png");
-                    bg.drawImage(msgImage, getX() - msgImage.getWidth()/2, getY() - 50);
-                    showingMessage = true;
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
                 }
                   if (Greenfoot.isKeyDown("f")) {
                     Greenfoot.setWorld(new NPCRoom());
@@ -82,9 +80,9 @@ class InteractiveDoor extends ScrollingActor {
             
             
         }else {
-            if (showingMessage) {
-                showingMessage = false;
-                world.setBackground("roomtwo.jpg");
+            if (messageActor != null) {
+                world.removeObject(messageActor);
+                messageActor = null;
             }
         }
     }

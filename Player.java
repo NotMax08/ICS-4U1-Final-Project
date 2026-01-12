@@ -470,17 +470,21 @@ public class Player extends ScrollingActor {
     }
     /**
      * Check if the player's hitbox at this position would collide with solid tiles
-     * @author Paul
+     * @author Paul assisted by Claude
      */ 
     private boolean isSolidAtPosition(int posX, int posY) {
         int halfWidth = getImage().getWidth() / 2;
         int halfHeight = getImage().getHeight() / 2;
-
-        // Check four corners of the hitbox (inset by 1 pixel for tighter collision)
-        return checkTileAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left
-        checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right
-        checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left
-        checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1);    // Bottom-right
+    
+        // Check all edges: corners + middle points for better collision
+        return checkTileAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left corner
+               checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right corner
+               checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left corner
+               checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right corner
+               checkTileAt(posX, posY - halfHeight + 1) ||                  // Top-middle (HEAD)
+               checkTileAt(posX, posY + halfHeight - 1) ||                  // Bottom-middle (FEET)
+               checkTileAt(posX - halfWidth + 1, posY) ||                   // Left-middle
+               checkTileAt(posX + halfWidth - 1, posY);                     // Right-middle
     }
 
     /**
