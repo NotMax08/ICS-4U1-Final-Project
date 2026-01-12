@@ -20,7 +20,7 @@ public class Player extends ScrollingActor {
     private static final int ANIMATION_SPEED = 4; 
     private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
     private static final int STUN_DURATION = 30; // Acts to remain stunned
-    private static final int ATTACK_COOLDOWN = 60;
+    private static final int BASIC_ATTACK_COOLDOWN = 80;
 
     // Character states 
     private boolean onGround = false;
@@ -85,7 +85,7 @@ public class Player extends ScrollingActor {
         jumpingAnimCounter = new Counter(ANIMATION_SPEED * 2);
         fallingAnimCounter = new Counter(ANIMATION_SPEED * 2);
         frameCounter = new Counter();
-        abilityCooldownCounter = new Counter(ATTACK_COOLDOWN);
+        abilityCooldownCounter = new Counter(BASIC_ATTACK_COOLDOWN);
 
         // Initialize images
         scaleImages(); 
@@ -275,7 +275,7 @@ public class Player extends ScrollingActor {
 
     private void basicAttack(){
         isAttacking = true;
-        abilityCooldownCounter.set(ATTACK_COOLDOWN);
+        abilityCooldownCounter.set(BASIC_ATTACK_COOLDOWN);
 
         // slash animation
         SlashAnimation slash = new SlashAnimation(6,4);
@@ -587,5 +587,9 @@ public class Player extends ScrollingActor {
 
     public double getVelocityY() {
         return velocityY;
+    }
+    
+    public int getAbilityCooldown(){
+        return abilityCooldownCounter.getCount();
     }
 }

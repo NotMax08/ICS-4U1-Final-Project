@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * 
  * @author Robin, Paul & Claude
  */
-public class IconDisplay extends ScrollingActor {
+public class InventoryDisplay extends ScrollingActor {
     // Image variables
     private GreenfootImage openInv = new GreenfootImage("openInv.png");
     private GreenfootImage closedInv = new GreenfootImage("closedInv.png");
@@ -28,13 +28,14 @@ public class IconDisplay extends ScrollingActor {
      * @param screenX X position on screen (not world position)
      * @param screenY Y position on screen (not world position)
      */
-    public IconDisplay(int screenX, int screenY, Camera camera) {
+    public InventoryDisplay(int screenX, int screenY, Camera camera) {
         super(camera);
         this.screenX = screenX;
         this.screenY = screenY;
         this.items = new ArrayList<InventoryItem>();
-
-        // scale images
+        
+        
+        // scale Inventory
         closedInv.scale(100, 100);
         closedInv.setTransparency(225);
         openInv.scale(600, 600);

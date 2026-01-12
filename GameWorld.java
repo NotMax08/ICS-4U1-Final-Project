@@ -4,8 +4,13 @@ public abstract class GameWorld extends World {
     protected Camera camera;
     protected Player player;
     public MapGrid mapGrid;
-    protected IconDisplay inventory;
-    
+
+    // Display icons
+    protected InventoryDisplay inventory;
+    protected AbilityDisplay slashIcon, magicIcon;
+    protected static boolean magicUnlocked = false; // ability to be unlocked
+
+    // World image constants
     protected static final int WORLD_WIDTH = 2500;
     protected static final int WORLD_HEIGHT = 1420;
     protected static final int SCREEN_WIDTH = 800;
@@ -13,20 +18,16 @@ public abstract class GameWorld extends World {
     protected static final int TILE_SIZE = 20;
     protected static final int TILES_WIDE = WORLD_WIDTH / TILE_SIZE;
     protected static final int TILES_HIGH = WORLD_HEIGHT / TILE_SIZE;
-    
+
     protected GreenfootImage fullBackground;
-    
+
     public GameWorld() {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
-        
-        // Creates inventory 
-        inventory = new IconDisplay(60, SCREEN_HEIGHT - 60, camera);
-        addObject(inventory, 0, 0);
-        
-        this.setPaintOrder(IconDisplay.class);
+
+        this.setPaintOrder(InventoryDisplay.class, AbilityDisplay.class);
     }
-    
+
     public void act() {
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
@@ -34,39 +35,57 @@ public abstract class GameWorld extends World {
             updateBackground();
         }
     }
-    
+
+    protected void setIcons(){
+        // Creates inventory icon
+        inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera);
+        addObject(inventory, 0, 0);
+
+        // Creates ability icons
+        slashIcon = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
+        addObject(slashIcon, 0, 0);
+
+        magicIcon = new AbilityDisplay(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, camera, player);
+        addObject(magicIcon, 0, 0);
+    }
+
     protected void updateBackground() {
         if (camera == null || fullBackground == null) return;
-        
+
         GreenfootImage bg = getBackground();
         bg.clear();
         GreenfootImage visiblePortion = new GreenfootImage(SCREEN_WIDTH, SCREEN_HEIGHT);
         visiblePortion.drawImage(fullBackground, -camera.getX(), -camera.getY());
         bg.drawImage(visiblePortion, 0, 0);
     }
-    
+
     protected void updateAllActors() {
         for (Object obj : getObjects(ScrollingActor.class)) {
             ScrollingActor actor = (ScrollingActor) obj;
             actor.updateScreenPosition();
         }
     }
-    
+
     protected void transferPlayer(Player existingPlayer, int startX, int startY) {
         this.player = existingPlayer;
         player.setCamera(this.camera);
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(startX, startY);
     }
-    
+
     public Camera getCamera() { return camera; }
+
     public MapGrid getMapGrid() { return mapGrid; }
-    public IconDisplay getInventory() { return inventory;}
-    
+
+    public InventoryDisplay getInventory() { return inventory;}
+
     public int worldToTileX(int worldX) { return worldX / TILE_SIZE; }
+
     public int worldToTileY(int worldY) { return worldY / TILE_SIZE; }
+
     public int tileToWorldX(int tileX) { return tileX * TILE_SIZE; }
+
     public int tileToWorldY(int tileY) { return tileY * TILE_SIZE; }
-    
+
     protected abstract void initializeMapGrid();
 }
