@@ -4,14 +4,10 @@ import greenfoot.*;
  * @author Paul assisted by Claude
  */
 public class BossRoom extends GameWorld {
-    // Override world dimensions to be same as screen - makes room static
-<<<<<<< Updated upstream
-    private static final int BOSS_WORLD_WIDTH = 822;
-    private static final int BOSS_WORLD_HEIGHT = 600;
-=======
-    public static final int BOSS_WORLD_WIDTH = 800;
+    
+    public static final int BOSS_WORLD_WIDTH = 822;
     public static final int BOSS_WORLD_HEIGHT = 600;
->>>>>>> Stashed changes
+
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
