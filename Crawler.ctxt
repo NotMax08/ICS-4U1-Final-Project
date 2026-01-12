@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Crawler
-comment0.text=\r\n\ Crawler\ -\ Ground\ enemy\ that\ patrols\ platforms\ and\ chases\ player\r\n\ \r\n\ @author\ Max\ Yuan\r\n\ @version\ 1.0\r\n
+comment0.text=\n\ Crawler\ -\ Ground\ enemy\ that\ patrols\ platforms\ and\ chases\ player\n\ \n\ @author\ Max\ Yuan\n\ @version\ 1.0\n
 comment1.params=camera
 comment1.target=Crawler(Camera)
 comment10.params=
