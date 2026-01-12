@@ -255,13 +255,12 @@ public class Player extends ScrollingActor {
     }
 
     private void handleAbility(){
-        GameWorld world = (GameWorld)getWorld();
         if(abilityCooldownCounter.isZero()){
             if(Greenfoot.mousePressed(null)){
                 MouseInfo mouse = Greenfoot.getMouseInfo();
                 if(mouse.getButton() == 1 || Greenfoot.isKeyDown("j")){
                     basicAttack();
-                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && world.magicUnlocked){
+                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && GameWorld.magicUnlocked){
                     magicAttack();
                 }
                 
