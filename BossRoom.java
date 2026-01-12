@@ -5,8 +5,9 @@ import greenfoot.*;
  */
 public class BossRoom extends GameWorld {
     // Override world dimensions to be same as screen - makes room static
-    private static final int BOSS_WORLD_WIDTH = 800;
-    private static final int BOSS_WORLD_HEIGHT = 600;
+    public static final int BOSS_WORLD_WIDTH = 822;
+    public static final int BOSS_WORLD_HEIGHT = 600;
+    
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
@@ -39,6 +40,9 @@ public class BossRoom extends GameWorld {
             updateAllActors();
             updateBackground();
         }
+        
+        Boss staBee = new Boss(1);
+        addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn off screen
     }
     
     public BossRoom() {
@@ -246,7 +250,7 @@ public class BossRoom extends GameWorld {
             int width = region[2];
             int height = region[3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height);
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, "bossroom");
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }

@@ -3,85 +3,61 @@ import greenfoot.*;
  * 
  * @author Paul assisted by Claude
  */
-public class RoomTwo extends GameWorld {
-    private MapGridDebugOverlay gridDebug;
-    public RoomTwo(Player existingPlayer) {
+public class BossRoomTwo extends GameWorld {
+    // Override world dimensions to be same as screen - makes room static
+    private static final int BOSS_WORLD_WIDTH = 822;
+    private static final int BOSS_WORLD_HEIGHT = 600;
+    private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
+    private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
+    
+    public BossRoomTwo(Player existingPlayer) {
         super(); // This creates the camera
         
-        fullBackground = new GreenfootImage("roomtwo.jpg");
-        fullBackground.scale(WORLD_WIDTH, WORLD_HEIGHT);
+        // Lock camera to center of static room
+        camera.centerOn(BOSS_WORLD_WIDTH / 2, BOSS_WORLD_HEIGHT / 2);
+        
+        fullBackground = new GreenfootImage("bossroomtwo.jpg");
+        fullBackground.scale(BOSS_WORLD_WIDTH, BOSS_WORLD_HEIGHT);
         
         initializeMapGrid();
         createPlatformVisuals();
         createInteractiveDoorVisuals();
-        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
+        
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 600, 900);
+            transferPlayer(existingPlayer, 500, 500); // Center player in static room
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(600, 900);
+            player.setWorldPosition(500, 500); // Center player in static room
         }
         
         setIcons();
         
-        if (camera != null && player != null) {
-            camera.centerOn(player.getWorldX(), player.getWorldY());
+        // Keep camera locked - don't follow player
+        if (camera != null) {
             updateAllActors();
             updateBackground();
         }
-        
-        gridDebug = new MapGridDebugOverlay(this, mapGrid);
-        addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-        gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-
     }
     
-    public RoomTwo() {
+    public BossRoomTwo() {
         this(null);
     }
     
-    // Override act() to add null check
+    // Override act() to keep camera static (don't follow player)
     public void act() {
         if (camera != null && player != null) {
-            super.act(); // Call GameWorld's act()
-        }
-        if (Greenfoot.isKeyDown("g")) {
-            gridDebug.toggle();
-            Greenfoot.delay(10); // debounce
+            // Don't call super.act() which would follow the player
+            // Just update positions without moving camera
+            updateAllActors();
         }
     }
     
     protected void initializeMapGrid() {
-        // Platforms in world coordinates
+        // Platforms in world coordinates (scaled for 800x600 room)
         int[][] platformData = {
-               // Bottom main floor 
-            {250, 1060, 520, 40},
-            
-            // Bottom floor   
-            {1675, 1350, 300, 40},
-            
-            // Left mid-level platform 
-            {240, 900, 460, 20},
-            
-            // Center-left platform 
-            {1000, 1225, 1040, 40},
-            
-            // Large center mid level platform 
-            {1725, 890, 1550, 20},
-            
-            // Center-right platform
-            {2250, 1225, 930, 40},
-            
-            // Center mid-level platform 
-            {700, 650, 200, 20},
-            
-            // Upper left ledge 
-            {600, 380, 200, 20},
-            
-            // Upper middle
-            {1725, 350, 1650, 20},
+            {400, 580, 780, 40}  // Floor platform - full width near bottom
         };
         
         // Convert platforms to tiles
@@ -92,7 +68,7 @@ public class RoomTwo extends GameWorld {
             int worldY = platform[1];
             int width = platform[2];
             int height = platform[3];
-            
+        
             int startTileX = worldToTileX(worldX - width/2);
             int endTileX = worldToTileX(worldX + width/2);
             int startTileY = worldToTileY(worldY - height/2);
@@ -129,33 +105,30 @@ public class RoomTwo extends GameWorld {
             }
         }
         
-        // Walls - only outer boundaries and major vertical barriers
+        // Walls - outer boundaries for 800x600 room (40 tiles wide x 30 tiles high)
         java.util.ArrayList<Integer> wallXList = new java.util.ArrayList<>();
         java.util.ArrayList<Integer> wallYList = new java.util.ArrayList<>();
         
         // Left wall (x=0, all y)
-        for (int y = 0; y < TILES_HIGH; y++) {
+        for (int y = 0; y < BOSS_TILES_HIGH; y++) {
             wallXList.add(0);
             wallYList.add(y);
         }
         
-        // Right wall (x=124, all y)
-        for (int y = 0; y < TILES_HIGH; y++) {
-            wallXList.add(TILES_WIDE - 1);
+        // Right wall (x=39, all y)
+        for (int y = 0; y < BOSS_TILES_HIGH; y++) {
+            wallXList.add(BOSS_TILES_WIDE - 1);
             wallYList.add(y);
         }
         
         // Top wall (y=0, all x)
-        for (int x = 1; x < TILES_WIDE - 1; x++) {
+        for (int x = 1; x < BOSS_TILES_WIDE - 1; x++) {
             wallXList.add(x);
             wallYList.add(0);
         }
         
-        // Bottom wall (y=70, all x)
-        for (int x = 1; x < TILES_WIDE - 1; x++) {
-            wallXList.add(x);
-            wallYList.add(TILES_HIGH - 1);
-        }
+        // Bottom wall (y=29, all x) - removed to prevent glitching
+        // Add a floor platform instead if needed in platformData
         
         int[] wallsX = new int[wallXList.size()];
         int[] wallsY = new int[wallYList.size()];
@@ -164,17 +137,16 @@ public class RoomTwo extends GameWorld {
             wallsY[i] = wallYList.get(i);
         }
         
-        // Doors at left and right sides
-        int[] doorX = new int[]{0, TILES_WIDE - 1};
-        int[] doorY = new int[]{35, 35}; // Mid-height doors
+        // Doors at left side (scaled for smaller room)
+        int[] doorX = new int[]{0};
+        int[] doorY = new int[]{15}; // Mid-height door for 30-tile-high room
         
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
-        //Interactive Doors
+        
+        //Interactive Doors (scaled for 800x600 room)
         int[][] interactiveData = {
-            {250, 820, 80, 140},   // Left door
-            {700, 1130, 80, 140},  // Middle door
-            {2330, 810, 80, 140}   // Right door 
+            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
         };
         
         // Convert doors to tiles
@@ -222,12 +194,12 @@ public class RoomTwo extends GameWorld {
             }
         }
         
-        
+        // Use BOSS dimensions for MapGrid
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
-            WORLD_WIDTH,
-            WORLD_HEIGHT,
+            BOSS_WORLD_WIDTH,  // Use 800 instead of WORLD_WIDTH
+            BOSS_WORLD_HEIGHT, // Use 600 instead of WORLD_HEIGHT
             true,
             true,
             true,
@@ -245,36 +217,12 @@ public class RoomTwo extends GameWorld {
             interactiveY
         );
     }
+    
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-               // Bottom main floor 
-            {250, 1060, 520, 40},
-            
-            // Bottom floor   
-            {1675, 1350, 300, 40},
-            
-            // Left mid-level platform 
-            {240, 900, 460, 20},
-            
-            // Center-left platform 
-            {1000, 1225, 1040, 40},
-            
-            // Large center mid level platform 
-            {1725, 890, 1550, 20},
-            
-            // Center-right platform
-            {2250, 1225, 930, 40},
-            
-            // Center mid-level platform 
-            {700, 650, 200, 20},
-            
-            // Upper left ledge 
-            {600, 380, 200, 20},
-            
-            // Upper middle
-            {1725, 350, 1650, 20},
+            {400, 580, 780, 40}  // Floor platform visual
         };
-        
+            
         for (int[] region : platformRegions) {
             int worldX = region[0];
             int worldY = region[1];
@@ -286,26 +234,22 @@ public class RoomTwo extends GameWorld {
             platform.setWorldPosition(worldX, worldY);
         }
     }
+    
     private void createInteractiveDoorVisuals() {
-            int[][] doorRegions = {
-            {250, 820, 80, 140},   // Left door
-            {700, 1130, 80, 140},  // Middle door
-            {2330, 810, 80, 140}   // Right door       
+        int[][] doorRegions = {
+            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
         };
         
-        String[] doorIds = {"npcenter", "backtormone", "enterboss"};
-        
-        for (int i = 0; i < doorRegions.length; i++) {
-            int worldX = doorRegions[i][0];
-            int worldY = doorRegions[i][1];
-            int width = doorRegions[i][2];
-            int height = doorRegions[i][3];
+        for(int[] region : doorRegions) {
+            int worldX = region[0];
+            int worldY = region[1];
+            int width = region[2];
+            int height = region[3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height, doorIds[i]);
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, "bossroom");
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
     }
-
 }
 

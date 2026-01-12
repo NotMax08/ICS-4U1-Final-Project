@@ -4,12 +4,18 @@ import greenfoot.*;
  * @author Paul assisted by Claude
  */
 public class NPCRoom extends GameWorld {
+    private static final int NPC_WORLD_WIDTH = 800;
+    private static final int NPC_WORLD_HEIGHT = 600;
     
+    private static final int NPC_TILES_WIDE = NPC_WORLD_WIDTH / TILE_SIZE;
+    private static final int NPC_TILES_HIGH = NPC_WORLD_HEIGHT / TILE_SIZE;
     public NPCRoom(Player existingPlayer) {
         super(); // This creates the camera
         
+        camera.centerOn(NPC_WORLD_WIDTH / 2, NPC_WORLD_HEIGHT / 2);
+        
         fullBackground = new GreenfootImage("npcroom.jpg");
-        fullBackground.scale(WORLD_WIDTH, WORLD_HEIGHT);
+        fullBackground.scale(NPC_WORLD_WIDTH, NPC_WORLD_HEIGHT);
         
         initializeMapGrid();
         createPlatformVisuals();
@@ -17,17 +23,16 @@ public class NPCRoom extends GameWorld {
         
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 525, 900);
+            transferPlayer(existingPlayer, 400, 500);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(525, 900);
+            player.setWorldPosition(400, 500);
         }
         
         setIcons();
         
-        if (camera != null && player != null) {
-            camera.centerOn(player.getWorldX(), player.getWorldY());
+        if (camera != null) {
             updateAllActors();
             updateBackground();
         }
@@ -37,17 +42,19 @@ public class NPCRoom extends GameWorld {
         this(null);
     }
     
-    // Override act() to add null check
+    // Override act() to keep camera static (don't follow player)
     public void act() {
         if (camera != null && player != null) {
-            super.act(); // Call GameWorld's act()
+            // Don't call super.act() which would follow the player
+            // Just update positions without moving camera
+            updateAllActors();
         }
     }
     
     protected void initializeMapGrid() {
-        // Platforms in world coordinates
+        // Platforms in world coordinates (scaled for 800x600 room)
         int[][] platformData = {
-            
+            {410, 580, 830, 40}  // Floor platform - full width near bottom
         };
         
         // Convert platforms to tiles
@@ -58,12 +65,12 @@ public class NPCRoom extends GameWorld {
             int worldY = platform[1];
             int width = platform[2];
             int height = platform[3];
-            
+        
             int startTileX = worldToTileX(worldX - width/2);
             int endTileX = worldToTileX(worldX + width/2);
             int startTileY = worldToTileY(worldY - height/2);
             int endTileY = worldToTileY(worldY + height/2);
-        
+            
             int tilesWide = Math.max(1, endTileX - startTileX + 1);
             int tilesHigh = Math.max(1, endTileY - startTileY + 1);
             totalPlatformTiles += tilesWide * tilesHigh;
@@ -95,33 +102,30 @@ public class NPCRoom extends GameWorld {
             }
         }
         
-        // Walls - only outer boundaries and major vertical barriers
+        // Walls - outer boundaries for 800x600 room (40 tiles wide x 30 tiles high)
         java.util.ArrayList<Integer> wallXList = new java.util.ArrayList<>();
         java.util.ArrayList<Integer> wallYList = new java.util.ArrayList<>();
         
         // Left wall (x=0, all y)
-        for (int y = 0; y < TILES_HIGH; y++) {
+        for (int y = 0; y < NPC_TILES_HIGH; y++) {
             wallXList.add(0);
             wallYList.add(y);
         }
         
-        // Right wall (x=124, all y)
-        for (int y = 0; y < TILES_HIGH; y++) {
-            wallXList.add(TILES_WIDE - 1);
+        // Right wall (x=39, all y)
+        for (int y = 0; y < NPC_TILES_HIGH; y++) {
+            wallXList.add(NPC_TILES_WIDE - 1);
             wallYList.add(y);
         }
         
         // Top wall (y=0, all x)
-        for (int x = 1; x < TILES_WIDE - 1; x++) {
+        for (int x = 1; x < NPC_TILES_WIDE - 1; x++) {
             wallXList.add(x);
             wallYList.add(0);
         }
         
-        // Bottom wall (y=70, all x)
-        for (int x = 1; x < TILES_WIDE - 1; x++) {
-            wallXList.add(x);
-            wallYList.add(TILES_HIGH - 1);
-        }
+        // Bottom wall (y=29, all x) - removed to prevent glitching
+        // Add a floor platform instead if needed in platformData
         
         int[] wallsX = new int[wallXList.size()];
         int[] wallsY = new int[wallYList.size()];
@@ -130,16 +134,16 @@ public class NPCRoom extends GameWorld {
             wallsY[i] = wallYList.get(i);
         }
         
-        // Doors at left and right sides
-        int[] doorX = new int[]{0, TILES_WIDE - 1};
-        int[] doorY = new int[]{35, 35}; // Mid-height doors
+        // Doors at left side (scaled for smaller room)
+        int[] doorX = new int[]{0};
+        int[] doorY = new int[]{15}; // Mid-height door for 30-tile-high room
         
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
-        //Interactive Doors
+        
+        //Interactive Doors (scaled for 800x600 room)
         int[][] interactiveData = {
-            
-            {2330, 610, 80, 140}   // Right door 
+            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
         };
         
         // Convert doors to tiles
@@ -187,12 +191,12 @@ public class NPCRoom extends GameWorld {
             }
         }
         
-        
+        // Use room dimensions for MapGrid
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
-            WORLD_WIDTH,
-            WORLD_HEIGHT,
+            NPC_WORLD_WIDTH,  // Use 800 instead of WORLD_WIDTH
+            NPC_WORLD_HEIGHT, // Use 600 instead of WORLD_HEIGHT
             true,
             true,
             true,
@@ -210,34 +214,36 @@ public class NPCRoom extends GameWorld {
             interactiveY
         );
     }
+    
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            
+            {410, 580, 830, 40}  // Floor platform visual
         };
-        
+            
         for (int[] region : platformRegions) {
             int worldX = region[0];
             int worldY = region[1];
             int width = region[2];
             int height = region[3];
-        
+            
             Platform platform = new Platform(camera, width, height);
             addObject(platform, 0, 0);
             platform.setWorldPosition(worldX, worldY);
         }
     }
+    
     private void createInteractiveDoorVisuals() {
         int[][] doorRegions = {
-            
-            {2330, 610, 80, 140}   // Right door       
+            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
         };
+        
         for(int[] region : doorRegions) {
             int worldX = region[0];
             int worldY = region[1];
             int width = region[2];
             int height = region[3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height);
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, "bossroom");
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
