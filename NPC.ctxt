@@ -1,14 +1,14 @@
 #BlueJ class context
 comment0.target=NPC
-comment0.text=\r\n\ Write\ a\ description\ of\ class\ NPC\ here.\r\n\ \r\n\ @author\ Julian\r\n\ @version\ 2026\r\n
+comment0.text=\n\ Write\ a\ description\ of\ class\ NPC\ here.\n\ \n\ @author\ Julian\n\ @version\ 2026\n
 comment1.params=
 comment1.target=NPC()
 comment2.params=
 comment2.target=void\ act()
 comment3.params=
 comment3.target=boolean\ interactWithPlayer()
-comment3.text=\r\n\ method\ to\ check\ if\ player\ is\ near\ NPC\ to\ allow\ player\ to\ interact\ with\ it\r\n\ @return\ true\ if\ a\ Player\ is\ within\ range;\ otherwise\ returns\ false.\r\n\ @author\ Julian\r\n
+comment3.text=\n\ method\ to\ check\ if\ player\ is\ near\ NPC\ to\ allow\ player\ to\ interact\ with\ it\n\ @return\ true\ if\ a\ Player\ is\ within\ range;\ otherwise\ returns\ false.\n\ @author\ Julian\n
 comment4.params=
 comment4.target=boolean\ interactOption()
-comment4.text=\r\n\ Method\ that\ returns\ whether\ the\ player\ wants\ to\ interact\ with\ the\ NPC\r\n\ @return\ true\ if\ player\ wants\ to\ interact\ with\ npc;\ false\ otherwise\r\n\ @author\ Julian\r\n
+comment4.text=\n\ Method\ that\ returns\ whether\ the\ player\ wants\ to\ interact\ with\ the\ NPC\n\ @return\ true\ if\ player\ wants\ to\ interact\ with\ npc;\ false\ otherwise\n\ @author\ Julian\n
 numComments=5

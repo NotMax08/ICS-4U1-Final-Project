@@ -140,17 +140,10 @@ dependency8.type=UsesDependency
 dependency9.from=RoomTwo
 dependency9.to=MapGrid
 dependency9.type=UsesDependency
-<<<<<<< HEAD
-editor.fx.0.height=0
-editor.fx.0.width=0
-editor.fx.0.x=0
-editor.fx.0.y=0
-=======
-editor.fx.0.height=760
-editor.fx.0.width=837
-editor.fx.0.x=359
-editor.fx.0.y=25
->>>>>>> 026804207e2ada2fe8ed24f53dfb9fdcfe21a9dc
+editor.fx.0.height=902
+editor.fx.0.width=1454
+editor.fx.0.x=8
+editor.fx.0.y=46
 height=747
 package.numDependencies=47
 package.numTargets=23
@@ -331,6 +324,6 @@ target9.x=0
 target9.y=0
 version=3.1.0
 width=1123
-world.lastInstantiated=BossRoom
-xPosition=32
-yPosition=34
+world.lastInstantiated=StartWorld
+xPosition=100
+yPosition=100
