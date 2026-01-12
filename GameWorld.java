@@ -34,6 +34,8 @@ public abstract class GameWorld extends World {
             updateAllActors();
             updateBackground();
         }
+        
+
     }
 
     protected void setIcons(){

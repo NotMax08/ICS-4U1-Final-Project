@@ -5,6 +5,7 @@ import greenfoot.*;
  */
 public class RoomOne extends GameWorld {
     private boolean visuals; //debug to show platforms, doors, walls, etc 
+    private MapGridDebugOverlay gridDebug;
     public RoomOne(Player existingPlayer) {
         super(); 
         
@@ -31,7 +32,7 @@ public class RoomOne extends GameWorld {
         
         Crawler enemy = new Crawler(camera);
         addObject(enemy, SCREEN_WIDTH/2 , SCREEN_HEIGHT/2);
-        enemy.setWorldPosition(500, 1000);
+        enemy.setWorldPosition(500, 1100 - enemy.getImage().getHeight()/2); 
         // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
@@ -39,12 +40,25 @@ public class RoomOne extends GameWorld {
             updateBackground();
         }
         
+        gridDebug = new MapGridDebugOverlay(this, mapGrid);
+        addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
     }
     
     public RoomOne() {
         this(null);
+        
     }
-    
+    // Override act() to add null check
+    public void act() {
+        if (camera != null && player != null) {
+            super.act(); // Call GameWorld's act()
+        }
+        if (Greenfoot.isKeyDown("g")) {
+            gridDebug.toggle();
+            Greenfoot.delay(10); // debounce
+        }
+    }
     protected void initializeMapGrid() {
         // Platforms in world coordinates
         int[][] platformData = {

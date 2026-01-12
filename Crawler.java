@@ -12,7 +12,7 @@ public class Crawler extends Enemies
     public static final int CRAWLER_HEALTH = 50;
     public static final int CRAWLER_DAMAGE = 10;
     public static final int CRAWLER_DETECTION_RANGE = 300;
-    public static final int CRAWLER_ATTACK_RANGE = 70;
+    public static final int CRAWLER_ATTACK_RANGE = 150;
     public static final int PATROL_SPEED = 1;
     public static final int CHASE_SPEED = 3;
     public static final int MAX_IDLE_TIME = 120; 
@@ -20,18 +20,18 @@ public class Crawler extends Enemies
     public static final int GRAVITY = 1;
     public static final int KNOCKBACK_DISTANCE = 10;
     public static final int KNOCKBACK_HEIGHT = 5;
-    public static final int WALL_CHECK_DISTANCE = 20;
+    public static final int WALL_CHECK_DISTANCE = 10;
     
     private int idleTimer;
     private int patrolTimer;
 
     //image stuff
-    public static final int IMAGE_WIDTH = 192;
-    public static final int IMAGE_HEIGHT = 192;
+    public static final int IMAGE_WIDTH = 220;
+    public static final int IMAGE_HEIGHT = 220;
     public static final int FADE_SPEED = 15;
     public static final int ANIMATION_SPEED = 10;
-    public static final int ATTACK_ANIMATION_SPEED = 12;
-    public static final int ATTACK_COOLDOWN = 120;
+    public static final int ATTACK_ANIMATION_SPEED = 6;
+    public static final int ATTACK_COOLDOWN = 10;
     
     private GreenfootImage normalIdleImage;
     private GreenfootImage alertIdleImage;
@@ -48,6 +48,8 @@ public class Crawler extends Enemies
     private int attackFrame = 0;
     private int attackAnimationCounter = 0;
     
+    private boolean isMoving = false;
+    
     public Crawler(Camera camera) {
         super(camera, 
               getUniformImage("Crawler.png"),
@@ -60,19 +62,20 @@ public class Crawler extends Enemies
         this.idleTimer = 0;
         this.patrolTimer = 0;
         
-        normalIdleImage = getUniformImage("Crawler.png");
-        alertIdleImage = getUniformImage("AlertCrawler.png");
+        normalIdleImage = getUniformImage("Golem.png");
+        alertIdleImage = getUniformImage("AlertGolem.png");
         
-        normalWalkingImages.add(getUniformImage("CrawlerWalking.png"));
-        normalWalkingImages.add(getUniformImage("CrawlerWalking2.png"));
+        normalWalkingImages.add(getUniformImage("GolemWalking.png"));
+        normalWalkingImages.add(getUniformImage("GolemWalking2.png"));
         
-        alertWalkingImages.add(getUniformImage("AlertCrawlerWalking.png"));
-        alertWalkingImages.add(getUniformImage("AlertCrawlerWalking2.png"));
+        alertWalkingImages.add(getUniformImage("AlertGolemWalking.png"));
+        alertWalkingImages.add(getUniformImage("AlertGolemWalking2.png"));
         
-        attackImages.add(getUniformImage("CrawlerAttack1.png"));
-        attackImages.add(getUniformImage("CrawlerAttack2.png"));
-        attackImages.add(getUniformImage("CrawlerAttack3.png"));
-        attackImages.add(getUniformImage("CrawlerAttack4.png"));
+        attackImages.add(getUniformImage("GolemAttack1.png"));
+        attackImages.add(getUniformImage("GolemAttack2.png"));
+        attackImages.add(getUniformImage("GolemAttack3.png"));
+        attackImages.add(getUniformImage("GolemAttack4.png"));
+        //attackImages.add(getUniformImage("GolemAttack5.png"));
         
         behaviour = ENEMY_BEHAVIOUR.IDLE;
     }
@@ -88,6 +91,17 @@ public class Crawler extends Enemies
         super.act();
         updateAnimation();
         updateImageTransition();
+        
+        
+        GreenfootImage img = getImage();
+        System.out.println("-------");
+        System.out.println("Wall check: " + isWallAhead());
+        System.out.println("Ground check: "+ isGroundAhead());
+        System.out.println("Edge check: " + isAtEdge());
+        
+        
+        createDebugDots();
+    
     }
     
     @Override
@@ -133,8 +147,8 @@ public class Crawler extends Enemies
             attackAnimationCounter = 0;
         }
         
-        // Only animate when moving (patrol or chase)
-        if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
+        // Only animate when ACTUALLY moving (patrol or chase AND isMoving flag is true)
+        if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
             animationCounter++;
             if (animationCounter >= ANIMATION_SPEED) {
                 animationCounter = 0;
@@ -165,26 +179,28 @@ public class Crawler extends Enemies
         // Use attack animation if in attack states
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
             finalImage = new GreenfootImage(attackImages.get(attackFrame));
-        } else {
-            GreenfootImage normalBase;
-            GreenfootImage alertBase;
-            
-            if (behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) {
-                normalBase = normalWalkingImages.get(currentFrame);
-                alertBase = alertWalkingImages.get(currentFrame);
+        } else if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
+            // Only use walking animation if ACTUALLY MOVING
+            if (currentAlpha > 127) { // More than halfway alert
+                finalImage = new GreenfootImage(alertWalkingImages.get(currentFrame));
             } else {
-                normalBase = normalIdleImage;
-                alertBase = alertIdleImage;
+                finalImage = new GreenfootImage(normalWalkingImages.get(currentFrame));
             }
-            
-            if (currentAlpha > 0) {
-                GreenfootImage blended = new GreenfootImage(normalBase);
-                GreenfootImage overlay = new GreenfootImage(alertBase);
+        } else {
+            // Use idle animation when not moving (or in IDLE state)
+            if (currentAlpha > 127) {
+                // Fully alert - use alert idle image
+                finalImage = new GreenfootImage(alertIdleImage);
+            } else if (currentAlpha > 0) {
+                // Transitioning - blend idle images
+                GreenfootImage blended = new GreenfootImage(normalIdleImage);
+                GreenfootImage overlay = new GreenfootImage(alertIdleImage);
                 overlay.setTransparency(currentAlpha);
                 blended.drawImage(overlay, 0, 0);
                 finalImage = blended;
             } else {
-                finalImage = new GreenfootImage(normalBase);
+                // Normal - use normal idle image
+                finalImage = new GreenfootImage(normalIdleImage);
             }
         }
         
@@ -207,11 +223,21 @@ public class Crawler extends Enemies
     
     @Override
     protected void patrol() {
-        setWorldPosition(worldX + (direction * PATROL_SPEED), worldY);
+        // First, always apply gravity
+        fall(GRAVITY);
         
-        if (isAtEdge() || isBlocked(WALL_CHECK_DISTANCE)) {
+        // Then check if we should turn
+        boolean shouldTurn = isAtEdge() || isWallAhead() || !isGroundAhead();
+        
+        if (shouldTurn) {
             direction *= -1;
             flipImage();
+            // Wait a moment after turning to avoid flip-flopping
+            Greenfoot.delay(5);
+            isMoving = false;
+        } else {
+            setWorldPosition(worldX + (direction * PATROL_SPEED), worldY);
+            isMoving = true;
         }
         
         patrolTimer++;
@@ -219,8 +245,6 @@ public class Crawler extends Enemies
             behaviour = ENEMY_BEHAVIOUR.IDLE;
             patrolTimer = 0;
         }
-        
-        fall(GRAVITY);
     }
     
     @Override
@@ -229,29 +253,46 @@ public class Crawler extends Enemies
         
         int targetX = ((ScrollingActor)target).getWorldX();
         
-        if (!(Math.abs(targetX - worldX) < 5)){
-            if (targetX > worldX) {
-                direction = 1;
-                setWorldPosition(worldX + CHASE_SPEED, worldY);
-                if (!isFacingRight) {
-                    flipImage();
-                }
-            } else if (targetX < worldX) {
-                direction = -1;
-                setWorldPosition(worldX - CHASE_SPEED, worldY);
-                if (isFacingRight) {
-                    flipImage();
-                }
-            } 
-        }
+        isMoving = false; // Reset movement flag
         
-        if (isBlocked(WALL_CHECK_DISTANCE)) {
-            direction *= -1;
-            flipImage();
+        //added this condition so it doesn't flip back and forth when player is directly above the enemy
+        if (!(Math.abs(targetX - worldX) < 5)){
+            // Determine desired direction
+            int desiredDirection = (targetX > worldX) ? 1 : -1;
+            
+            // Update direction first to check correctly
+            direction = desiredDirection;
+            
+            // Check if we can move in that direction (not blocked, has ground, and not at edge)
+            if (!isWallAhead() && isGroundAhead() && !isAtEdge()) {
+                if (desiredDirection == 1) {
+                    setWorldPosition(worldX + CHASE_SPEED, worldY);
+                    if (!isFacingRight) {
+                        flipImage();
+                    }
+                } else {
+                    setWorldPosition(worldX - CHASE_SPEED, worldY);
+                    if (isFacingRight) {
+                        flipImage();
+                    }
+                }
+                isMoving = true; // We actually moved!
+            } else {
+                // If blocked, no ground ahead, or at edge - stop and just face the player
+                if (desiredDirection == 1 && !isFacingRight) {
+                    flipImage();
+                } else if (desiredDirection == -1 && isFacingRight) {
+                    flipImage();
+                }
+                // Don't move, just stay at the edge facing the player
+                isMoving = false; // Not moving
+            }
         }
         
         fall(GRAVITY);
     }
+ 
+    
     
     @Override
     protected void attackAnimation() {
@@ -281,5 +322,74 @@ public class Crawler extends Enemies
         if (health <= 0) {
             behaviour = ENEMY_BEHAVIOUR.DEAD;
         }
+    }
+    
+    public void createDebugDots() {
+        if (getWorld() == null) return;
+        
+        // Remove any existing debug dots
+        List<DebugDot> existingDots = getWorld().getObjects(DebugDot.class);
+        for (DebugDot dot : existingDots) {
+            getWorld().removeObject(dot);
+        }
+        
+        // Calculate offsets to match the actual check methods
+        int wallCheckX = getImage().getWidth() / 2;
+        int wallCheckY = getImage().getHeight() / 4;
+        
+        int groundCheckX = WALL_CHECK_DISTANCE;
+        int groundCheckY = getImage().getHeight() / 2;
+        
+        int edgeCheckX = getImage().getWidth()/2 + 10; // Check slightly ahead of feet
+        int edgeCheckY = getImage().getHeight()/2;
+        
+        // Wall check dot (red) - matches isWallAhead()
+        DebugDot wallDot = new DebugDot(this, Color.RED, wallCheckX, wallCheckY, 0, camera);
+        getWorld().addObject(wallDot, 0, 0);
+        wallDot.setWorldPosition(worldX + (direction * wallCheckX), worldY + wallCheckY);
+        
+        // Ground check dot (blue) - matches isGroundAhead()
+        DebugDot groundDot = new DebugDot(this, Color.BLUE, groundCheckX, groundCheckY, 1, camera);
+        getWorld().addObject(groundDot, 0, 0);
+        groundDot.setWorldPosition(worldX + (direction * groundCheckX), worldY + groundCheckY);
+        
+        // Edge check dot (yellow) - matches isAtEdge()
+        DebugDot edgeDot = new DebugDot(this, Color.YELLOW, edgeCheckX, edgeCheckY, 2, camera);
+        getWorld().addObject(edgeDot, 0, 0);
+        edgeDot.setWorldPosition(worldX + (direction * edgeCheckX), worldY + edgeCheckY);
+    }
+    
+    // Checks if there's ground to walk on ahead
+    protected boolean isGroundAhead() {
+        int groundCheckY = getImage().getHeight()/2;
+        // Pass OFFSETS, not absolute coordinates
+        return getOneObjectAtWorldOffset(0, groundCheckY, Platform.class) != null;
+    }
+    
+    // Checks if there's a wall/platform blocking movement ahead
+    protected boolean isWallAhead() {
+        int wallCheckX = getImage().getWidth() / 2;
+        int wallCheckY = getImage().getHeight() / 4; // Check at body height, not feet
+        return getOneObjectAtWorldOffset(direction * wallCheckX, wallCheckY, Platform.class) != null;
+    }
+    
+    @Override
+    public boolean isAtEdge() {
+        int edgeCheckX = getImage().getWidth()/2 + 10; // Check slightly ahead of feet
+        int edgeCheckY = getImage().getHeight()/2; // Check BELOW feet, not at center
+        // An edge is when there's NO ground ahead and down
+        return getOneObjectAtWorldOffset(direction * edgeCheckX, edgeCheckY, Platform.class) == null;
+    }
+    
+    public int getXPos(){
+        return getX();
+    }
+    
+    public int getYPos(){
+        return getY();
+    }
+    
+    public int getDirection(){
+        return direction;
     }
 }
