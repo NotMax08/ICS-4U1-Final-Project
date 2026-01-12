@@ -5,7 +5,7 @@ import greenfoot.*;
  */
 public class BossRoom extends GameWorld {
     
-    public static final int BOSS_WORLD_WIDTH = 822;
+    public static final int BOSS_WORLD_WIDTH = 800;
     public static final int BOSS_WORLD_HEIGHT = 600;
 
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;

@@ -4,7 +4,7 @@ import greenfoot.*;
  * @author Paul assisted by Claude
  */
 public class RoomTwo extends GameWorld {
-    
+    private MapGridDebugOverlay gridDebug;
     public RoomTwo(Player existingPlayer) {
         super(); // This creates the camera
         
@@ -31,6 +31,11 @@ public class RoomTwo extends GameWorld {
             updateAllActors();
             updateBackground();
         }
+        
+        gridDebug = new MapGridDebugOverlay(this, mapGrid);
+        addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+
     }
     
     public RoomTwo() {
@@ -41,6 +46,10 @@ public class RoomTwo extends GameWorld {
     public void act() {
         if (camera != null && player != null) {
             super.act(); // Call GameWorld's act()
+        }
+        if (Greenfoot.isKeyDown("g")) {
+            gridDebug.toggle();
+            Greenfoot.delay(10); // debounce
         }
     }
     

@@ -5,6 +5,7 @@ import greenfoot.*;
  */
 public class RoomOne extends GameWorld {
     private boolean visuals; //debug to show platforms, doors, walls, etc 
+    private MapGridDebugOverlay gridDebug;
     public RoomOne(Player existingPlayer) {
         super(); 
         
@@ -39,12 +40,25 @@ public class RoomOne extends GameWorld {
             updateBackground();
         }
         
+        gridDebug = new MapGridDebugOverlay(this, mapGrid);
+        addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
     }
     
     public RoomOne() {
         this(null);
+        
     }
-    
+    // Override act() to add null check
+    public void act() {
+        if (camera != null && player != null) {
+            super.act(); // Call GameWorld's act()
+        }
+        if (Greenfoot.isKeyDown("g")) {
+            gridDebug.toggle();
+            Greenfoot.delay(10); // debounce
+        }
+    }
     protected void initializeMapGrid() {
         // Platforms in world coordinates
         int[][] platformData = {
