@@ -7,7 +7,7 @@ public abstract class GameWorld extends World {
 
     // Display icons
     protected InventoryDisplay inventory;
-    protected AbilityDisplay slashIcon, magicIcon;
+    protected AbilityDisplay abilityDisplay;
     protected static boolean magicUnlocked = false; // ability to be unlocked
 
     // World image constants
@@ -41,12 +41,9 @@ public abstract class GameWorld extends World {
         inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera);
         addObject(inventory, 0, 0);
 
-        // Creates ability icons
-        slashIcon = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
-        addObject(slashIcon, 0, 0);
-
-        magicIcon = new AbilityDisplay(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, camera, player);
-        addObject(magicIcon, 0, 0);
+        // Creates ability display
+        abilityDisplay = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
+        addObject(abilityDisplay, 0, 0);
     }
 
     protected void updateBackground() {
