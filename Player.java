@@ -25,6 +25,7 @@ public class Player extends ScrollingActor {
     // Character states 
     private boolean onGround = false;
     private boolean inDoor = false;
+    private boolean inInteractive = false;
     private boolean direction = true; // false = left, true = right
     private boolean isStunned = false;
     private boolean isAttacking = false;
@@ -201,10 +202,10 @@ public class Player extends ScrollingActor {
             }
 
             // Moving in the air
-            if (Greenfoot.isKeyDown("a")) {
+            if (Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("left")) {
                 direction = false;
                 velocityX = -MOVE_SPEED * 0.85; // Slightly reduced horizontal movement speed while in the air
-            } else if (Greenfoot.isKeyDown("d")) {
+            } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
                 velocityX = MOVE_SPEED * 0.85;
             } else {
@@ -215,11 +216,11 @@ public class Player extends ScrollingActor {
             jumpingAnimCounter.reset();
             fallingAnimCounter.reset();
             // Normal ground movement
-            if (Greenfoot.isKeyDown("a")) {
+            if (Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("left")) {
                 direction = false;
                 velocityX = -MOVE_SPEED;
                 animateRunning();
-            } else if (Greenfoot.isKeyDown("d")) {
+            } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
                 velocityX = MOVE_SPEED;
                 animateRunning();
@@ -459,7 +460,14 @@ public class Player extends ScrollingActor {
             inDoor = false;
         }
     }
-
+    private void checkInteractive(){
+        if (isDoorAtPosition(worldX, worldY)) {
+            inInteractive = true;
+            
+        } else {
+            inInteractive = false;
+        }
+    }
     /**
      * Check if the player's hitbox at this position would collide with solid tiles
      * @author Paul
@@ -489,7 +497,20 @@ public class Player extends ScrollingActor {
         checkDoorAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
         checkDoorAt(posX, posY);                                      // Center
     }
+    /**
+     * @author Paul
+     */
+    private boolean isInteractiveAtPosition(int posX, int posY) {
+        int halfWidth = getImage().getWidth() / 2;
+        int halfHeight = getImage().getHeight() / 2;
 
+        // Check four corners and center
+        return checkInteractiveAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left
+        checkInteractiveAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right
+        checkInteractiveAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left
+        checkInteractiveAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
+        checkInteractiveAt(posX, posY);                                      // Center
+    }
     /**
      *  Check if a specific world coordinate contains a solid tile
      *  @author Paul
@@ -521,7 +542,20 @@ public class Player extends ScrollingActor {
 
         return tileType == 3 ;
     }
+    /**
+     * @author Paul
+     */
+    private boolean checkInteractiveAt(int worldX, int worldY){
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null) return false;
 
+        int tileX = world.worldToTileX(worldX);
+        int tileY = world.worldToTileY(worldY);
+
+        int tileType = world.mapGrid.getTileAt(tileX, tileY);
+
+        return tileType == 5 ;
+    }
     /**
      * @author Paul
      */
@@ -544,7 +578,9 @@ public class Player extends ScrollingActor {
     public boolean isInDoor(){
         return inDoor;
     }
-
+    public boolean isInInteractive(){
+        return inInteractive;
+    }
     public double getVelocityX() {
         return velocityX;
     }

@@ -276,18 +276,21 @@ public class RoomTwo extends GameWorld {
         }
     }
     private void createInteractiveDoorVisuals() {
-        int[][] doorRegions = {
-            {250, 820, 80, 140},   //Left door
-            {700, 1130, 80, 140},  //Middle door
+            int[][] doorRegions = {
+            {250, 820, 80, 140},   // Left door
+            {700, 1130, 80, 140},  // Middle door
             {2330, 810, 80, 140}   // Right door       
         };
-        for(int[] region : doorRegions) {
-            int worldX = region[0];
-            int worldY = region[1];
-            int width = region[2];
-            int height = region[3];
+        
+        String[] doorIds = {"npcenter", "backtormone", "enterboss"};
+        
+        for (int i = 0; i < doorRegions.length; i++) {
+            int worldX = doorRegions[i][0];
+            int worldY = doorRegions[i][1];
+            int width = doorRegions[i][2];
+            int height = doorRegions[i][3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height);
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, doorIds[i]);
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }

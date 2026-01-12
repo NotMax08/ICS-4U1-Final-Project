@@ -125,6 +125,12 @@ public class MapGrid
                     tileMap[breakableX[i]][breakableY[i]] = 4;
                 }
             }
+        }if (hasInteractiveDoor && interactiveX != null && interactiveY != null ){
+            for(int i = 0 ; i < interactiveX.length; i++){
+                if(interactiveX[i] >= 0 && interactiveX[i] < TILES_WIDE && interactiveY[i] >= 0 && interactiveY[i] < TILES_HIGH){
+                    tileMap[interactiveX[i]][interactiveY[i]] = 5;
+                }
+            }
         }
     }
     public int[][] getTileMap() {
