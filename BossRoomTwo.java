@@ -16,7 +16,7 @@ public class BossRoomTwo extends GameWorld {
         // Lock camera to center of static room
         camera.centerOn(BOSS_WORLD_WIDTH / 2, BOSS_WORLD_HEIGHT / 2);
         
-        fullBackground = new GreenfootImage("bossroom.jpg");
+        fullBackground = new GreenfootImage("bossroomtwo.jpg");
         fullBackground.scale(BOSS_WORLD_WIDTH, BOSS_WORLD_HEIGHT);
         
         initializeMapGrid();

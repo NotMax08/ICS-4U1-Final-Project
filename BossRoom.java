@@ -5,13 +5,9 @@ import greenfoot.*;
  */
 public class BossRoom extends GameWorld {
     // Override world dimensions to be same as screen - makes room static
-<<<<<<< Updated upstream
-    private static final int BOSS_WORLD_WIDTH = 822;
-    private static final int BOSS_WORLD_HEIGHT = 600;
-=======
-    public static final int BOSS_WORLD_WIDTH = 800;
+    public static final int BOSS_WORLD_WIDTH = 822;
     public static final int BOSS_WORLD_HEIGHT = 600;
->>>>>>> Stashed changes
+    
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
@@ -21,7 +17,7 @@ public class BossRoom extends GameWorld {
         // Lock camera to center of static room
         camera.centerOn(BOSS_WORLD_WIDTH / 2, BOSS_WORLD_HEIGHT / 2);
         
-        fullBackground = new GreenfootImage("bossroomtwo.jpg");
+        fullBackground = new GreenfootImage("bossroom.jpg");
         fullBackground.scale(BOSS_WORLD_WIDTH, BOSS_WORLD_HEIGHT);
         
         initializeMapGrid();
