@@ -25,11 +25,11 @@ public class BossRoomTwo extends GameWorld {
         
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 400, 500); // Center player in static room
+            transferPlayer(existingPlayer, 500, 500); // Center player in static room
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(400, 500); // Center player in static room
+            player.setWorldPosition(500, 500); // Center player in static room
         }
         
         setIcons();

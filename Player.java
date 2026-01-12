@@ -249,7 +249,7 @@ public class Player extends ScrollingActor {
         }
 
         // Fall faster
-        if ((Greenfoot.isKeyDown("s") && !onGround)){
+        if ((Greenfoot.isKeyDown("s") || Greenfoot.isKeyDown("down") && !onGround)){
             velocityY += GRAVITY;
         }
     }
@@ -264,6 +264,9 @@ public class Player extends ScrollingActor {
                     magicAttack();
                 }
                 
+            }
+            if (Greenfoot.isKeyDown("e")){
+                basicAttack();
             }
         }
     }
