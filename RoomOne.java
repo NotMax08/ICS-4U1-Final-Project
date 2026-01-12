@@ -4,7 +4,7 @@ import greenfoot.*;
  * 
  */
 public class RoomOne extends GameWorld {
-    
+    private boolean visuals; //debug to show platforms, doors, walls, etc 
     public RoomOne(Player existingPlayer) {
         super(); 
         
@@ -14,16 +14,21 @@ public class RoomOne extends GameWorld {
         initializeMapGrid();
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 800, 1200);
+            transferPlayer(existingPlayer, 900, 1200);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(800, 1200);
+            player.setWorldPosition(900, 1200);
         }
         
         setIcons();
         
-        createPlatformVisuals();
+        visuals = true;
+        if(visuals){
+            createPlatformVisuals();
+            
+        }
+        
         Crawler enemy = new Crawler(camera);
         addObject(enemy, SCREEN_WIDTH/2 , SCREEN_HEIGHT/2);
         enemy.setWorldPosition(500, 1000);
@@ -43,10 +48,12 @@ public class RoomOne extends GameWorld {
     protected void initializeMapGrid() {
         // Platforms in world coordinates
         int[][] platformData = {
-            {200, 400, 300, 20},
+            //Pause and inspect and find world coord variables to figure 
+            //out which platform is which
+            {35, 800, 70, 20},
             {600, 300, 200, 20},
-            {1000, 500, 400, 20},
-            {1500, 200, 300, 20},
+            {900, 500, 400, 20},
+            {1400, 200, 300, 20},
             {550, 1100, 500, 20},
             {890, 740, 360, 20},
             {510, 740, 280, 20},
@@ -56,7 +63,30 @@ public class RoomOne extends GameWorld {
             {1730, 1170, 200, 20},
             {1610, 1220, 150, 20},
             {1350, 1320, 370, 20},
-            {230, 1030, 150, 20}
+            {230, 1030, 150, 20},
+            {115,980,80,20},
+            {1750, 740, 520, 20},
+            {2180, 740, 120, 20},
+            {1110, 870, 80, 20},
+            {1200, 940, 100, 20},
+            {1450, 830, 100, 20},
+            {35, 530, 70, 20},
+            {140, 430, 140, 20},
+            {250, 290, 60, 20},
+            {310, 240, 60, 20},
+            {370, 190, 60, 20},
+            {480, 130, 170, 20},
+            {620, 60, 170, 20},
+            {760, 20, 120, 20},
+            {960, 60, 300, 20},
+            {1800, 70, 800, 20},
+            {2440, 740, 120, 20},
+            {2420, 540, 120, 20},
+            {2100, 540, 300, 20}, // delete later
+            {2300, 210, 160, 20},
+            {2200, 150, 100, 20},
+            
+            
         };
         
         // Convert platforms to tile coordinates
@@ -209,10 +239,12 @@ public class RoomOne extends GameWorld {
     
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            {200, 400, 300, 20},
+            //Pause and inspect and find world coord variables to figure 
+            //out which platform is which
+            {35, 800, 70, 20},
             {600, 300, 200, 20},
-            {1000, 500, 400, 20},
-            {1500, 200, 300, 20},
+            {900, 500, 400, 20},
+            {1400, 200, 300, 20},
             {550, 1100, 500, 20},
             {890, 740, 360, 20},
             {510, 740, 280, 20},
@@ -222,7 +254,34 @@ public class RoomOne extends GameWorld {
             {1730, 1170, 200, 20},
             {1610, 1220, 150, 20},
             {1350, 1320, 370, 20},
-            {230, 1030, 150, 20}
+            {230, 1030, 150, 20},
+            {115,980,80,20},
+            {1750, 740, 520, 20},
+            {2180, 740, 120, 20},
+            {1110, 870, 80, 20},
+            {1200, 940, 100, 20},
+            {1450, 830, 100, 20},
+            {35, 530, 70, 20},
+            {140, 430, 140, 20},
+            {250, 290, 60, 20},
+            {310, 240, 60, 20},
+            {370, 190, 60, 20},
+            {480, 130, 170, 20},
+            {620, 60, 170, 20},
+            {760, 20, 120, 20},
+            {960, 60, 300, 20},
+            {1800, 70, 800, 20},
+            {2440, 740, 120, 20},
+            {2420, 540, 120, 20},
+            {2100, 540, 300, 20}, // delete later
+            {2300, 210, 160, 20},
+            {2200, 150, 100, 20},
+            
+            
+            
+            
+                        
+            
         };
         
         for (int[] region : platformRegions) {

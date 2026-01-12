@@ -4,14 +4,10 @@ import greenfoot.*;
  * @author Paul assisted by Claude
  */
 public class BossRoom extends GameWorld {
-    // Override world dimensions to be same as screen - makes room static
-<<<<<<< Updated upstream
-    private static final int BOSS_WORLD_WIDTH = 822;
-    private static final int BOSS_WORLD_HEIGHT = 600;
-=======
-    public static final int BOSS_WORLD_WIDTH = 800;
+    
+    public static final int BOSS_WORLD_WIDTH = 822;
     public static final int BOSS_WORLD_HEIGHT = 600;
->>>>>>> Stashed changes
+
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
@@ -65,7 +61,7 @@ public class BossRoom extends GameWorld {
     protected void initializeMapGrid() {
         // Platforms in world coordinates (scaled for 800x600 room)
         int[][] platformData = {
-            {400, 580, 780, 40}  // Floor platform - full width near bottom
+            {410, 580, 830, 40}  // Floor platform - full width near bottom
         };
         
         // Convert platforms to tiles
@@ -228,7 +224,7 @@ public class BossRoom extends GameWorld {
     
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            {400, 580, 780, 40}  // Floor platform visual
+            {410, 580, 830, 40}  // Floor platform visual
         };
             
         for (int[] region : platformRegions) {

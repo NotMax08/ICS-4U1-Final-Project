@@ -14,14 +14,14 @@ public class RoomTwo extends GameWorld {
         initializeMapGrid();
         createPlatformVisuals();
         createInteractiveDoorVisuals();
-        
+        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 525, 900);
+            transferPlayer(existingPlayer, 600, 900);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(525, 900);
+            player.setWorldPosition(600, 900);
         }
         
         setIcons();
@@ -163,8 +163,8 @@ public class RoomTwo extends GameWorld {
         int[] breakableY = new int[0];
         //Interactive Doors
         int[][] interactiveData = {
-            {250, 820, 80, 140},   //Left door
-            {700, 1130, 80, 140},  //Middle door
+            {250, 820, 80, 140},   // Left door
+            {700, 1130, 80, 140},  // Middle door
             {2330, 810, 80, 140}   // Right door 
         };
         

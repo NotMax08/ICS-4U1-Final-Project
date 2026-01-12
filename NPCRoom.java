@@ -4,12 +4,15 @@ import greenfoot.*;
  * @author Paul assisted by Claude
  */
 public class NPCRoom extends GameWorld {
-    
+    private final int NPC_WORLD_WIDTH = 822;
+    private final int NPC_WORLD_HEIGHT = 600;
     public NPCRoom(Player existingPlayer) {
         super(); // This creates the camera
         
+        camera.centerOn(NPC_WORLD_WIDTH / 2, NPC_WORLD_HEIGHT / 2);
+        
         fullBackground = new GreenfootImage("npcroom.jpg");
-        fullBackground.scale(WORLD_WIDTH, WORLD_HEIGHT);
+        fullBackground.scale(NPC_WORLD_WIDTH, NPC_WORLD_HEIGHT);
         
         initializeMapGrid();
         createPlatformVisuals();
@@ -17,11 +20,11 @@ public class NPCRoom extends GameWorld {
         
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 525, 900);
+            transferPlayer(existingPlayer, 400, 500);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(525, 900);
+            player.setWorldPosition(400, 500);
         }
         
         setIcons();
@@ -47,6 +50,7 @@ public class NPCRoom extends GameWorld {
     protected void initializeMapGrid() {
         // Platforms in world coordinates
         int[][] platformData = {
+            {410, 200, 830, 20},
             
         };
         
@@ -212,7 +216,7 @@ public class NPCRoom extends GameWorld {
     }
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            
+            {410, 200, 830, 20},
         };
         
         for (int[] region : platformRegions) {
