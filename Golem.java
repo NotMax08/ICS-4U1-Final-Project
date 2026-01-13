@@ -1,226 +1,217 @@
 import greenfoot.*;
 import java.util.*;
-/**
- * GOLEM - Ground enemy that patrols platforms and chases player
- * 
- * @author Max Yuan
- * @version 1.0
- */
-public class Golem extends Enemies
-{
-    //constants for movement and enemy
+
+public class Golem extends GroundEnemy {
     public static final int GOLEM_HEALTH = 50;
     public static final int GOLEM_DAMAGE = 10;
     public static final int GOLEM_DETECTION_RANGE = 300;
     public static final int GOLEM_ATTACK_RANGE = 150;
     public static final int PATROL_SPEED = 1;
     public static final int CHASE_SPEED = 3;
-    public static final int MAX_IDLE_TIME = 120; 
-    public static final int MAX_PATROL_TIME = MAX_IDLE_TIME;
     public static final int GRAVITY = 1;
-    public static final int KNOCKBACK_DISTANCE = 10;
-    public static final int KNOCKBACK_HEIGHT = 5;
     public static final int WALL_CHECK_DISTANCE = 10;
+    public static final int IMAGE_SIZE = 220;
     
-    private int idleTimer;
-    private int patrolTimer;
-
-    //image stuff
-    public static final int IMAGE_WIDTH = 220;
-    public static final int IMAGE_HEIGHT = 220;
-    public static final int FADE_SPEED = 15;
-    public static final int ANIMATION_SPEED = 10;
-    public static final int ATTACK_ANIMATION_SPEED = 6;
-    public static final int ATTACK_COOLDOWN = 10;
-    
+    // Animation images
     private GreenfootImage normalIdleImage;
     private GreenfootImage alertIdleImage;
-    private ArrayList<GreenfootImage> alertWalkingImages = new ArrayList<>();
-    private ArrayList<GreenfootImage> normalWalkingImages = new ArrayList<>();
-    private ArrayList<GreenfootImage> attackImages = new ArrayList<>();
+    private ArrayList<GreenfootImage> alertWalkImages = new ArrayList<>();
     
+    // Animation state
     private int currentAlpha = 0;
-    private boolean isAlert = false;
-    private int animationCounter = 0;
-    private int currentFrame = 0;
-    
-    // Attack state tracking
+    private int walkFrame = 0;
     private int attackFrame = 0;
-    private int attackAnimationCounter = 0;
+    private int walkTimer = 0;
+    private int attackTimer = 0;
+    private int alphaTimer = 0;
     
-    private boolean isMoving = false;
+    // Animation speeds
+    private static final int WALK_FRAME_DELAY = 10; // Walk animation speed
+    private static final int ATTACK_FRAME_DELAY = 8; // Attack animation speed
+    private static final int ALPHA_CHANGE_DELAY = 3; // Alpha fade speed
+    private static final int ATTACK_COOLDOWN = 40;
     
-    private ScrollingStatBar healthBar;
+    private boolean isAttackComplete = false;
+    private int attackHoldTimer = 0;
+    private static final int ATTACK_HOLD_FRAMES = 20;
     
-
+    // State timers
+    private int idleTimer = 0;
+    private int patrolTimer = 0;
+    public static final int MAX_IDLE_TIME = 120;
+    public static final int MAX_PATROL_TIME = MAX_IDLE_TIME;
+    
     public Golem(Camera camera) {
         super(camera, 
-              getUniformImage("Golem.png", IMAGE_WIDTH, IMAGE_HEIGHT),
-              GOLEM_HEALTH,
-              GOLEM_DAMAGE,
-              GOLEM_DETECTION_RANGE,
-              GOLEM_ATTACK_RANGE
-        );
+              getUniformImage("Golem.png", IMAGE_SIZE, IMAGE_SIZE),
+              GOLEM_HEALTH, GOLEM_DAMAGE,
+              GOLEM_DETECTION_RANGE, GOLEM_ATTACK_RANGE,
+              PATROL_SPEED, CHASE_SPEED, GRAVITY, WALL_CHECK_DISTANCE);
         
-        this.idleTimer = 0;
-        this.patrolTimer = 0;
-        
-        normalIdleImage = getUniformImage("Golem.png", IMAGE_WIDTH, IMAGE_HEIGHT);
-        alertIdleImage = getUniformImage("AlertGolem.png", IMAGE_WIDTH, IMAGE_HEIGHT);
-        
-        normalWalkingImages.add(getUniformImage("GolemWalking.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        normalWalkingImages.add(getUniformImage("GolemWalking2.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        
-        alertWalkingImages.add(getUniformImage("AlertGolemWalking.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        alertWalkingImages.add(getUniformImage("AlertGolemWalking2.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        
-        attackImages.add(getUniformImage("GolemAttack1.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        attackImages.add(getUniformImage("GolemAttack2.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        attackImages.add(getUniformImage("GolemAttack3.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        attackImages.add(getUniformImage("GolemAttack4.png", IMAGE_WIDTH, IMAGE_HEIGHT));
-        
+        loadImages();
         behaviour = ENEMY_BEHAVIOUR.IDLE;
-        
-        // Create health bar - positioned above the golem
-        //healthBar = new ScrollingStatBar(camera, this, GOLEM_HEALTH, 80, 8, -120);
-        healthBar = null;
+        healthBarYOffset = -120;
     }
-    @Override
-    protected void addedToWorld(World world) {
-        // Create and add the health bar AFTER being added to world
-        healthBar = new ScrollingStatBar(camera, this, GOLEM_HEALTH, 80, 8, -120);
-        world.addObject(healthBar, 0, 0);
+    
+    private void loadImages() {
+        normalIdleImage = getUniformImage("Golem.png", IMAGE_SIZE, IMAGE_SIZE);
+        alertIdleImage = getUniformImage("AlertGolem.png", IMAGE_SIZE, IMAGE_SIZE);
         
-        // Set initial position
-        healthBar.setWorldPosition(worldX, worldY - 120);
+        walkImages.add(getUniformImage("GolemWalking.png", IMAGE_SIZE, IMAGE_SIZE));
+        walkImages.add(getUniformImage("GolemWalking2.png", IMAGE_SIZE, IMAGE_SIZE));
+        
+        alertWalkImages.add(getUniformImage("AlertGolemWalking.png", IMAGE_SIZE, IMAGE_SIZE));
+        alertWalkImages.add(getUniformImage("AlertGolemWalking2.png", IMAGE_SIZE, IMAGE_SIZE));
+        
+        attackImages.add(getUniformImage("GolemAttack1.png", IMAGE_SIZE, IMAGE_SIZE));
+        attackImages.add(getUniformImage("GolemAttack2.png", IMAGE_SIZE, IMAGE_SIZE));
+        attackImages.add(getUniformImage("GolemAttack3.png", IMAGE_SIZE, IMAGE_SIZE));
+        attackImages.add(getUniformImage("GolemAttack4.png", IMAGE_SIZE, IMAGE_SIZE));
     }
-
     
     @Override
     public void act() {
+        // Call parent for basic enemy logic
         super.act();
+        
+        // Update animations
         updateAnimation();
-        updateImageTransition();
-        
-        
-        GreenfootImage img = getImage();
-        /*
-        System.out.println("-------");
-        System.out.println("Wall check: " + isWallAhead());
-        System.out.println("Ground check: "+ isGroundAhead());
-        System.out.println("Edge check: " + isAtEdge());
-        */
-        
-        
-        createDebugDots();
-    
+        updateImage();
     }
     
     @Override
-    protected void flipImage() {
-        isFacingRight = !isFacingRight;
-    }
-    
-    private void updateAnimation() {
-        // Reset attack animation when entering ATTACK_ANIMATION state fresh
-        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION && attackFrame == 0 && attackAnimationCounter == 0) {
-            // Starting fresh attack
+    protected void updateAnimation() {
+        // Update walk animation timer
+        walkTimer++;
+        
+        // Update walk frames when moving
+        if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
+            if (walkTimer >= WALK_FRAME_DELAY) {
+                walkTimer = 0;
+                walkFrame = (walkFrame + 1) % 2;
+            }
+        } else {
+            walkFrame = 0;
+            walkTimer = 0;
         }
         
-        // Handle attack animation - FORCED to complete
+        // Update attack animation
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
-            attackAnimationCounter++;
-            if (attackAnimationCounter >= ATTACK_ANIMATION_SPEED) {
-                attackAnimationCounter = 0;
-                attackFrame++;
-                
-                // Check if attack animation is complete
-                if (attackFrame >= attackImages.size()) {
-                    attackFrame = attackImages.size() - 1; // Hold on last frame
+            if (!isAttackComplete) {
+                // Still playing attack animation
+                attackTimer++;
+                if (attackTimer >= ATTACK_FRAME_DELAY) {
+                    attackTimer = 0;
+                    attackFrame++;
                     
-                    // Deal damage on last frame
-                    Player player = (Player) getOneIntersectingWorldObject(Player.class);
-                    if (player != null) {
-                        //player.takeDamage(damage);
+                    if (attackFrame >= attackImages.size()) {
+                        // Reached last frame - start holding
+                        attackFrame = attackImages.size() - 1; // Stay on frame 4
+                        isAttackComplete = true;
+                        attackHoldTimer = 0;
+                        
+                        // Deal damage when we reach the last frame
+                        Player player = (Player) getOneIntersectingWorldObject(Player.class);
+                        if (player != null) {
+                            // player.takeDamage(damage);
+                        }
                     }
-                    
-                    // Transition to cooldown state
+                }
+            } else {
+                // Holding on last frame
+                attackHoldTimer++;
+                if (attackHoldTimer >= ATTACK_HOLD_FRAMES) {
+                    // Hold complete - transition to cooldown
                     behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
                     attackCooldownTimer = ATTACK_COOLDOWN;
                     isInAttackCooldown = true;
+                    
+                    // Reset attack animation state
+                    attackFrame = 0;
+                    isAttackComplete = false;
+                    attackHoldTimer = 0;
                 }
             }
-            return; // Don't update walking animation during attack
-        }
-        
-        // Reset attack animation when NOT in attack states
-        if (behaviour != ENEMY_BEHAVIOUR.ATTACK_ANIMATION && behaviour != ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
-            attackFrame = 0;
-            attackAnimationCounter = 0;
-        }
-        
-        // Only animate when ACTUALLY moving (patrol or chase AND isMoving flag is true)
-        if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
-            animationCounter++;
-            if (animationCounter >= ANIMATION_SPEED) {
-                animationCounter = 0;
-                currentFrame = (currentFrame + 1) % 2;
-            }
         } else {
-            currentFrame = 0;
-            animationCounter = 0;
+            // Reset attack animation when not attacking
+            attackFrame = 0;
+            attackTimer = 0;
+            isAttackComplete = false;
+            attackHoldTimer = 0;
+        }
+        
+        // Update alpha fade
+        alphaTimer++;
+        if (alphaTimer >= ALPHA_CHANGE_DELAY) {
+            alphaTimer = 0;
+            boolean shouldBeAlert = (behaviour == ENEMY_BEHAVIOUR.CHASE || 
+                                    behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || 
+                                    behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN);
+            
+            if (shouldBeAlert && currentAlpha < 255) {
+                currentAlpha = Math.min(255, currentAlpha + 15);
+            } else if (!shouldBeAlert && currentAlpha > 0) {
+                currentAlpha = Math.max(0, currentAlpha - 15);
+            }
         }
     }
     
-    private void updateImageTransition() {
-        // Determine if we should be in alert mode
-        boolean shouldBeAlert = (behaviour == ENEMY_BEHAVIOUR.CHASE || 
-                                behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || 
-                                behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN);
-        
-        // Fade towards target state
-        if (shouldBeAlert && currentAlpha < 255) {
-            currentAlpha = Math.min(255, currentAlpha + FADE_SPEED);
-        } else if (!shouldBeAlert && currentAlpha > 0) {
-            currentAlpha = Math.max(0, currentAlpha - FADE_SPEED);
-        }
-        
-        // Select base images based on current state
+    @Override
+    protected void updateImage() {
         GreenfootImage finalImage;
         
-        // Use attack animation if in attack states
-        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
-            finalImage = new GreenfootImage(attackImages.get(attackFrame));
+        // Determine which image to use based on state
+        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || 
+            behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
+            // Attack animation or holding attack pose
+            int frameIndex = Math.min(attackFrame, attackImages.size() - 1);
+            finalImage = new GreenfootImage(attackImages.get(frameIndex));
         } else if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
-            // Only use walking animation if ACTUALLY MOVING
-            if (currentAlpha > 127) { // More than halfway alert
-                finalImage = new GreenfootImage(alertWalkingImages.get(currentFrame));
+            // Walking animation
+            if (currentAlpha > 127) { // Mostly alert
+                finalImage = new GreenfootImage(alertWalkImages.get(walkFrame));
             } else {
-                finalImage = new GreenfootImage(normalWalkingImages.get(currentFrame));
+                finalImage = new GreenfootImage(walkImages.get(walkFrame));
             }
         } else {
-            // Use idle animation when not moving (or in IDLE state)
+            // Idle animation
             if (currentAlpha > 127) {
-                // Fully alert - use alert idle image
                 finalImage = new GreenfootImage(alertIdleImage);
             } else if (currentAlpha > 0) {
-                // Transitioning - blend idle images
+                // Blend between normal and alert
                 GreenfootImage blended = new GreenfootImage(normalIdleImage);
                 GreenfootImage overlay = new GreenfootImage(alertIdleImage);
                 overlay.setTransparency(currentAlpha);
                 blended.drawImage(overlay, 0, 0);
                 finalImage = blended;
             } else {
-                // Normal - use normal idle image
                 finalImage = new GreenfootImage(normalIdleImage);
             }
         }
         
+        // Flip image if facing left
         if (!isFacingRight) {
             finalImage.mirrorHorizontally();
         }
         
         setImage(finalImage);
+    }
+    
+    @Override
+    protected void attackAnimation() {
+        // Animation is handled in updateAnimation()
+        fall(); // Apply gravity during attack
+    }
+    
+    @Override
+    protected void takeDamage(int dmg) {
+        super.takeDamage(dmg);
+        
+        // Reset attack animation when hurt
+        attackFrame = 0;
+        attackTimer = 0;
+        isAttackComplete = false;
+        attackHoldTimer = 0;
     }
     
     @Override
@@ -230,25 +221,19 @@ public class Golem extends Enemies
             behaviour = ENEMY_BEHAVIOUR.PATROL;
             idleTimer = 0;
         }
-        fall(GRAVITY);
+        fall();
     }
     
     @Override
     protected void patrol() {
-        // First, always apply gravity
-        fall(GRAVITY);
+        fall();
         
-        // Then check if we should turn
         boolean shouldTurn = isAtEdge() || isWallAhead() || !isGroundAhead();
-        
         if (shouldTurn) {
-            direction *= -1;
-            flipImage();
-            // Wait a moment after turning to avoid flip-flopping
-            Greenfoot.delay(5);
+            setDirection(-direction);
             isMoving = false;
         } else {
-            setWorldPosition(worldX + (direction * PATROL_SPEED), worldY);
+            setWorldPosition(worldX + (direction * patrolSpeed), worldY);
             isMoving = true;
         }
         
@@ -263,158 +248,30 @@ public class Golem extends Enemies
     protected void chase() {
         if (target == null) return;
         
-        int targetX = ((ScrollingActor)target).getWorldX();
+        ScrollingActor scrollTarget = (ScrollingActor) target;
+        int targetX = scrollTarget.getWorldX();
         
-        isMoving = false; // Reset movement flag
-        
-        //added this condition so it doesn't flip back and forth when player is directly above the enemy
-        if (!(Math.abs(targetX - worldX) < 5)){
-            // Determine desired direction
+        if (Math.abs(targetX - worldX) >= 5) {
             int desiredDirection = (targetX > worldX) ? 1 : -1;
+            setDirection(desiredDirection);
             
-            // Update direction first to check correctly
-            direction = desiredDirection;
-            
-            // Check if we can move in that direction (not blocked, has ground, and not at edge)
             if (!isWallAhead() && isGroundAhead() && !isAtEdge()) {
-                if (desiredDirection == 1) {
-                    setWorldPosition(worldX + CHASE_SPEED, worldY);
-                    if (!isFacingRight) {
-                        flipImage();
-                    }
-                } else {
-                    setWorldPosition(worldX - CHASE_SPEED, worldY);
-                    if (isFacingRight) {
-                        flipImage();
-                    }
-                }
-                isMoving = true; // We actually moved!
+                int speed = (desiredDirection == direction) ? chaseSpeed : patrolSpeed;
+                setWorldPosition(worldX + (desiredDirection * speed), worldY);
+                isMoving = true;
             } else {
-                // If blocked, no ground ahead, or at edge - stop and just face the player
-                if (desiredDirection == 1 && !isFacingRight) {
-                    flipImage();
-                } else if (desiredDirection == -1 && isFacingRight) {
-                    flipImage();
-                }
-                // Don't move, just stay at the edge facing the player
-                isMoving = false; // Not moving
+                isMoving = false;
             }
+        } else {
+            isMoving = false;
         }
         
-        fall(GRAVITY);
-    }
- 
-    
-    
-    @Override
-    protected void attackAnimation() {
-        // Stay still during attack animation, just apply gravity
-        fall(GRAVITY);
+        fall();
     }
     
     @Override
     protected void attackCooldown() {
-        // Stay still during cooldown, hold last attack frame
-        fall(GRAVITY);
+        fall(); // Apply gravity during cooldown
     }
     
-    @Override
-    protected void takeDamage(int dmg) {
-        health -= dmg;
-        
-        // Update the health bar
-        if (healthBar != null) {
-            healthBar.update(health);
-        }
-        
-        behaviour = ENEMY_BEHAVIOUR.HURT;
-        
-        // Reset attack state when hurt
-        attackFrame = 0;
-        attackAnimationCounter = 0;
-        attackCooldownTimer = 0;
-        isInAttackCooldown = false;
-        
-        setWorldPosition(worldX + (direction * -KNOCKBACK_DISTANCE), worldY - KNOCKBACK_HEIGHT);
-        
-        if (health <= 0) {
-            behaviour = ENEMY_BEHAVIOUR.DEAD;
-        }
-    }
-    
-    public void createDebugDots() {
-        if (getWorld() == null) return;
-        
-        // Remove any existing debug dots
-        List<DebugDot> existingDots = getWorld().getObjects(DebugDot.class);
-        for (DebugDot dot : existingDots) {
-            getWorld().removeObject(dot);
-        }
-        
-        // Calculate offsets to match the actual check methods
-        int wallCheckX = getImage().getWidth() / 2;
-        int wallCheckY = getImage().getHeight() / 4;
-        
-        int groundCheckX = WALL_CHECK_DISTANCE;
-        int groundCheckY = getImage().getHeight() / 2;
-        
-        int edgeCheckX = getImage().getWidth()/2 + 10; // Check slightly ahead of feet
-        int edgeCheckY = getImage().getHeight()/2;
-        
-        // Wall check dot (red) - matches isWallAhead()
-        DebugDot wallDot = new DebugDot(this, Color.RED, wallCheckX, wallCheckY, 0, camera);
-        getWorld().addObject(wallDot, 0, 0);
-        wallDot.setWorldPosition(worldX + (direction * wallCheckX), worldY + wallCheckY);
-        
-        // Ground check dot (blue) - matches isGroundAhead()
-        DebugDot groundDot = new DebugDot(this, Color.BLUE, groundCheckX, groundCheckY, 1, camera);
-        getWorld().addObject(groundDot, 0, 0);
-        groundDot.setWorldPosition(worldX + (direction * groundCheckX), worldY + groundCheckY);
-        
-        // Edge check dot (yellow) - matches isAtEdge()
-        DebugDot edgeDot = new DebugDot(this, Color.YELLOW, edgeCheckX, edgeCheckY, 2, camera);
-        getWorld().addObject(edgeDot, 0, 0);
-        edgeDot.setWorldPosition(worldX + (direction * edgeCheckX), worldY + edgeCheckY);
-    }
-    
-    // Checks if there's ground to walk on ahead
-    protected boolean isGroundAhead() {
-        int groundCheckY = getImage().getHeight()/2;
-        // Pass OFFSETS, not absolute coordinates
-        return getOneObjectAtWorldOffset(0, groundCheckY, Platform.class) != null;
-    }
-    
-    // Checks if there's a wall/platform blocking movement ahead
-    protected boolean isWallAhead() {
-        int wallCheckX = getImage().getWidth() / 2;
-        int wallCheckY = getImage().getHeight() / 4; // Check at body height, not feet
-        return getOneObjectAtWorldOffset(direction * wallCheckX, wallCheckY, Platform.class) != null;
-    }
-    
-    @Override
-    public boolean isAtEdge() {
-        int edgeCheckX = getImage().getWidth()/2 + 10; // Check slightly ahead of feet
-        int edgeCheckY = getImage().getHeight()/2; // Check BELOW feet, not at center
-        // An edge is when there's NO ground ahead and down
-        return getOneObjectAtWorldOffset(direction * edgeCheckX, edgeCheckY, Platform.class) == null;
-    }
-    
-    protected void die() {
-        if (healthBar != null && getWorld() != null) {
-            getWorld().removeObject(healthBar);
-        }
-        getWorld().removeObject(this);
-    }
-    
-    public int getXPos(){
-        return getX();
-    }
-    
-    public int getYPos(){
-        return getY();
-    }
-    
-    public int getDirection(){
-        return direction;
-    }
 }
