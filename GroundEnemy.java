@@ -57,13 +57,13 @@ public abstract class GroundEnemy extends BaseEnemy {
     
     protected boolean isGroundAhead() {
         return getOneObjectAtWorldOffset(direction * wallCheckDistance, 
-                                         getImage().getHeight()/2, Platform.class) != null;
+                                         getImage().getHeight()/2 + 5, Platform.class) != null;
     }
     
     @Override
     public boolean isAtEdge() {
         return getOneObjectAtWorldOffset(direction * (getImage().getWidth()/2 + 10), 
-                                         getImage().getHeight()/2, Platform.class) == null;
+                                         getImage().getHeight()/2 + 5, Platform.class) == null;
     }
     
     // Ground enemies always need to apply gravity

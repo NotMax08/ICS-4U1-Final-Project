@@ -39,6 +39,10 @@ public class RoomOne extends GameWorld {
         addObject(fly1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fly1.setWorldPosition(1500, 1100);
         
+        Fungi fungi1 = new Fungi(camera);
+        addObject(fungi1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi1.setWorldPosition(888, 680 - 100);
+        
         // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
