@@ -17,16 +17,17 @@ public class RoomThree extends GameWorld {
         visuals = false;
         if(visuals){
             createPlatformVisuals();
-            createInteractiveDoorVisuals();
         }
+        createInteractiveDoors(); //debug visual in contructor class
+        
         this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
         
         if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 600, 1000);
+            transferPlayer(existingPlayer, 1000, 1250);
         } else {
             player = new Player(camera);
             addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(600, 1000);
+            player.setWorldPosition(1000, 1250);
         }
         
         setIcons();
@@ -135,10 +136,7 @@ public class RoomThree extends GameWorld {
             {51, 51, 32},
             {52, 52, 33},
             {53, 53, 34},
-            {54, 54, 35},
-            
-            
-            
+            {54, 54, 35}, 
            
             
         };
@@ -381,7 +379,7 @@ public class RoomThree extends GameWorld {
             platform.setWorldPosition(worldX, worldY);
         }
     }
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
         int[][] doorRegions = {
                   
         };

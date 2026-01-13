@@ -24,11 +24,13 @@ public class RoomOne extends GameWorld {
         
         setIcons();
         
-        visuals = true;
+        visuals = false;
         if(visuals){
             createPlatformVisuals();
-            createInteractiveDoorVisuals();
+            
         }
+        
+        createInteractiveDoors();//debug visual in contructor class
         
         // Create different enemy types easily
         Golem golem = new Golem(camera);
@@ -38,6 +40,10 @@ public class RoomOne extends GameWorld {
         BasicFly fly1 = new BasicFly(camera, 1200, 1800, 1100);
         addObject(fly1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fly1.setWorldPosition(1500, 1100);
+        
+        Fungi fungi1 = new Fungi(camera);
+        addObject(fungi1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi1.setWorldPosition(888, 680 - 100);
         
         // Null check
         if (camera != null && player != null) {
@@ -49,10 +55,16 @@ public class RoomOne extends GameWorld {
         gridDebug = new MapGridDebugOverlay(this, mapGrid);
         addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        
+        
+        drawPlatformOnBackground(910, 500, 420, 40, "platform1.png");
+        drawPlatformOnBackground(610, 300, 220, 40, "platform1.png");
+        drawPlatformOnBackground(1800, 440, 320, 40, "platform1.png");
+        drawPlatformOnBackground(1400, 200, 320, 40, "platform1.png");
     }
     
     public RoomOne() {
-        this(null);
+         this(null);
         
     }
     // Override act() to add null check
@@ -74,7 +86,7 @@ public class RoomOne extends GameWorld {
             {600, 300, 200, 20},
             {900, 500, 400, 20},
             {1400, 200, 300, 20},
-            {550, 1100, 500, 20},
+            {550, 1100, 480, 20},
             {890, 740, 360, 20},
             {510, 740, 280, 20},
             {1925, 1120, 175, 20},
@@ -158,8 +170,8 @@ public class RoomOne extends GameWorld {
         
         // Create border walls (leaving space for doors on top and right)
         int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2 ); 
-        int[] wallsX = new int[wallTileCount/2 + 60]; //Plus additional wall barriers counted 
-        int[] wallsY = new int[wallTileCount/2 + 60]; //manually with the debug menu
+        int[] wallsX = new int[wallTileCount/2 + 65]; //Plus additional wall barriers counted 
+        int[] wallsY = new int[wallTileCount/2 + 65]; //manually with the debug menu
         
         index = 0;
         // Bottom walls only (no top wall for door)
@@ -209,6 +221,11 @@ public class RoomOne extends GameWorld {
         for(int y = 0; y < 5; y++){
             wallsX[index] = 10;
             wallsY[index] = 16 + y;
+            index++;
+        }
+        for(int i = 0; i < 5; i++){
+            wallsX[index] = 53;
+            wallsY[index] = 38 + i;
             index++;
         }
         
@@ -351,7 +368,7 @@ public class RoomOne extends GameWorld {
             platform.setWorldPosition(worldX, worldY);
         }
     }
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
         int[][] doorRegions = {
             {2090, 650, 100, 150}     
         };
@@ -365,5 +382,14 @@ public class RoomOne extends GameWorld {
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
+    }
+    private void drawPlatformOnBackground(int worldX, int worldY, int width, int height, String imageName) {
+        GreenfootImage platformImg = new GreenfootImage(imageName);
+        platformImg.scale(width, height);
+        
+        int x = worldX - width/2;
+        int y = worldY - height/2;
+        
+        fullBackground.drawImage(platformImg, x, y);
     }
 }
