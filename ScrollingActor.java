@@ -101,41 +101,56 @@ public abstract class ScrollingActor extends SuperSmoothMover {
         return result;
     }
     
-    /**
-     * Get objects in world coordinate range (radius-based)
-     */
-    protected <T> List<T> getObjectsInWorldRange(int range, Class<T> cls) {
-        List<T> result = new ArrayList<>();
-        List<T> objects = getWorld().getObjects(cls);
-        
-        for (T obj : objects) {
-            if (obj instanceof ScrollingActor) {
-                ScrollingActor scrollObj = (ScrollingActor) obj;
-                
-                // Calculate distance in world coordinates
-                int dx = scrollObj.getWorldX() - worldX;
-                int dy = scrollObj.getWorldY() - worldY;
-                double distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance <= range && obj != this) {
-                    result.add(obj);
-                }
+    // Add this method to Enemies class
+protected <T extends Actor> List<T> getObjectsInWorldRange(int worldRange, Class<T> cls) {
+    List<T> allObjects = getWorld().getObjects(cls);
+    List<T> objectsInRange = new ArrayList<>();
+    
+    for (T obj : allObjects) {
+        if (obj instanceof ScrollingActor) {
+            ScrollingActor scrollObj = (ScrollingActor) obj;
+            int dx = scrollObj.getWorldX() - worldX;
+            int dy = scrollObj.getWorldY() - worldY;
+            double distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance <= worldRange) {
+                objectsInRange.add(obj);
             }
         }
-        
-        // Sort by distance (closest first)
-        result.sort((a, b) -> {
-            ScrollingActor sa = (ScrollingActor) a;
-            ScrollingActor sb = (ScrollingActor) b;
+        // For non-scrolling actors, use screen coordinates (fallback)
+        else {
+            int dx = obj.getX() - getX();
+            int dy = obj.getY() - getY();
+            double distance = Math.sqrt(dx * dx + dy * dy);
             
-            double distA = Math.hypot(sa.getWorldX() - worldX, sa.getWorldY() - worldY);
-            double distB = Math.hypot(sb.getWorldX() - worldX, sb.getWorldY() - worldY);
-            
-            return Double.compare(distA, distB);
-        });
-        
-        return result;
+            if (distance <= worldRange) {
+                objectsInRange.add(obj);
+            }
+        }
     }
+    
+    // Sort by distance (closest first)
+    objectsInRange.sort((a, b) -> {
+        double distA = calculateDistanceTo(a);
+        double distB = calculateDistanceTo(b);
+        return Double.compare(distA, distB);
+    });
+    
+    return objectsInRange;
+}
+
+private double calculateDistanceTo(Actor actor) {
+    if (actor instanceof ScrollingActor) {
+        ScrollingActor scrollActor = (ScrollingActor) actor;
+        int dx = scrollActor.getWorldX() - worldX;
+        int dy = scrollActor.getWorldY() - worldY;
+        return Math.sqrt(dx * dx + dy * dy);
+    } else {
+        int dx = actor.getX() - getX();
+        int dy = actor.getY() - getY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+}
     
     /**
      * Get intersecting objects (checking world coordinate bounding boxes)
