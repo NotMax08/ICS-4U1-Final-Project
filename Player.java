@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.ArrayList;
 /**
  * The Player class manages controls related to the Player character
  * Controls such as movement and abilities
@@ -20,7 +21,8 @@ public class Player extends ScrollingActor {
     private static final int ANIMATION_SPEED = 4; 
     private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
     private static final int STUN_DURATION = 30; // Acts to remain stunned
-    private static final int BASIC_ATTACK_COOLDOWN = 30;
+    private static final int BASIC_ATTACK_COOLDOWN = 25;
+    private static final int BASIC_ATTACK_DAMAGE = 7;
 
     // Character states 
     private boolean onGround = false;
@@ -276,7 +278,7 @@ public class Player extends ScrollingActor {
         abilityCooldownCounter.set(BASIC_ATTACK_COOLDOWN);
 
         // slash animation
-        SlashAnimation slash = new SlashAnimation(6,4);
+        SlashAnimation slash = new SlashAnimation(6,2);
 
         // changes depending on which direction the player is facing
         int slashOffsetX = direction ? 30: -30; 
@@ -301,14 +303,28 @@ public class Player extends ScrollingActor {
                 slash.setImage(slashImg);
             }
 
-            checkAttackHit(slashWorldX, slashWorldY);
+            checkAttackHit(slashWorldX, slashWorldY, BASIC_ATTACK_DAMAGE);
         }
     }
 
-    private void checkAttackHit(int attackX, int attackY){
-        // TO DO!!!!!
-        // check for enemies and deal damage
-        // also incorporate ranged attacks and projectiles
+    private void checkAttackHit(int attackX, int attackY, int damage){
+        GameWorld world = (GameWorld) getWorld();
+        if(world == null) return;
+        
+        // 
+        int attackScreenX = camera.worldToScreenX(attackX);
+        int attackScreenY = camera.worldToScreenY(attackY);
+        
+        ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
+            attackScreenX,
+            attackScreenY,
+            BaseEnemy.class
+        ));
+        
+        for(BaseEnemy enemy : enemies){
+            enemy.takeDamage(damage);
+        }
+            
     }
 
     private void magicAttack(){
