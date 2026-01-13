@@ -29,7 +29,7 @@ public class Golem extends GroundEnemy {
     private static final int WALK_FRAME_DELAY = 10; // Walk animation speed
     private static final int ATTACK_FRAME_DELAY = 8; // Attack animation speed
     private static final int ALPHA_CHANGE_DELAY = 3; // Alpha fade speed
-    private static final int ATTACK_COOLDOWN = 40;
+    private static final int ATTACK_COOLDOWN = 1;
     
     private boolean isAttackComplete = false;
     private int attackHoldTimer = 0;
