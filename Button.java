@@ -187,7 +187,7 @@ public class Button extends Actor
         
         // The button in ChooseWorld that leads to the GameWorld
         if(buttonID.equals("startworld")){
-            Greenfoot.setWorld(new RoomOne());
+            Greenfoot.setWorld(new RoomThree());
             return;
         }
         /*

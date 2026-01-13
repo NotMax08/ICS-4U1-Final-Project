@@ -450,10 +450,15 @@ public class Player extends ScrollingActor {
      * @author Paul
      */
     private void checkDoor(){
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null) return;
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
-
-            Greenfoot.setWorld(new RoomTwo());
+            if( getWorld() instanceof RoomOne){
+                Greenfoot.setWorld(new RoomTwo());
+            }else if(getWorld() instanceof RoomTwo){
+                Greenfoot.setWorld(new RoomThree());
+            }
         } else {
             inDoor = false;
         }
@@ -557,19 +562,6 @@ public class Player extends ScrollingActor {
         int tileType = world.mapGrid.getTileAt(tileX, tileY);
 
         return tileType == 5 ;
-    }
-    /**
-     * @author Paul
-     */
-    private void enterDoor() {
-        GameWorld world = (GameWorld) getWorld();
-        if (world == null) return;
-
-        if (world instanceof RoomOne) {
-            Greenfoot.setWorld(new RoomTwo(this)); // Pass player to new world
-        } else if (world instanceof RoomTwo) {
-            Greenfoot.setWorld(new RoomOne(this)); // Pass player back
-        }
     }
     
     // Getters

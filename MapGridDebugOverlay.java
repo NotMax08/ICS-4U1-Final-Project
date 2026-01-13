@@ -9,7 +9,7 @@ import greenfoot.*;
 public class MapGridDebugOverlay extends ScrollingActor {
     private GameWorld world;
     private MapGrid mapGrid;
-    private boolean enabled = false; // DEBUG TOGGLE (false by default)
+    private int displayMode = 0; // 0=off, 1=show X, 2=show Y
     private int tileSize;
     private int tilesWide;
     private int tilesHigh;
@@ -35,21 +35,23 @@ public class MapGridDebugOverlay extends ScrollingActor {
         updateScreenPosition();
     }
     
-    /** Toggle grid visibility */
+    /** Toggle grid visibility through modes: off -> X coords -> Y coords -> off */
     public void toggle() {
-        enabled = !enabled;
-        getImage().setTransparency(enabled ? 255 : 0);
+        displayMode = (displayMode + 1) % 3;
+        redraw();
+        getImage().setTransparency(displayMode == 0 ? 0 : 255);
     }
     
-    /** Force enable */
+    /** Force enable with X coordinates */
     public void enable() {
-        enabled = true;
+        displayMode = 1;
+        redraw();
         getImage().setTransparency(255);
     }
     
     /** Force disable */
     public void disable() {
-        enabled = false;
+        displayMode = 0;
         getImage().setTransparency(0);
     }
     
@@ -72,14 +74,17 @@ public class MapGridDebugOverlay extends ScrollingActor {
                     );
                 }
                 
-                // Draw coordinates (white text, only x)
-                img.setColor(Color.WHITE);
-                img.setFont(new Font(10));
-                img.drawString(
-                    String.valueOf(x),
-                    x * tileSize + 3,
-                    y * tileSize + 12
-                );
+                // Draw coordinates (white text)
+                if (displayMode > 0) {
+                    img.setColor(Color.WHITE);
+                    img.setFont(new Font(10));
+                    String coord = (displayMode == 1) ? String.valueOf(x) : String.valueOf(y);
+                    img.drawString(
+                        coord,
+                        x * tileSize + 3,
+                        y * tileSize + 12
+                    );
+                }
             }
         }
         

@@ -27,7 +27,7 @@ public class RoomOne extends GameWorld {
         visuals = true;
         if(visuals){
             createPlatformVisuals();
-            
+            createInteractiveDoorVisuals();
         }
         
         Crawler enemy = new Crawler(camera);
@@ -96,9 +96,10 @@ public class RoomOne extends GameWorld {
             {1800, 70, 800, 20},
             {2440, 740, 120, 20},
             {2420, 540, 120, 20},
-            {2100, 540, 300, 20}, // delete later
+            {1800, 440, 300, 20}, 
             {2300, 210, 160, 20},
             {2200, 150, 100, 20},
+            {1380, 30, 60, 20}
             
             
         };
@@ -150,9 +151,9 @@ public class RoomOne extends GameWorld {
         }
         
         // Create border walls (leaving space for doors on top and right)
-        int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2);
-        int[] wallsX = new int[wallTileCount/2];
-        int[] wallsY = new int[wallTileCount/2];
+        int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2 ); 
+        int[] wallsX = new int[wallTileCount/2 + 60]; //Plus additional wall barriers counted 
+        int[] wallsY = new int[wallTileCount/2 + 60]; //manually with the debug menu
         
         index = 0;
         // Bottom walls only (no top wall for door)
@@ -168,20 +169,57 @@ public class RoomOne extends GameWorld {
             wallsY[index] = y;
             index++;
         }
+        //Additional wall barriers
+        for (int y = 0; y < 7; y++){
+            wallsX[index] = 3;
+            wallsY[index] = 41 + y;
+            index++;
+        }
+        for (int y = 0; y < 11; y++){
+            wallsX[index] = 39;
+            wallsY[index] = 56 + y;
+            index++;
+        }
+        for (int y = 0; y < 5; y++){
+            wallsX[index] = 100;
+            wallsY[index] = 50 + y;
+            index++;
+        }
+        for (int y = 0; y < 10; y++){
+            wallsX[index] = 119;
+            wallsY[index] = 38 + y;
+            index++;
+        }
+        for (int y = 0; y < 8; y++){
+            wallsX[index] = 124;
+            wallsY[index] = 28 + y;
+            index++;
+        }
+        for(int y = 0; y < 14; y++){
+            wallsX[index] = 118;
+            wallsY[index] = 12 + y;
+            index++;
+        }
+        for(int y = 0; y < 5; y++){
+            wallsX[index] = 10;
+            wallsY[index] = 16 + y;
+            index++;
+        }
         
-        int[] doorX = new int[60];
-        int[] doorY = new int[60];
-        index = 60;
+        
+        int[] doorX = new int[11];
+        int[] doorY = new int[11];
+        index = 56;
         for(int i = 0; i < doorX.length; i++){
             doorX[i] = index;
-            doorY[i] = 1;
+            doorY[i] = 0;
             index++;
         }
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
         //Interactive Doors
         int[][] interactiveData = {
-            
+            {2090, 650, 100, 150}  
         };
         
         // Convert doors to tiles
@@ -237,7 +275,7 @@ public class RoomOne extends GameWorld {
             true,
             true,
             false,
-            false,
+            true,
             wallsX,
             platformX,
             doorX,
@@ -287,14 +325,12 @@ public class RoomOne extends GameWorld {
             {1800, 70, 800, 20},
             {2440, 740, 120, 20},
             {2420, 540, 120, 20},
-            {2100, 540, 300, 20}, // delete later
+            {1800, 440, 300, 20}, 
             {2300, 210, 160, 20},
             {2200, 150, 100, 20},
+            {1380, 30, 60, 20}
             
-            
-            
-            
-                        
+               
             
         };
         
@@ -311,9 +347,7 @@ public class RoomOne extends GameWorld {
     }
     private void createInteractiveDoorVisuals() {
         int[][] doorRegions = {
-            {250, 820, 80, 140},   //Left door
-            {700, 1130, 80, 140},  //Middle door
-            {2330, 810, 80, 140}   // Right door       
+            {2090, 650, 100, 150}     
         };
         for(int[] region : doorRegions) {
             int worldX = region[0];

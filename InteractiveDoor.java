@@ -41,7 +41,7 @@ class InteractiveDoor extends ScrollingActor {
                     world.addObject(messageActor, getX(), getY() - 80);
                 }
                   if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomTwo());
+                    Greenfoot.setWorld(new BossRoomTwo());
                 }
             } else if(id.equals("backtormone")){
                 if (messageActor == null) {
@@ -82,6 +82,14 @@ class InteractiveDoor extends ScrollingActor {
                 }
                 if (Greenfoot.isKeyDown("f")) {
                     Greenfoot.setWorld(new RoomTwo());
+                }
+            }else if (id.equals("bossroomtwo")){
+                if (messageActor == null) {
+                    messageActor = new Message("entermsg.png");
+                    world.addObject(messageActor, getX(), getY() - 80);
+                }
+                if (Greenfoot.isKeyDown("f")) {
+                    Greenfoot.setWorld(new RoomOne());
                 }
             }
             

@@ -246,7 +246,7 @@ public class BossRoomTwo extends GameWorld {
             int width = region[2];
             int height = region[3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height, "bossroom");
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, "bossroomtwo");
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }

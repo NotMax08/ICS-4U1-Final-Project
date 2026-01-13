@@ -129,52 +129,67 @@ public class RoomTwo extends GameWorld {
             }
         }
         
-        // Walls - only outer boundaries and major vertical barriers
-        java.util.ArrayList<Integer> wallXList = new java.util.ArrayList<>();
-        java.util.ArrayList<Integer> wallYList = new java.util.ArrayList<>();
+        // Create border walls 
+        int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2) - 4; // -4 for corner overlaps
+        int[] wallsX = new int[wallTileCount + 14];
+        int[] wallsY = new int[wallTileCount + 14];
         
-        // Left wall (x=0, all y)
-        for (int y = 0; y < TILES_HIGH; y++) {
-            wallXList.add(0);
-            wallYList.add(y);
+        index = 0;
+        // Bottom wall
+        for (int x = 0; x < TILES_WIDE; x++) {
+            wallsX[index] = x;
+            wallsY[index] = TILES_HIGH - 1;
+            index++;
         }
         
-        // Right wall (x=124, all y)
-        for (int y = 0; y < TILES_HIGH; y++) {
-            wallXList.add(TILES_WIDE - 1);
-            wallYList.add(y);
+        // Left wall (exclude bottom corner)
+        for (int y = 0; y < TILES_HIGH - 1; y++) {
+            wallsX[index] = 0;
+            wallsY[index] = y;
+            index++;
         }
         
-        // Top wall (y=0, all x)
-        for (int x = 1; x < TILES_WIDE - 1; x++) {
-            wallXList.add(x);
-            wallYList.add(0);
+        // Top wall (exclude left corner)
+        for(int x = 1; x < TILES_WIDE; x++){
+            wallsX[index] = x;
+            wallsY[index] = 0;
+            index++;
         }
         
-        // Bottom wall (y=70, all x)
-        for (int x = 1; x < TILES_WIDE - 1; x++) {
-            wallXList.add(x);
-            wallYList.add(TILES_HIGH - 1);
+        // Right wall (exclude both corners)
+        for(int y = 1; y < TILES_HIGH - 1; y++){
+            wallsX[index] = 124;
+            wallsY[index] = y;
+            index++;  // <-- DON'T FORGET THIS!
         }
         
-        int[] wallsX = new int[wallXList.size()];
-        int[] wallsY = new int[wallYList.size()];
-        for (int i = 0; i < wallXList.size(); i++) {
-            wallsX[i] = wallXList.get(i);
-            wallsY[i] = wallYList.get(i);
+        //Additional walls added manually
+        for(int i = 0; i < 14; i++){
+            wallsX[index] = 45;
+            wallsY[index] = 18 + i;
+            index++;
         }
         
         // Doors at left and right sides
-        int[] doorX = new int[]{0, TILES_WIDE - 1};
-        int[] doorY = new int[]{35, 35}; // Mid-height doors
+        int[] doorX = new int[17];
+        int[] doorY = new int[17];
+        int tempIndex = 0;
+        for(int i = 0; i < 17; i++){
+            doorX[tempIndex] = 124;
+            doorY[tempIndex] = 0 + i;
+            tempIndex++;
+        }
+        
         
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
         //Interactive Doors
+        //Y should be 20 pixels above visuals so visuals show the door directly
+        //on platforms but the actual door tiles to not override the platform tiles
         int[][] interactiveData = {
-            {250, 820, 80, 140},   // Left door
-            {700, 1130, 80, 140},  // Middle door
-            {2330, 810, 80, 140}   // Right door 
+            {250, 800, 80, 140},   // Left door
+            {700, 1110, 80, 140},  // Middle door
+            {2330, 790, 80, 140}   // Right door 
         };
         
         // Convert doors to tiles
@@ -222,7 +237,7 @@ public class RoomTwo extends GameWorld {
             }
         }
         
-        
+     
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
