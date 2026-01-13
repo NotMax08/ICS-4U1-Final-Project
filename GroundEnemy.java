@@ -1,10 +1,6 @@
 import greenfoot.*;
 import java.util.*;
 
-/**
- * GroundEnemy - Base class for all ground-based enemies
- * Handles gravity, ground detection, and platform movement
- */
 public abstract class GroundEnemy extends BaseEnemy {
     // Movement constants
     protected int patrolSpeed;
@@ -47,23 +43,45 @@ public abstract class GroundEnemy extends BaseEnemy {
     }
     
     protected boolean onGround() {
-        return getOneObjectAtWorldOffset(0, getImage().getHeight()/2 + 3, Platform.class) != null;
+        // Check directly below the enemy's feet
+        int checkX = worldX;
+        int checkY = worldY + (getImage().getHeight() / 2) + 3;
+        
+        return isSolidAtPosition(checkX, checkY);
     }
     
     protected boolean isWallAhead() {
-        return getOneObjectAtWorldOffset(direction * wallCheckDistance, 
-                                         getImage().getHeight()/4, Platform.class) != null;
+        // Check ahead of the enemy at body height
+        int checkX = worldX + (direction * wallCheckDistance);
+        int checkY = worldY + (getImage().getHeight() / 4); // Body height
+        
+        return isSolidAtPosition(checkX, checkY);
     }
     
     protected boolean isGroundAhead() {
-        return getOneObjectAtWorldOffset(direction * wallCheckDistance, 
-                                         getImage().getHeight()/2 + 5, Platform.class) != null;
+        // Check ahead and below the enemy (where next step would be)
+        int checkX = worldX + (direction * wallCheckDistance);
+        int checkY = worldY + (getImage().getHeight() / 2) + 7;
+        
+        return isSolidAtPosition(checkX, checkY);
     }
     
     @Override
     public boolean isAtEdge() {
-        return getOneObjectAtWorldOffset(direction * (getImage().getWidth()/2 + 10), 
-                                         getImage().getHeight()/2 + 5, Platform.class) == null;
+        // Check further ahead and below (edge of platform)
+        int checkX = worldX + (direction * (getImage().getWidth() / 2 + 10));
+        int checkY = worldY + (getImage().getHeight() / 2) + 5;
+        
+        return !isSolidAtPosition(checkX, checkY);
+    }
+    
+    // Optional: More precise collision detection using area checking
+    protected boolean isCollidingWithSolid() {
+        int width = getImage().getWidth();
+        int height = getImage().getHeight();
+        
+        // Check if enemy's entire bounding box collides with solids
+        return isSolidArea(worldX, worldY, width - 5, height - 5);
     }
     
     // Ground enemies always need to apply gravity
