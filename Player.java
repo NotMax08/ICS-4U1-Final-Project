@@ -20,7 +20,7 @@ public class Player extends ScrollingActor {
     private static final int ANIMATION_SPEED = 4; 
     private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
     private static final int STUN_DURATION = 30; // Acts to remain stunned
-    private static final int BASIC_ATTACK_COOLDOWN = 80;
+    private static final int BASIC_ATTACK_COOLDOWN = 30;
 
     // Character states 
     private boolean onGround = false;
