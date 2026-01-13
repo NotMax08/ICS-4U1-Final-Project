@@ -7,7 +7,7 @@ public class Boss extends Actor
     private boolean entering = false;
     
     private boolean teleporting = false;
-    private int teleportPhase;
+    private boolean teleported = false;
     
     private int teleportX;
     private int teleportY;    
@@ -24,8 +24,7 @@ public class Boss extends Actor
     GreenfootImage staBeeFront;
     GreenfootImage staBeeLeftUp;
     
-    private double teleportSpeed = 60;
-    private double teleportFrameCounter = 0;
+    private double teleportFrames = 100;
     
     public Boss(int variant)
     {
@@ -53,52 +52,42 @@ public class Boss extends Actor
             this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+2);
             if (this.getY() == 300){
                 entering = false;
-                startTeleport(600, this.getY(), "LeftUp");
+                teleport(600, this.getY(), "LeftUp");
             }
         }
         if (teleporting){
-            teleport(teleportX, teleportY);
+            teleporting(teleportX, teleportY,teleportImage);
         }
     }
     
-    private void startTeleport(int x, int y, String newPose){
+    private void teleport(int x, int y, String newPose){
         teleportX = x;
         teleportY = y;
         teleportImage = newPose;
         
-        teleportPhase = 1;
         teleporting = true;
+        teleported = false;
     }
     
-    private void teleport(int x, int y){
-        teleportFrameCounter++;
-        if (teleportFrameCounter==teleportSpeed){
-            if(teleportPhase<=3){
-                setI(currentImage);
-                setPhase();
-            }
-            else if (teleportPhase==4){
-                setI(teleportImage);
-                currentImage = teleportImage;
-                setPhase();
-                this.setLocation(x,y);
-            }
-            else if (teleportPhase==5){
-                setI(teleportImage);
-                setPhase();
-            }
-            else{
-                setI(teleportImage);
-                teleporting = false;
-            }
-            
-            teleportPhase++;
-            teleportFrameCounter = 0;
+    private void teleporting(int x, int y, String newPose){
+        int newTransparency;
+        if (!teleported){
+           newTransparency = this.getImage().getTransparency() - (int)(255/(teleportFrames/2));
         }
-    }
-    
-    private void setPhase(){
-        this.getImage().drawImage(new GreenfootImage("StaBee/Teleport/Phase" + teleportPhase + ".PNG"),0,0);
+        else{
+           newTransparency = this.getImage().getTransparency() + (int)(255/(teleportFrames/2));
+        }
+        if (newTransparency <= 0){
+            newTransparency = 0;
+            this.setI(newPose);
+            this.setLocation(teleportX,teleportY);
+            teleported = true;
+        }
+        else if(newTransparency >= 255){
+            newTransparency = 255;
+            teleporting = false;
+        }
+        this.getImage().setTransparency(newTransparency);
     }
     
     private void enterScreen(){
