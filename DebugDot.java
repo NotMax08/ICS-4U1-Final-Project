@@ -2,12 +2,12 @@ import greenfoot.*;
 
 public class DebugDot extends ScrollingActor {
     private Color color;
-    private Crawler enemy; // Reference to the enemy to follow
+    private Golem enemy; // Reference to the enemy to follow
     private int offsetX; // X offset from enemy center
     private int offsetY; // Y offset from enemy center
     private int checkType; // 0=wall, 1=ground, 2=edge
     
-    public DebugDot(Crawler enemy, Color color, int offsetX, int offsetY, int checkType, Camera camera) {
+    public DebugDot(Golem enemy, Color color, int offsetX, int offsetY, int checkType, Camera camera) {
         super(camera);
         this.enemy = enemy;
         this.color = color; 
@@ -41,7 +41,7 @@ public class DebugDot extends ScrollingActor {
         // Update position based on enemy's current world position and direction
         int enemyWorldX = enemy.getWorldX();
         int enemyWorldY = enemy.getWorldY();
-        int enemyDirection = enemy.getDirection(); // You'll need to add getDirection() to Crawler
+        int enemyDirection = enemy.getDirection(); // You'll need to add getDirection() to Golem
         
         // Calculate actual offset based on enemy's facing direction
         int actualOffsetX = offsetX * enemyDirection;

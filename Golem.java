@@ -1,18 +1,18 @@
 import greenfoot.*;
 import java.util.*;
 /**
- * Crawler - Ground enemy that patrols platforms and chases player
+ * GOLEM - Ground enemy that patrols platforms and chases player
  * 
  * @author Max Yuan
  * @version 1.0
  */
-public class Crawler extends Enemies
+public class Golem extends Enemies
 {
     //constants for movement and enemy
-    public static final int CRAWLER_HEALTH = 50;
-    public static final int CRAWLER_DAMAGE = 10;
-    public static final int CRAWLER_DETECTION_RANGE = 300;
-    public static final int CRAWLER_ATTACK_RANGE = 150;
+    public static final int GOLEM_HEALTH = 50;
+    public static final int GOLEM_DAMAGE = 10;
+    public static final int GOLEM_DETECTION_RANGE = 300;
+    public static final int GOLEM_ATTACK_RANGE = 150;
     public static final int PATROL_SPEED = 1;
     public static final int CHASE_SPEED = 3;
     public static final int MAX_IDLE_TIME = 120; 
@@ -50,41 +50,51 @@ public class Crawler extends Enemies
     
     private boolean isMoving = false;
     
-    public Crawler(Camera camera) {
+    private ScrollingStatBar healthBar;
+    
+
+    public Golem(Camera camera) {
         super(camera, 
-              getUniformImage("Crawler.png"),
-              CRAWLER_HEALTH,
-              CRAWLER_DAMAGE,
-              CRAWLER_DETECTION_RANGE,
-              CRAWLER_ATTACK_RANGE
+              getUniformImage("Golem.png", IMAGE_WIDTH, IMAGE_HEIGHT),
+              GOLEM_HEALTH,
+              GOLEM_DAMAGE,
+              GOLEM_DETECTION_RANGE,
+              GOLEM_ATTACK_RANGE
         );
         
         this.idleTimer = 0;
         this.patrolTimer = 0;
         
-        normalIdleImage = getUniformImage("Golem.png");
-        alertIdleImage = getUniformImage("AlertGolem.png");
+        normalIdleImage = getUniformImage("Golem.png", IMAGE_WIDTH, IMAGE_HEIGHT);
+        alertIdleImage = getUniformImage("AlertGolem.png", IMAGE_WIDTH, IMAGE_HEIGHT);
         
-        normalWalkingImages.add(getUniformImage("GolemWalking.png"));
-        normalWalkingImages.add(getUniformImage("GolemWalking2.png"));
+        normalWalkingImages.add(getUniformImage("GolemWalking.png", IMAGE_WIDTH, IMAGE_HEIGHT));
+        normalWalkingImages.add(getUniformImage("GolemWalking2.png", IMAGE_WIDTH, IMAGE_HEIGHT));
         
-        alertWalkingImages.add(getUniformImage("AlertGolemWalking.png"));
-        alertWalkingImages.add(getUniformImage("AlertGolemWalking2.png"));
+        alertWalkingImages.add(getUniformImage("AlertGolemWalking.png", IMAGE_WIDTH, IMAGE_HEIGHT));
+        alertWalkingImages.add(getUniformImage("AlertGolemWalking2.png", IMAGE_WIDTH, IMAGE_HEIGHT));
         
-        attackImages.add(getUniformImage("GolemAttack1.png"));
-        attackImages.add(getUniformImage("GolemAttack2.png"));
-        attackImages.add(getUniformImage("GolemAttack3.png"));
-        attackImages.add(getUniformImage("GolemAttack4.png"));
-        //attackImages.add(getUniformImage("GolemAttack5.png"));
+        attackImages.add(getUniformImage("GolemAttack1.png", IMAGE_WIDTH, IMAGE_HEIGHT));
+        attackImages.add(getUniformImage("GolemAttack2.png", IMAGE_WIDTH, IMAGE_HEIGHT));
+        attackImages.add(getUniformImage("GolemAttack3.png", IMAGE_WIDTH, IMAGE_HEIGHT));
+        attackImages.add(getUniformImage("GolemAttack4.png", IMAGE_WIDTH, IMAGE_HEIGHT));
         
         behaviour = ENEMY_BEHAVIOUR.IDLE;
+        
+        // Create health bar - positioned above the golem
+        //healthBar = new ScrollingStatBar(camera, this, GOLEM_HEALTH, 80, 8, -120);
+        healthBar = null;
     }
-    
-    private static GreenfootImage getUniformImage(String filename) {
-        GreenfootImage img = new GreenfootImage(filename);
-        img.scale(IMAGE_WIDTH, IMAGE_HEIGHT);
-        return img;
+    @Override
+    protected void addedToWorld(World world) {
+        // Create and add the health bar AFTER being added to world
+        healthBar = new ScrollingStatBar(camera, this, GOLEM_HEALTH, 80, 8, -120);
+        world.addObject(healthBar, 0, 0);
+        
+        // Set initial position
+        healthBar.setWorldPosition(worldX, worldY - 120);
     }
+
     
     @Override
     public void act() {
@@ -94,10 +104,12 @@ public class Crawler extends Enemies
         
         
         GreenfootImage img = getImage();
+        /*
         System.out.println("-------");
         System.out.println("Wall check: " + isWallAhead());
         System.out.println("Ground check: "+ isGroundAhead());
         System.out.println("Edge check: " + isAtEdge());
+        */
         
         
         createDebugDots();
@@ -309,6 +321,12 @@ public class Crawler extends Enemies
     @Override
     protected void takeDamage(int dmg) {
         health -= dmg;
+        
+        // Update the health bar
+        if (healthBar != null) {
+            healthBar.update(health);
+        }
+        
         behaviour = ENEMY_BEHAVIOUR.HURT;
         
         // Reset attack state when hurt
@@ -379,6 +397,13 @@ public class Crawler extends Enemies
         int edgeCheckY = getImage().getHeight()/2; // Check BELOW feet, not at center
         // An edge is when there's NO ground ahead and down
         return getOneObjectAtWorldOffset(direction * edgeCheckX, edgeCheckY, Platform.class) == null;
+    }
+    
+    protected void die() {
+        if (healthBar != null && getWorld() != null) {
+            getWorld().removeObject(healthBar);
+        }
+        getWorld().removeObject(this);
     }
     
     public int getXPos(){

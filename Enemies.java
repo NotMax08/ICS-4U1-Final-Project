@@ -58,6 +58,12 @@ public abstract class Enemies extends ScrollingActor
     protected abstract void attackCooldown();
     protected abstract void idleBehavior();
     
+    protected static GreenfootImage getUniformImage(String filename, int width, int height) {
+        GreenfootImage img = new GreenfootImage(filename);
+        img.scale(width, height);
+        return img;
+    }
+    
     
     public void act() {
         if (health <= 0) {
@@ -199,7 +205,6 @@ public abstract class Enemies extends ScrollingActor
     }
     
     protected void detectPlayer() {
-        
         detections = (ArrayList<Player>) getObjectsInWorldRange(detectionRange, Player.class);
         
         if (!detections.isEmpty()) {
@@ -210,7 +215,43 @@ public abstract class Enemies extends ScrollingActor
             isAggro = false;
         }
     }
-    
+    protected void debugDetection() {
+        System.out.println("\n=== ENEMY DETECTION DEBUG ===");
+        System.out.println("Enemy Type: " + getClass().getSimpleName());
+        System.out.println("Enemy Screen Position: (" + getX() + ", " + getY() + ")");
+        System.out.println("Enemy World Position: (" + worldX + ", " + worldY + ")");
+        System.out.println("Detection Range: " + detectionRange);
+        System.out.println("Is Aggro: " + isAggro);
+        System.out.println("Target: " + (target != null ? target.getClass().getSimpleName() : "null"));
+        
+        if (target != null && target instanceof ScrollingActor) {
+            ScrollingActor scrollTarget = (ScrollingActor) target;
+            System.out.println("Target World Position: (" + scrollTarget.getWorldX() + ", " + scrollTarget.getWorldY() + ")");
+            
+            // Calculate actual distance
+            int dx = scrollTarget.getWorldX() - worldX;
+            int dy = scrollTarget.getWorldY() - worldY;
+            double actualDistance = Math.sqrt(dx * dx + dy * dy);
+            System.out.println("Actual World Distance: " + actualDistance);
+        }
+        
+        // Check all players in the world
+        List<Player> allPlayers = getWorld().getObjects(Player.class);
+        System.out.println("Total Players in World: " + allPlayers.size());
+        
+        for (Player player : allPlayers) {
+            if (player instanceof ScrollingActor) {
+                ScrollingActor scrollPlayer = (ScrollingActor) player;
+                int dx = scrollPlayer.getWorldX() - worldX;
+                int dy = scrollPlayer.getWorldY() - worldY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                System.out.println("  Player at world (" + scrollPlayer.getWorldX() + ", " + scrollPlayer.getWorldY() + 
+                                  ") - distance: " + distance);
+            } else {
+                System.out.println("  Player at screen (" + player.getX() + ", " + player.getY() + ")");
+            }
+        }
+    }
     protected void takeDamage(int dmg) { 
         health -= dmg;
         behaviour = ENEMY_BEHAVIOUR.HURT;

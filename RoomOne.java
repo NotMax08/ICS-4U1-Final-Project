@@ -30,9 +30,18 @@ public class RoomOne extends GameWorld {
             
         }
         
-        Crawler enemy = new Crawler(camera);
+        Golem enemy = new Golem(camera);
         addObject(enemy, SCREEN_WIDTH/2 , SCREEN_HEIGHT/2);
         enemy.setWorldPosition(500, 1100 - enemy.getImage().getHeight()/2); 
+        
+        
+        //boundary 1 needs to be < than boundary 2
+        int xBoundary1 = 1200;
+        int xBoundary2 = 1800;
+        int yLevel = 1100;
+        FlyingEnemy fly1 = new FlyingEnemy(camera, xBoundary1,xBoundary2, yLevel);
+        addObject(fly1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fly1.setWorldPosition((xBoundary1 + xBoundary2) / 2, yLevel);
         // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
