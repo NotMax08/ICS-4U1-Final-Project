@@ -5,6 +5,7 @@ import greenfoot.*;
  */
 public class RoomTwo extends GameWorld {
     private MapGridDebugOverlay gridDebug;
+    private boolean visuals;
     public RoomTwo(Player existingPlayer) {
         super(); // This creates the camera
         
@@ -12,8 +13,12 @@ public class RoomTwo extends GameWorld {
         fullBackground.scale(WORLD_WIDTH, WORLD_HEIGHT);
         
         initializeMapGrid();
-        createPlatformVisuals();
-        createInteractiveDoorVisuals();
+        visuals = false;
+        if(visuals){
+            createPlatformVisuals();
+        }
+        createInteractiveDoors();//debug visual in contructor class
+        
         this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
         
         if (existingPlayer != null) {
@@ -35,7 +40,11 @@ public class RoomTwo extends GameWorld {
         gridDebug = new MapGridDebugOverlay(this, mapGrid);
         addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-
+        
+        drawPlatformOnBackground(710, 650, 250, 100, "platform2.png");
+        drawPlatformOnBackground(610, 380, 250, 100, "platform2.png");
+        drawPlatformOnBackground(250, 890, 560, 100, "platform2.png");
+        drawPlatformOnBackground(1675, 890, 1770, 100, "platform2.png");
     }
     
     public RoomTwo() {
@@ -131,8 +140,8 @@ public class RoomTwo extends GameWorld {
         
         // Create border walls 
         int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2) - 4; // -4 for corner overlaps
-        int[] wallsX = new int[wallTileCount + 14];
-        int[] wallsY = new int[wallTileCount + 14];
+        int[] wallsX = new int[wallTileCount + 64];
+        int[] wallsY = new int[wallTileCount + 64];
         
         index = 0;
         // Bottom wall
@@ -169,6 +178,22 @@ public class RoomTwo extends GameWorld {
             wallsY[index] = 18 + i;
             index++;
         }
+        for (int i = 0; i < 5; i++){
+            wallsX[index] = 25;
+            wallsY[index] = 55 + i;
+            index++;
+        }
+        for (int i = 0; i < 31; i++){
+            wallsX[index] = 24;
+            wallsY[index] = 1 + i;
+            index++;
+        }
+        for (int i = 0; i < 14; i++){
+            wallsX[index] = 120;
+            wallsY[index] = 46 + i;
+            index++;
+        }
+        
         
         // Doors at left and right sides
         int[] doorX = new int[17];
@@ -301,7 +326,7 @@ public class RoomTwo extends GameWorld {
             platform.setWorldPosition(worldX, worldY);
         }
     }
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
             int[][] doorRegions = {
             {250, 820, 80, 140},   // Left door
             {700, 1130, 80, 140},  // Middle door
@@ -321,6 +346,14 @@ public class RoomTwo extends GameWorld {
             door.setWorldPosition(worldX, worldY);
         }
     }
-
+    private void drawPlatformOnBackground(int worldX, int worldY, int width, int height, String imageName) {
+        GreenfootImage platformImg = new GreenfootImage(imageName);
+        platformImg.scale(width, height);
+        
+        int x = worldX - width/2;
+        int y = worldY - height/2;
+        
+        fullBackground.drawImage(platformImg, x, y);
+    }
 }
 

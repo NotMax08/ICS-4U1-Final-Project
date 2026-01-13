@@ -17,8 +17,9 @@ public class RoomThree extends GameWorld {
         visuals = false;
         if(visuals){
             createPlatformVisuals();
-            createInteractiveDoorVisuals();
         }
+        createInteractiveDoors(); //debug visual in contructor class
+        
         this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
         
         if (existingPlayer != null) {
@@ -381,7 +382,7 @@ public class RoomThree extends GameWorld {
             platform.setWorldPosition(worldX, worldY);
         }
     }
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
         int[][] doorRegions = {
                   
         };
