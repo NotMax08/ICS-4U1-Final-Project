@@ -36,7 +36,7 @@ public class AbilityDisplay extends Display
     protected void updateDisplay(){
         boolean magicUnlocked = GameWorld.magicUnlocked;
         int cooldown = player.getAbilityCooldown();
-        boolean onCoolDown = cooldown > 0;
+        boolean onCooldown = cooldown > 0;
         
         // If state changes
         if(magicUnlocked != lastMagicState){
@@ -46,8 +46,8 @@ public class AbilityDisplay extends Display
         
         // Update image if cooldown state changed
         if (cooldown != lastCooldown){
-            initializeDisplays();
-            lastCooldown = -1;
+            setImage(onCooldown ? cooldownDisplay : activeDisplay);
+            lastCooldown = cooldown;
         }
     }
     
@@ -56,6 +56,7 @@ public class AbilityDisplay extends Display
         activeDisplay = createDisplay(ACTIVE_TRANSPARENCY, magicUnlocked);
         cooldownDisplay = createDisplay(COOLDOWN_TRANSPARENCY, magicUnlocked);
         lastMagicState = magicUnlocked;
+        
     }
     
     private GreenfootImage createDisplay(int transparency, boolean magicUnlocked){

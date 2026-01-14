@@ -36,10 +36,16 @@ public abstract class GameWorld extends World {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
 
+        setPaintOrder();
+    }
+    
+    protected void setPaintOrder(){
         setPaintOrder(
             InventoryDisplay.class,
             AbilityDisplay.class,
-            HealthDisplay.class
+            HealthDisplay.class,
+            SlashAnimation.class,
+            Player.class
             );
     }
 
@@ -104,7 +110,6 @@ public abstract class GameWorld extends World {
         
         initalizeDisplays();
     }
-    
     
 
     public Camera getCamera() { return camera; }

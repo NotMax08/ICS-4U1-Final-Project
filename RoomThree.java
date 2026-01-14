@@ -30,6 +30,9 @@ public class RoomThree extends GameWorld {
             player.setWorldPosition(1000, 1250);
         }
         
+        
+        initalizeDisplays();
+        
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
             updateAllActors();

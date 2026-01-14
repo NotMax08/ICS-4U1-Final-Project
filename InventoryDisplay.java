@@ -12,7 +12,6 @@ public class InventoryDisplay extends Display {
     // Image variables
     private GreenfootImage openInv = new GreenfootImage("openInv.png");
     private GreenfootImage closedInv = new GreenfootImage("closedInv.png");
-    private int screenX, screenY;
     private boolean isOpen = false;
     private boolean tabWasDown = false;
 
@@ -46,6 +45,13 @@ public class InventoryDisplay extends Display {
             setLocation(screenX + 350, screenY - 250);
             setImage(openInv);
         }
+    }
+    
+    @Override
+    public void act(){
+        checkMouseClick();
+        checkTabPress();
+        updateDisplay();
     }
 
     private void checkMouseClick(){
