@@ -21,9 +21,12 @@ public class Merchant extends NPC
         super.act();
     }
     
-    public void startDialogue()
+    public void dialogue()
     {
         TextBox options = new TextBox("Would you like to purchase weapons? [E]", fontSize);
         textBoxWriter(options);
+        if (("e").equals(Greenfoot.getKey())  && options != null) {
+                getWorld().removeObject(options);
+        }
     }
 }

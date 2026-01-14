@@ -34,9 +34,9 @@ public abstract class NPC extends Actor
                 textBoxWriter(prompt);
                 promptVisible = true;
             }
-            if (Greenfoot.isKeyDown("e") && prompt != null) {
+            if (("e").equals(Greenfoot.getKey()) && prompt != null) {
                 getWorld().removeObject(prompt);
-                startDialogue();
+                dialogue();
             }
         }
         else {
@@ -48,7 +48,7 @@ public abstract class NPC extends Actor
     }
 
     //What the individual npcs do
-    public abstract void startDialogue();
+    public abstract void dialogue();
 
     public void textBoxWriter(TextBox dialogue)
     {
