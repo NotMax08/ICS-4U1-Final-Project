@@ -8,17 +8,23 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class HealthDisplay extends Display
 {
     // Images
-    private GreenfootImage full = new GreenfootImage("healthFull.png");
-    private GreenfootImage empty = new GreenfootImage("healthEmpty.png");
-    
-    private int screenX, screenY;
-    private Player player;
-    
-    public HealthDisplay(int screenX, int screenY, Camera camera){
-        super(camera);
-        this.screenX = screenX;
-        this.screenY = screenY;
+    private GreenfootImage full;
+    private GreenfootImage empty;
+    public HealthDisplay(int screenX, int screenY, Camera camera, Player player){
+        super(screenX, screenY, camera, player);
         
+        
+        // Initialize images
+        full = new GreenfootImage("healthFull.png");
+        empty = new GreenfootImage("healthEmpty.png");
+        
+        // Set intial image
+        updateDisplay();
+    }
+    
+    @Override
+    protected void updateDisplay(){
+        //TODO: implement display
     }
     
     /**

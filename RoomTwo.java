@@ -29,8 +29,6 @@ public class RoomTwo extends GameWorld {
             player.setWorldPosition(600, 900);
         }
         
-        setIcons();
-        
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
             updateAllActors();

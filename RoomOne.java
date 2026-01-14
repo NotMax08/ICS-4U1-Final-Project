@@ -22,8 +22,6 @@ public class RoomOne extends GameWorld {
             player.setWorldPosition(900, 1200);
         }
         
-        setIcons();
-        
         visuals = false;
         if(visuals){
             createPlatformVisuals();

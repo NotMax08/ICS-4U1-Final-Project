@@ -1,5 +1,6 @@
 #BlueJ class context
 comment0.target=GameWorld
+comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ @author\ Paul\ and\ Robin\n
 comment1.params=
 comment1.target=GameWorld()
 comment10.params=worldX
@@ -14,8 +15,10 @@ comment14.params=
 comment14.target=void\ initializeMapGrid()
 comment2.params=
 comment2.target=void\ act()
+comment2.text=\n\ Main\ act\ loop\ -\ update\ camera,\ actors\ and\ background\ \n
 comment3.params=
-comment3.target=void\ setIcons()
+comment3.target=void\ initalizeDisplays()
+comment3.text=\n\ Initialize\ display\ elements\n\ Can\ only\ be\ called\ after\ the\ player\ is\ created\ \n
 comment4.params=
 comment4.target=void\ updateBackground()
 comment5.params=
