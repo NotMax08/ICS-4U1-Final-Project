@@ -6,25 +6,41 @@ import java.util.*;
  */
 public abstract class NPC extends Actor
 {    
+<<<<<<< Updated upstream
     private int range = 100; 
     private boolean promptVisible = false; 
     private TextBox prompt;
     public int fontSize = 15;
 
+=======
+    private ArrayList<Player> playerInRange; // Stores player(s) that are within the interaction hitbox 
+    private int range = 100; // range at which the npc will have an option to interact
+    private boolean promptVisible = false; // boolean to show if player is within range to see the interact prompt
+    private TextBox prompt;
+    public int fontSize = 15;
+    
+>>>>>>> Stashed changes
     public void act()
     {
         interactWithPlayer();
     }
 
     /**
+<<<<<<< Updated upstream
      * method to check if player is near NPC to allow player to interact with it
      * @return true if a Player is within range; otherwise returns false.
+=======
+>>>>>>> Stashed changes
      * Method to show prompt and handle dialogue.
      * @author Julian
      */
     private void interactWithPlayer()
     {
+<<<<<<< Updated upstream
         ArrayList<Player> playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
+=======
+        playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
+>>>>>>> Stashed changes
         boolean playerNear = !playerInRange.isEmpty();
         if(playerNear)
         {
@@ -46,12 +62,23 @@ public abstract class NPC extends Actor
             }
         }
     }
+<<<<<<< Updated upstream
     //What the individual npcs do
     public abstract void startDialogue();
 
+=======
+    
+    //What the individual npcs do
+    public abstract void startDialogue();
+    
+>>>>>>> Stashed changes
     public void textBoxWriter(TextBox dialogue)
     {
         getWorld().addObject(dialogue, getX(), getY() - 65);
     }
+<<<<<<< Updated upstream
 
 }
+=======
+}
+>>>>>>> Stashed changes
