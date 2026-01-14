@@ -59,6 +59,7 @@ public abstract class NPC extends Actor
      */
     public void textBoxWriter(String dialogue, boolean split)
     {
+        removeText();
         if (split)
         {
             int index = 0;
@@ -75,8 +76,8 @@ public abstract class NPC extends Actor
                 }
             }
 
-            TextBox textOne = new TextBox(lineOne, fontSize);
-            TextBox textTwo = new TextBox(lineTwo, fontSize);
+            textOne = new TextBox(lineOne, fontSize);
+            textTwo = new TextBox(lineTwo, fontSize);
 
             getWorld().addObject(textOne, getX(), getY() - 80);
             getWorld().addObject(textTwo, getX(), getY() - 65);
@@ -84,7 +85,7 @@ public abstract class NPC extends Actor
 
         else
         { 
-            TextBox text = new TextBox(dialogue, fontSize);
+            text = new TextBox(dialogue, fontSize);
             getWorld().addObject(text, getX(), getY() - 65);
         }
     }
@@ -93,7 +94,7 @@ public abstract class NPC extends Actor
     {
         if (text != null && text.getWorld() != null)
         {
-            getWorld().removeObject(textOne);
+            getWorld().removeObject(text);
         }
         if (textOne != null && textOne.getWorld() != null)
         {
