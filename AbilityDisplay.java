@@ -19,7 +19,7 @@ public class AbilityDisplay extends Display
     // Image constants
     private static final int ACTIVE_TRANSPARENCY = 240;
     private static final int COOLDOWN_TRANSPARENCY = 100;
-    private static final int ICON_SIZE = 85;
+    private static final int ICON_SIZE = 75;
     private static final int ICON_SPACING = 10;
 
     public AbilityDisplay(int screenX, int screenY, Camera camera, Player player){
