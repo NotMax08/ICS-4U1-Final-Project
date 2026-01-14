@@ -1,12 +1,11 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class HealthDisplay here.
+ * A display to show the health points of the player
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Robin
  */
-public class HealthDisplay extends ScrollingActor
+public class HealthDisplay extends Display
 {
     // Images
     private GreenfootImage full = new GreenfootImage("healthFull.png");

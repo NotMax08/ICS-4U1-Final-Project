@@ -3,10 +3,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Displays the ability icons, fixed to a position of the camera screen
  * 
- * 
  * @author Robin 
  */
-public class AbilityDisplay extends ScrollingActor
+public class AbilityDisplay extends Display
 {
     // Image variables
     private GreenfootImage slashIcon, magicIcon;

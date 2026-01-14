@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * 
  * @author Robin, Paul & Claude
  */
-public class InventoryDisplay extends ScrollingActor {
+public class InventoryDisplay extends Display {
     // Image variables
     private GreenfootImage openInv = new GreenfootImage("openInv.png");
     private GreenfootImage closedInv = new GreenfootImage("closedInv.png");
