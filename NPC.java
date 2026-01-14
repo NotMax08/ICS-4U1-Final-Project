@@ -1,55 +1,57 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 import java.util.*;
-
 /**
- * Write a description of class NPC here.
- * 
  * @author Julian
  * @version 2026
  */
-public class NPC extends Actor
+public abstract class NPC extends Actor
 {    
-    private String dialogue;
-    private ArrayList<Player> playerInRange; // Stores player(s) that are within the interaction hitbox 
-    private int range = 20; // range at which the npc will have an option to interact
-    
-    public NPC ()
-    {
-        
-    }
-    
+    private int range = 100; 
+    private boolean promptVisible = false; 
+    private TextBox prompt;
+    public int fontSize = 15;
+
     public void act()
     {
-        if(interactWithPlayer() && interactOption())
-        {
-            System.out.println("e clicked");
-        }
+        interactWithPlayer();
     }
-    
+
     /**
      * method to check if player is near NPC to allow player to interact with it
      * @return true if a Player is within range; otherwise returns false.
+     * Method to show prompt and handle dialogue.
      * @author Julian
      */
-    private boolean interactWithPlayer()
+    private void interactWithPlayer()
     {
-        playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
-        if(playerInRange == null)
+        ArrayList<Player> playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
+        boolean playerNear = !playerInRange.isEmpty();
+        if(playerNear)
         {
-            return false;
+            if(!promptVisible)
+            {
+                prompt = new TextBox("Press 'E' to interact", fontSize);
+                textBoxWriter(prompt);
+                promptVisible = true;
+            }
+            if (Greenfoot.isKeyDown("e") && prompt != null) {
+                getWorld().removeObject(prompt);
+                startDialogue();
+            }
         }
-        return true;
+        else {
+            if (promptVisible && prompt != null) {
+                getWorld().removeObject(prompt);
+                promptVisible = false;
+            }
+        }
     }
-    
-    /**
-     * Method that returns whether the player wants to interact with the NPC
-     * @return true if player wants to interact with npc; false otherwise
-     * @author Julian
-     */
-    private boolean interactOption()
+    //What the individual npcs do
+    public abstract void startDialogue();
+
+    public void textBoxWriter(TextBox dialogue)
     {
-        return Greenfoot.isKeyDown("e");
+        getWorld().addObject(dialogue, getX(), getY() - 65);
     }
-    
-    
+
 }
