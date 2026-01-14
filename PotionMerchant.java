@@ -12,10 +12,11 @@ public class PotionMerchant extends NPC
     
     public PotionMerchant()
     {
-        image = new GreenfootImage("merchant.png");
+        image = new GreenfootImage("potionMerchant.png");
         image.scale(image.getWidth()/3, image.getHeight()/3);
         setImage(image);
     }
+    
     public void act()
     {
         super.act();

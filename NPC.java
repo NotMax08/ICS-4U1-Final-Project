@@ -9,7 +9,7 @@ public abstract class NPC extends Actor
 {    
     private int range = 100; 
     private boolean promptVisible = false; 
-    public int fontSize = 15;
+    public int fontSize = 12;
     
     private TextBox textOne;
     private TextBox textTwo;
