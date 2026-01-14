@@ -9,12 +9,15 @@ public abstract class NPC extends Actor
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private int range = 100; 
     private boolean promptVisible = false; 
     private TextBox prompt;
     public int fontSize = 15;
 
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -35,8 +38,11 @@ public abstract class NPC extends Actor
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
      * method to check if player is near NPC to allow player to interact with it
      * @return true if a Player is within range; otherwise returns false.
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -54,6 +60,9 @@ public abstract class NPC extends Actor
         playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -91,6 +100,9 @@ public abstract class NPC extends Actor
     
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -103,7 +115,10 @@ public abstract class NPC extends Actor
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
