@@ -9,8 +9,11 @@ public abstract class NPC extends Actor
 {    
     private int range = 100; 
     private boolean promptVisible = false; 
-    private TextBox prompt;
     public int fontSize = 15;
+    
+    private TextBox textOne;
+    private TextBox textTwo;
+    private TextBox text;
 
     public void act()
     {
@@ -25,23 +28,22 @@ public abstract class NPC extends Actor
     {
         ArrayList<Player> playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
         boolean playerNear = !playerInRange.isEmpty();
-        
+
         if(playerNear)
         {
             if(!promptVisible)
             {
-                prompt = new TextBox("Press 'E' to interact", fontSize);
-                textBoxWriter(prompt);
+                textBoxWriter("Press 'E' to interact", false);
                 promptVisible = true;
             }
-            if (("e").equals(Greenfoot.getKey()) && prompt != null) {
-                getWorld().removeObject(prompt);
+            if (("e").equals(Greenfoot.getKey())) {
+                removeText();
                 dialogue();
             }
         }
         else {
-            if (promptVisible && prompt != null) {
-                getWorld().removeObject(prompt);
+            if (promptVisible) {
+                removeText();
                 promptVisible = false;
             }
         }
@@ -50,8 +52,56 @@ public abstract class NPC extends Actor
     //What the individual npcs do
     public abstract void dialogue();
 
-    public void textBoxWriter(TextBox dialogue)
+    /**
+     * Method that handles making text objects
+     * If the text is too long It splits it into two lines
+     * @author Julian
+     */
+    public void textBoxWriter(String dialogue, boolean split)
     {
-        getWorld().addObject(dialogue, getX(), getY() - 65);
+        if (split)
+        {
+            int index = 0;
+            String lineOne = "";
+            String lineTwo = "";
+            for (int i = 0; i < dialogue.length()/2; i++)
+            {
+                index ++; 
+                if(dialogue.charAt(i) =='|')
+                {
+                    lineOne = dialogue.substring(0,index - 1);
+                    lineTwo = dialogue.substring(index);
+                    break;
+                }
+            }
+
+            TextBox textOne = new TextBox(lineOne, fontSize);
+            TextBox textTwo = new TextBox(lineTwo, fontSize);
+
+            getWorld().addObject(textOne, getX(), getY() - 80);
+            getWorld().addObject(textTwo, getX(), getY() - 65);
+        }
+
+        else
+        { 
+            TextBox text = new TextBox(dialogue, fontSize);
+            getWorld().addObject(text, getX(), getY() - 65);
+        }
+    }
+    
+    public void removeText()
+    {
+        if (text != null && text.getWorld() != null)
+        {
+            getWorld().removeObject(textOne);
+        }
+        if (textOne != null && textOne.getWorld() != null)
+        {
+            getWorld().removeObject(textOne);
+        }
+        if (textTwo != null && textTwo.getWorld() != null)
+        {
+            getWorld().removeObject(textTwo);
+        }
     }
 }
