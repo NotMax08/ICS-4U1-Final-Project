@@ -76,6 +76,9 @@ public class Player extends ScrollingActor {
     private GreenfootImage fallL1;
     private GreenfootImage fallL2;
     private GreenfootImage[] fallingLeft;
+    
+    //Item data
+    public int[][] itemData;
 
     public Player(Camera camera) {
         super(camera);
@@ -601,5 +604,8 @@ public class Player extends ScrollingActor {
     
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
+    }
+    public int[][] getItemData(){
+        return itemData;
     }
 }

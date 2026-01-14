@@ -19,14 +19,22 @@ public class InventoryDisplay extends ScrollingActor {
 
     // Inventory utility
     private ArrayList<InventoryItem> items;
-    private int[][] slotLocations; // set this
+    private int[][] itemData; // set this
     private int maxSlots = 15;
-
+    
+    //Images
+    GreenfootImage strpot = new GreenfootImage("strpot.jpg");
+    GreenfootImage shrpot = new GreenfootImage("shrpot.png");
+    GreenfootImage needle = new GreenfootImage ("needle.jpg");
+    //Item booleans
+    private boolean itemBooleans[];
     /**
      * Create inventory display at a fixed screen position
      * 
      * @param screenX X position on screen (not world position)
      * @param screenY Y position on screen (not world position)
+     * @param camera camera to update position
+     * @param items[] boolean array to assign true or false if player has certain items
      */
     public InventoryDisplay(int screenX, int screenY, Camera camera) {
         super(camera);
@@ -48,9 +56,11 @@ public class InventoryDisplay extends ScrollingActor {
      * Keep inventory at fixed screen position
      */
     public void act() {
+        updateItemData();
         checkTabPress();
         checkMouseClick();
         updateImage();
+        //updateInventory();
     }
 
     private void checkMouseClick(){
@@ -83,7 +93,20 @@ public class InventoryDisplay extends ScrollingActor {
         // Track state for next frame
         tabWasDown = tabIsDown;
     }
-
+    public void updateInventory(){
+        int hasItem = 0;
+        int itemCount = 0;
+        for (int[] inv : itemData) {
+            hasItem = inv[0];
+            itemCount = inv[1];
+            
+        }
+        if(hasItem == 1){
+            new InventoryItem("strpot",strpot, itemCount);
+        } else if (itemBooleans[1] = true){
+            new InventoryItem("shrpot", shrpot, itemCount);
+        }
+    }
     /**
      * Add an item to the inventory
      */
@@ -157,6 +180,9 @@ public class InventoryDisplay extends ScrollingActor {
     public void clear() {
         items.clear();
         updateImage();
+    }
+    public void updateItemData(){
+        
     }
 }
 

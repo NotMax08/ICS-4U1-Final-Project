@@ -24,7 +24,7 @@ public class RoomOne extends GameWorld {
         
         setIcons();
         
-        visuals = false;
+        visuals = true;
         if(visuals){
             createPlatformVisuals();
             
