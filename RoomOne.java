@@ -22,7 +22,7 @@ public class RoomOne extends GameWorld {
             player.setWorldPosition(900, 1200);
         }
         
-        setIcons();
+        initalizeDisplays();
         
         visuals = true;
         if(visuals){

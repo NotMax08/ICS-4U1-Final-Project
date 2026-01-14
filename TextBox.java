@@ -34,9 +34,6 @@ public class TextBox extends Actor
                 // Register the font with the Graphics Environment.
                 // This makes the font available to the JVM by its internal name: "Press Start 2P"
                 GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(awtFont);
-
-                // Confirm it worked in the terminal
-                System.out.println("Font loaded successfully: " + awtFont.getName());
             }
         } // Correctly closing the try block before catching specific exceptions
         catch (FontFormatException e) {

@@ -32,7 +32,8 @@ public class BossRoomTwo extends GameWorld {
             player.setWorldPosition(500, 500); // Center player in static room
         }
         
-        setIcons();
+        
+        initalizeDisplays();
         
         // Keep camera locked - don't follow player
         if (camera != null) {

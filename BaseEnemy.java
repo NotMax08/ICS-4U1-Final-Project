@@ -35,6 +35,8 @@ public abstract class BaseEnemy extends ScrollingActor {
     protected ScrollingStatBar healthBar;
     protected int healthBarYOffset = -50;
     
+    protected GreenfootImage currentImage;
+    
     public BaseEnemy(Camera camera, GreenfootImage img, 
                      int health, int damage, 
                      int detectionRange, int attackRange) {
@@ -44,6 +46,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         this.detectionRange = detectionRange;
         this.attackRange = attackRange;
         this.isAggro = false;
+        this.currentImage = img;
         setImage(img);
     }
     
@@ -184,13 +187,22 @@ public abstract class BaseEnemy extends ScrollingActor {
         }
     }
     
-    // Damage and death
     protected void takeDamage(int dmg) {
         health -= dmg;
         behaviour = ENEMY_BEHAVIOUR.HURT;
+        
+        // Update health bar
         if (healthBar != null) {
             healthBar.update(health);
         }
+        
+        // Create stun animation effect that follows the enemy
+        if (getWorld() != null) {
+            // Position it slightly above the enemy's center
+            StunAnimation stunEffect = new StunAnimation(camera, getWorldX(), getWorldY() - 30, (int) (this.currentImage.getWidth() * 1.5), (int) (this.currentImage.getHeight() * 1.5));
+            getWorld().addObject(stunEffect, 0, 0);
+        }
+        
         if (health <= 0) {
             behaviour = ENEMY_BEHAVIOUR.DEAD;
         }
@@ -210,5 +222,42 @@ public abstract class BaseEnemy extends ScrollingActor {
         GreenfootImage img = new GreenfootImage(filename);
         img.scale(width, height);
         return img;
+    }
+    
+    protected boolean isSolidAtPosition(int worldX, int worldY) {
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null || world.mapGrid == null) return false;
+
+        int tileX = world.worldToTileX(worldX);
+        int tileY = world.worldToTileY(worldY);
+
+        int tileType = world.mapGrid.getTileAt(tileX, tileY);
+
+        // Type 1 = walls, Type 2 = platforms
+        return tileType == 1 || tileType == 2;
+    }
+    
+    /**
+     * Check if a rectangular area contains any solid tiles
+     */
+    protected boolean isSolidArea(int centerX, int centerY, int width, int height) {
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null || world.mapGrid == null) return false;
+        
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+        
+        // Check multiple points within the area
+        int left = centerX - halfWidth;
+        int right = centerX + halfWidth;
+        int top = centerY - halfHeight;
+        int bottom = centerY + halfHeight;
+        
+        // Check corners and center
+        return isSolidAtPosition(left, top) ||      // Top-left
+               isSolidAtPosition(right, top) ||     // Top-right
+               isSolidAtPosition(left, bottom) ||   // Bottom-left
+               isSolidAtPosition(right, bottom) ||  // Bottom-right
+               isSolidAtPosition(centerX, centerY); // Center
     }
 }

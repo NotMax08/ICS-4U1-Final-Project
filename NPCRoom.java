@@ -30,7 +30,8 @@ public class NPCRoom extends GameWorld {
             player.setWorldPosition(400, 500);
         }
         
-        setIcons();
+        
+        initalizeDisplays();
         
         if (camera != null) {
             updateAllActors();
