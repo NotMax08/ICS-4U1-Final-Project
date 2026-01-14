@@ -10,6 +10,7 @@ comment11.params=dx\ dy\ cls
 comment11.target=java.util.List\ getObjectsAtWorldOffset(int,\ int,\ java.lang.Class)
 comment11.text=\n\ Get\ all\ objects\ at\ a\ world\ coordinate\ offset\n
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment12.params=worldRange\ cls
 comment12.target=java.util.List\ getObjectsInWorldRange(int,\ java.lang.Class)
 comment13.params=actor
@@ -27,6 +28,8 @@ comment17.params=other
 comment17.target=double\ getWorldDistanceTo(ScrollingActor)
 comment17.text=\n\ Get\ world\ distance\ to\ another\ ScrollingActor\n
 =======
+=======
+>>>>>>> Stashed changes
 comment12.params=range\ cls
 comment12.target=java.util.List\ getObjectsInWorldRange(int,\ java.lang.Class)
 comment12.text=\n\ Get\ objects\ in\ world\ coordinate\ range\ (radius-based)\n
@@ -42,6 +45,9 @@ comment15.text=\n\ Check\ if\ touching\ another\ actor\ in\ world\ coordinates\n
 comment16.params=other
 comment16.target=double\ getWorldDistanceTo(ScrollingActor)
 comment16.text=\n\ Get\ world\ distance\ to\ another\ ScrollingActor\n
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 comment2.params=x\ y
 comment2.target=void\ setWorldPosition(int,\ int)

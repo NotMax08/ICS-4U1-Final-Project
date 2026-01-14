@@ -27,6 +27,7 @@ dependency15.from=RoomThree
 dependency15.to=MapGrid
 dependency15.type=UsesDependency
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 dependency16.from=RoomThree
 dependency16.to=Platform
 dependency16.type=UsesDependency
@@ -39,6 +40,8 @@ dependency18.type=UsesDependency
 dependency19.from=RoomThree
 dependency19.to=InventoryDisplay
 =======
+=======
+>>>>>>> Stashed changes
 dependency16.from=RoomOne
 dependency16.to=Player
 dependency16.type=UsesDependency
@@ -50,11 +53,15 @@ dependency18.to=MapGrid
 dependency18.type=UsesDependency
 dependency19.from=RoomOne
 dependency19.to=Platform
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 dependency19.type=UsesDependency
 dependency2.from=GameWorld
 dependency2.to=Player
 dependency2.type=UsesDependency
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 dependency20.from=RoomThree
 dependency20.to=AbilityDisplay
@@ -77,6 +84,14 @@ dependency20.type=UsesDependency
 dependency21.from=NPCRoom
 dependency21.to=Player
 dependency21.type=UsesDependency
+=======
+dependency20.from=RoomOne
+dependency20.to=InteractiveDoor
+dependency20.type=UsesDependency
+dependency21.from=NPCRoom
+dependency21.to=Player
+dependency21.type=UsesDependency
+>>>>>>> Stashed changes
 dependency22.from=NPCRoom
 dependency22.to=MapGrid
 dependency22.type=UsesDependency
@@ -90,6 +105,7 @@ dependency24.type=UsesDependency
 dependency25.from=BossRoom
 dependency25.to=InteractiveDoor
 dependency25.type=UsesDependency
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 dependency26.from=RoomOne
 dependency26.to=MapGridDebugOverlay
@@ -109,11 +125,22 @@ dependency26.type=UsesDependency
 dependency27.from=Merchant
 dependency27.to=TextBox
 dependency27.type=UsesDependency
+=======
+dependency26.from=NPC
+dependency26.to=TextBox
+dependency26.type=UsesDependency
+dependency27.from=Merchant
+dependency27.to=TextBox
+dependency27.type=UsesDependency
+>>>>>>> Stashed changes
 dependency28.from=ScrollingActor
 dependency28.to=Camera
 dependency28.type=UsesDependency
 dependency29.from=Player
 dependency29.to=Counter
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 dependency29.type=UsesDependency
 dependency3.from=GameWorld
@@ -179,11 +206,15 @@ dependency38.to=Camera
 dependency38.type=UsesDependency
 dependency39.from=Crawler
 dependency39.to=Player
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 dependency39.type=UsesDependency
 dependency4.from=GameWorld
 dependency4.to=InventoryDisplay
 dependency4.type=UsesDependency
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 dependency40.from=RoomTwo
 dependency40.to=InventoryDisplay
@@ -221,6 +252,14 @@ dependency40.type=UsesDependency
 dependency41.from=Platform
 dependency41.to=Camera
 dependency41.type=UsesDependency
+=======
+dependency40.from=Crawler
+dependency40.to=ScrollingActor
+dependency40.type=UsesDependency
+dependency41.from=Platform
+dependency41.to=Camera
+dependency41.type=UsesDependency
+>>>>>>> Stashed changes
 dependency42.from=Platform
 dependency42.to=GameWorld
 dependency42.type=UsesDependency
@@ -244,6 +283,9 @@ dependency48.to=Camera
 dependency48.type=UsesDependency
 dependency49.from=Button
 dependency49.to=RoomOne
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 dependency49.type=UsesDependency
 dependency5.from=GameWorld
@@ -427,6 +469,9 @@ editor.fx.0.y=25
 height=747
 package.numDependencies=49
 package.numTargets=24
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 project.charset=UTF-8
 publish.hasSource=false
@@ -451,7 +496,11 @@ target1.x=0
 target1.y=0
 target10.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target10.name=BossRoomTwo
+=======
+target10.name=Merchant
+>>>>>>> Stashed changes
 =======
 target10.name=Merchant
 >>>>>>> Stashed changes
@@ -462,7 +511,11 @@ target10.x=0
 target10.y=0
 target11.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target11.name=Golem
+=======
+target11.name=Button
+>>>>>>> Stashed changes
 =======
 target11.name=Button
 >>>>>>> Stashed changes
@@ -473,7 +526,11 @@ target11.x=0
 target11.y=0
 target12.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target12.name=Fungi
+=======
+target12.name=Camera
+>>>>>>> Stashed changes
 =======
 target12.name=Camera
 >>>>>>> Stashed changes
@@ -484,7 +541,11 @@ target12.x=0
 target12.y=0
 target13.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target13.name=RoomThree
+=======
+target13.name=RoomOne
+>>>>>>> Stashed changes
 =======
 target13.name=RoomOne
 >>>>>>> Stashed changes
@@ -495,7 +556,11 @@ target13.x=0
 target13.y=0
 target14.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target14.name=Boss
+=======
+target14.name=ScrollingActor
+>>>>>>> Stashed changes
 =======
 target14.name=ScrollingActor
 >>>>>>> Stashed changes
@@ -506,7 +571,11 @@ target14.x=0
 target14.y=0
 target15.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target15.name=BossRoom
+=======
+target15.name=Player
+>>>>>>> Stashed changes
 =======
 target15.name=Player
 >>>>>>> Stashed changes
@@ -517,7 +586,11 @@ target15.x=0
 target15.y=0
 target16.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target16.name=Counter
+=======
+target16.name=RoomTwo
+>>>>>>> Stashed changes
 =======
 target16.name=RoomTwo
 >>>>>>> Stashed changes
@@ -528,7 +601,11 @@ target16.x=0
 target16.y=0
 target17.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target17.name=Merchant
+=======
+target17.name=AbilityDisplay
+>>>>>>> Stashed changes
 =======
 target17.name=AbilityDisplay
 >>>>>>> Stashed changes
@@ -539,7 +616,11 @@ target17.x=0
 target17.y=0
 target18.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target18.name=Button
+=======
+target18.name=InteractiveDoor
+>>>>>>> Stashed changes
 =======
 target18.name=InteractiveDoor
 >>>>>>> Stashed changes
@@ -550,7 +631,11 @@ target18.x=0
 target18.y=0
 target19.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target19.name=Camera
+=======
+target19.name=StartWorld
+>>>>>>> Stashed changes
 =======
 target19.name=StartWorld
 >>>>>>> Stashed changes
@@ -561,7 +646,11 @@ target19.x=0
 target19.y=0
 target2.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target2.name=Message
+=======
+target2.name=Enemies
+>>>>>>> Stashed changes
 =======
 target2.name=Enemies
 >>>>>>> Stashed changes
@@ -572,7 +661,11 @@ target2.x=0
 target2.y=0
 target20.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target20.name=RoomOne
+=======
+target20.name=Crawler
+>>>>>>> Stashed changes
 =======
 target20.name=Crawler
 >>>>>>> Stashed changes
@@ -583,7 +676,11 @@ target20.x=0
 target20.y=0
 target21.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target21.name=StunAnimation
+=======
+target21.name=SuperStatBar
+>>>>>>> Stashed changes
 =======
 target21.name=SuperStatBar
 >>>>>>> Stashed changes
@@ -594,7 +691,11 @@ target21.x=0
 target21.y=0
 target22.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target22.name=ScrollingActor
+=======
+target22.name=MapGrid
+>>>>>>> Stashed changes
 =======
 target22.name=MapGrid
 >>>>>>> Stashed changes
@@ -605,7 +706,11 @@ target22.x=0
 target22.y=0
 target23.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target23.name=Player
+=======
+target23.name=InventoryDisplay
+>>>>>>> Stashed changes
 =======
 target23.name=InventoryDisplay
 >>>>>>> Stashed changes
@@ -616,7 +721,11 @@ target23.x=0
 target23.y=0
 target24.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target24.name=ScrollingStatBar
+=======
+target24.name=NPCRoom
+>>>>>>> Stashed changes
 =======
 target24.name=NPCRoom
 >>>>>>> Stashed changes
@@ -625,6 +734,7 @@ target24.type=ClassTarget
 target24.width=120
 target24.x=0
 target24.y=0
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 target25.height=70
 target25.name=RoomTwo
@@ -663,6 +773,10 @@ target29.x=0
 target29.y=0
 target3.height=70
 target3.name=MapGridDebugOverlay
+=======
+target3.height=70
+target3.name=Platform
+>>>>>>> Stashed changes
 =======
 target3.height=70
 target3.name=Platform
@@ -730,6 +844,7 @@ target37.x=0
 target37.y=0
 target4.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target4.name=Platform
 target4.showInterface=false
 target4.type=ClassTarget
@@ -748,6 +863,16 @@ target4.y=0
 target5.height=70
 target5.name=SlashAnimation
 >>>>>>> Stashed changes
+=======
+target4.name=SuperSmoothMover
+target4.showInterface=false
+target4.type=AbstractTarget
+target4.width=130
+target4.x=0
+target4.y=0
+target5.height=70
+target5.name=SlashAnimation
+>>>>>>> Stashed changes
 target5.showInterface=false
 target5.type=AbstractTarget
 target5.width=130
@@ -755,7 +880,11 @@ target5.x=0
 target5.y=0
 target6.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target6.name=SlashAnimation
+=======
+target6.name=TextBox
+>>>>>>> Stashed changes
 =======
 target6.name=TextBox
 >>>>>>> Stashed changes
@@ -766,7 +895,11 @@ target6.x=0
 target6.y=0
 target7.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target7.name=TextBox
+=======
+target7.name=GameWorld
+>>>>>>> Stashed changes
 =======
 target7.name=GameWorld
 >>>>>>> Stashed changes
@@ -777,7 +910,11 @@ target7.x=0
 target7.y=0
 target8.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target8.name=GameWorld
+=======
+target8.name=BossRoom
+>>>>>>> Stashed changes
 =======
 target8.name=BossRoom
 >>>>>>> Stashed changes
@@ -788,7 +925,11 @@ target8.x=0
 target8.y=0
 target9.height=70
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 target9.name=HealthDisplay
+=======
+target9.name=Counter
+>>>>>>> Stashed changes
 =======
 target9.name=Counter
 >>>>>>> Stashed changes

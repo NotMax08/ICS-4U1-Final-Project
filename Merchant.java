@@ -27,7 +27,11 @@ public class Merchant extends NPC
         textBoxWriter(options);
     }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
 =======
 }
 >>>>>>> Stashed changes
