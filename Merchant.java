@@ -26,20 +26,4 @@ public class Merchant extends NPC
         TextBox options = new TextBox("Would you like to purchase weapons? [E]", fontSize);
         textBoxWriter(options);
     }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes

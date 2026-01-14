@@ -5,23 +5,7 @@ comment1.params=
 comment1.target=void\ act()
 comment2.params=
 comment2.target=void\ interactWithPlayer()
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-comment2.text=\n\ method\ to\ check\ if\ player\ is\ near\ NPC\ to\ allow\ player\ to\ interact\ with\ it\n\ @return\ true\ if\ a\ Player\ is\ within\ range;\ otherwise\ returns\ false.\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\n\ @author\ Julian\n
-=======
 comment2.text=\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\n\ @author\ Julian\n
->>>>>>> Stashed changes
-=======
-comment2.text=\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\n\ @author\ Julian\n
->>>>>>> Stashed changes
-=======
-comment2.text=\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\n\ @author\ Julian\n
->>>>>>> Stashed changes
-=======
-comment2.text=\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\n\ @author\ Julian\n
->>>>>>> Stashed changes
 comment3.params=
 comment3.target=void\ startDialogue()
 comment4.params=dialogue
