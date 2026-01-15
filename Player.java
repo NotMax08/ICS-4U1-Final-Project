@@ -23,6 +23,10 @@ public class Player extends ScrollingActor {
     private static final int STUN_DURATION = 30; // Acts to remain stunned
     private static final int BASIC_ATTACK_COOLDOWN = 25;
     private static final int BASIC_ATTACK_DAMAGE = 7;
+    private static final int STARTING_HEALTH_POINTS= 5;
+    
+    private static int currentHealth;
+    private static int maxHealth;
 
     // Character states 
     private boolean onGround = false;
@@ -31,6 +35,7 @@ public class Player extends ScrollingActor {
     private boolean direction = true; // false = left, true = right
     private boolean isStunned = false;
     private boolean isAttacking = false;
+    private boolean isTakingDamage = false;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -80,6 +85,9 @@ public class Player extends ScrollingActor {
     public Player(Camera camera) {
         super(camera);
 
+        this.maxHealth = STARTING_HEALTH_POINTS;
+        this.currentHealth = maxHealth;
+        
         // Initialize Counters
         fallCounter = new Counter();
         stunCounter = new Counter(STUN_DURATION);
@@ -97,7 +105,7 @@ public class Player extends ScrollingActor {
     }
 
     public void act() {
-        checkStunned();
+        //checkStunned();
         checkAbilityCooldown();
         handleInput();
         applyGravity();
@@ -461,6 +469,19 @@ public class Player extends ScrollingActor {
             velocityY = 0;
         }
     }
+    
+    public void takeDamage(int dmg){
+        currentHealth = Math.max(0, currentHealth - dmg);
+    }
+    
+    public void heal(int hp){
+        currentHealth = Math.min(maxHealth, currentHealth + hp);
+    }
+    
+    public void increaseMaxHealth(int hp){
+        maxHealth += hp;
+        currentHealth = maxHealth;
+    }
 
     /**
      * @author Paul
@@ -584,7 +605,12 @@ public class Player extends ScrollingActor {
     public boolean isOnGround() {
         return onGround;
     }
-
+    public int getHealth(){
+        return currentHealth;
+    }
+    public int getMaxHealth(){
+        return maxHealth;
+    }
     public boolean isInDoor(){
         return inDoor;
     }
@@ -594,11 +620,9 @@ public class Player extends ScrollingActor {
     public double getVelocityX() {
         return velocityX;
     }
-
     public double getVelocityY() {
         return velocityY;
     }
-    
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
