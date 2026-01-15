@@ -323,7 +323,12 @@ target9.width=120
 target9.x=0
 target9.y=0
 version=3.1.0
+<<<<<<< HEAD
 width=1936
 world.lastInstantiated=StartWorld
+=======
+width=1440
+world.lastInstantiated=NPCRoom
+>>>>>>> ee5b7475e9e4a9e9039a71ebfa56401ad536e59f
 xPosition=0
 yPosition=0
