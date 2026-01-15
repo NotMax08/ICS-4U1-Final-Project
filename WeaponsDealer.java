@@ -11,6 +11,7 @@ public class WeaponsDealer extends NPC
     public WeaponsDealer()
     {
         image = new GreenfootImage("weaponsDealer.png");
+        image.scale(image.getWidth()/3, image.getHeight()/3);
         setImage(image);
     }
     

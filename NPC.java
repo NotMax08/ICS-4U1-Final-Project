@@ -18,7 +18,8 @@ public abstract class NPC extends Actor
     private TextBox text;
     
     public GreenfootImage image;
-
+    public boolean isShopOpen = false;
+    public PotionShop shop;
     public void act()
     {
         interactWithPlayer();
@@ -35,7 +36,7 @@ public abstract class NPC extends Actor
 
         if(playerNear)
         {
-            if(!promptVisible)
+            if(!promptVisible && !isShopOpen)
             {
                 textBoxWriter("Press 'E' to interact", false);
                 promptVisible = true;
@@ -49,16 +50,24 @@ public abstract class NPC extends Actor
             if (promptVisible) {
                 removeText();
                 promptVisible = false;
+                
+                if(shop!=null)
+                {
+                    getWorld().removeObject(shop);
+                    isShopOpen = false;
+                }
             }
         }
     }
 
     //What the individual npcs do
     public abstract void dialogue();
-
+    
     /**
-     * Method that handles making text objects
-     * If the text is too long It splits it into two lines
+     * Method that handles making text objects specifically tailored to NPCs
+     * If the text is too long add new line using "|" key
+     * Max 2 lines
+     * 
      * @author Julian
      */
     public void textBoxWriter(String dialogue, boolean split)
@@ -93,7 +102,7 @@ public abstract class NPC extends Actor
             getWorld().addObject(text, getX(), getY() - 65);
         }
     }
-    
+
     /**
      * Removes all text
      * @author Julian

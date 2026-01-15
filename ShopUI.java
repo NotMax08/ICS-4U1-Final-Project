@@ -3,15 +3,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class ShopUI here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Julian
+ * @version 2025
  */
-public class ShopUI extends Actor
+public abstract class ShopUI extends Actor
 {
-    /**
-     * Act - do whatever the ShopUI wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    public GreenfootImage image;
+    
     public void act()
     {
         // Add your action code here.
