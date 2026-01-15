@@ -8,9 +8,16 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class WeaponsDealer extends NPC
 {
+    public WeaponsDealer()
+    {
+        image = new GreenfootImage("weaponsDealer.png");
+        image.scale(image.getWidth()/3, image.getHeight()/3);
+        setImage(image);
+    }
+    
     public void act()
     {
-        // Add your action code here.
+        super.act();
     }
 
     public void dialogue()
