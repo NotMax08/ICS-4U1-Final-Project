@@ -581,6 +581,6 @@ target9.x=0
 target9.y=0
 version=3.1.0
 width=1440
-world.lastInstantiated=StartWorld
+world.lastInstantiated=NPCRoom
 xPosition=0
 yPosition=91
