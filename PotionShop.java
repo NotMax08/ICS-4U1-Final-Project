@@ -11,6 +11,7 @@ public class PotionShop extends ShopUI
     public PotionShop()
     {
         image = new GreenfootImage ("potionsUI.png");
+        image.scale(image.getWidth() + 100, image.getHeight() + 100);
         setImage(image);
     }
     

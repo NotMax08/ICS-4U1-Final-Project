@@ -11,8 +11,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public abstract class Potions extends Actor
 {
     public int price;
-    public String description; 
-    
+    public boolean inInventory = false; 
+    public GreenfootImage image; 
     public void act()
     {
         // Add your action code here.
