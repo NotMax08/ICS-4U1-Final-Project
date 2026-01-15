@@ -99,7 +99,7 @@ public class Boss extends Actor
         attackTwo = true;
         
         // Initial teleport
-        //teleport(BossRoom.player.getX(),200,"DownUp");
+        teleport(BossRoom.player.getX(),200,"DownUp");
     }
    
     private void teleport(int x, int y, String newPose){
