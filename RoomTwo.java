@@ -46,6 +46,12 @@ public class RoomTwo extends GameWorld {
         drawPlatformOnBackground(610, 380, 250, 100, "platform2.png");
         drawPlatformOnBackground(250, 890, 560, 100, "platform2.png");
         drawPlatformOnBackground(1675, 890, 1770, 100, "platform2.png");
+        
+        
+        
+        Grim grim = new Grim (camera, false);
+        addObject(grim, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        grim.setWorldPosition(2120, 1100);
     }
     
     public RoomTwo() {
