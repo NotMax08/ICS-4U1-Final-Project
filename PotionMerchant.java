@@ -24,7 +24,7 @@ public class PotionMerchant extends NPC
     
     public void dialogue()
     {
-        textBoxWriter("Would you like to | purchase weapons? [E]", true);
+        textBoxWriter("Would you like to | purchase potions? [E]", true);
         //textBoxWriter(options);
         if (("e").equals(Greenfoot.getKey())) {
                 removeText();
