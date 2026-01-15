@@ -11,6 +11,8 @@ public class BossRoom extends GameWorld {
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
+    public static BossWeapon weapon1 = new BossWeapon();
+    
     public BossRoom(Player existingPlayer) {
         super(); // This creates the camera
         
@@ -44,6 +46,7 @@ public class BossRoom extends GameWorld {
         
         Boss staBee = new Boss(1);
         addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn off screen
+        addObject(weapon1, -200, -200);
     }
     
     public BossRoom() {
