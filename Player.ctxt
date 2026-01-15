@@ -31,6 +31,7 @@ comment21.params=
 comment21.target=void\ checkDoor()
 comment21.text=\r\n\ @author\ Paul\r\n
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment22.params=
 comment22.target=void\ checkInteractive()
 comment23.params=posX\ posY
@@ -52,6 +53,8 @@ comment28.params=worldX\ worldY
 comment28.target=boolean\ checkInteractiveAt(int,\ int)
 comment28.text=\r\n\ @author\ Paul\r\n
 =======
+=======
+>>>>>>> Stashed changes
 comment22.params=posX\ posY
 comment22.target=boolean\ isSolidAtPosition(int,\ int)
 comment22.text=\r\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\r\n\ @author\ Paul\r\n

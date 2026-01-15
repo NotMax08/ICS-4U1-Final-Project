@@ -2,6 +2,7 @@
 comment0.target=InteractiveDoor
 comment0.text=\r\n\ @author\ Paul\r\n
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment1.params=camera\ width\ height\ id
 comment1.target=InteractiveDoor(Camera,\ int,\ int,\ java.lang.String)
 comment2.params=
@@ -9,6 +10,8 @@ comment2.target=void\ act()
 comment3.params=worldX\ worldY
 comment3.target=boolean\ containsWorldPoint(int,\ int)
 =======
+=======
+>>>>>>> Stashed changes
 comment1.params=camera\ width\ height
 comment1.target=InteractiveDoor(Camera,\ int,\ int)
 comment2.params=worldX\ worldY
