@@ -9,20 +9,20 @@ import java.util.*;
 public class Fungi extends GroundEnemy
 {
     public static final int FUNGI_HEALTH = 10;
-    public static final int FUNGI_DAMAGE = 3;
-    public static final int FUNGI_DETECTION_RANGE = 10;
-    public static final int FUNGI_ATTACK_RANGE = 50;
+    public static final int FUNGI_DAMAGE = 1;
+    public static final int FUNGI_DETECTION_RANGE = 200;
+    public static final int FUNGI_ATTACK_RANGE = 100;
     public static final int PATROL_SPEED = 1;
-    public static final int CHASE_SPEED = 5;
-    public static final int ROLL_SPEED = 8; // Speed during roll attack
+    public static final int CHASE_SPEED = 6;
+    public static final int ROLL_SPEED = 5; // Speed during roll attack
     public static final int GRAVITY = 1;
-    public static final int WALL_CHECK_DISTANCE = 10;
+    public static final int WALL_CHECK_DISTANCE = 20;
     public static final int IMAGE_WIDTH = 62;
     public static final int IMAGE_HEIGHT = 71;
     
     // Animation constants - MAKE THESE HIGHER (slower animation)
-    public static final int ANIMATION_SPEED = 8; // Increased from 10
-    public static final int ATTACK_ANIMATION_SPEED = 8; // Increased from 4 (slower attack)
+    public static final int ANIMATION_SPEED = 10; // Increased from 10
+    public static final int ATTACK_ANIMATION_SPEED = 10; // Increased from 4 (slower attack)
     public static final int ATTACK_COOLDOWN = 60; // Increased from 30
     
     // Images
@@ -41,6 +41,7 @@ public class Fungi extends GroundEnemy
     private static final int FRAME_DELAY = 3; // Only update animation every 3 frames
     
     private int rollDirection = 1;
+    
     
     public Fungi(Camera camera) {
         super(camera, 
@@ -83,13 +84,33 @@ public class Fungi extends GroundEnemy
         */
         updateAnimation();
         updateImage();
-        System.out.println("edge: " + isAtEdge());
-        System.out.println("wall: " + isWallAhead());
-        System.out.println("onGround: " + isGroundAhead());
     }
     
     @Override
     protected void updateAnimation() {
+        if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
+            attackAnimationCounter++;
+            if (attackAnimationCounter >= ATTACK_ANIMATION_SPEED) {
+                attackAnimationCounter = 0;
+                attackFrame++;
+                
+                // Deal damage at a specific frame (e.g., frame 3 or 4)
+                if (attackFrame == 0 || attackFrame == 1 || attackFrame == 2 ||attackFrame == 3 || attackFrame == 4) {  // Choose the frame where impact should occur
+                    dealAttackDamage();  // Call the base class method
+                }
+                
+                // Check if attack animation is complete
+                if (attackFrame >= attackImages.size()) {
+                    attackFrame = attackImages.size() - 1;
+                    
+                    // Transition to cooldown
+                    behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
+                    attackCooldownTimer = ATTACK_COOLDOWN;
+                    isInAttackCooldown = true;
+                }
+            }
+            return;
+        }
         // Handle attack animation
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
             attackAnimationCounter++;
@@ -160,7 +181,46 @@ public class Fungi extends GroundEnemy
     
     @Override
     protected void attackAnimation() {
-        // ROLL towards the target!
+        
+        if ( (ScrollingActor)target != null){
+            int targetX = ((ScrollingActor)target).getWorldX();
+            int desiredDirection = (targetX > worldX) ? 1 : -1;
+            direction = desiredDirection;
+            
+            // Check if close enough to start roll attack
+            int distanceToTarget = Math.abs(targetX - worldX);
+            if (distanceToTarget <= attackRange && !isInAttackCooldown) {
+                // Start roll attack!
+                // EXPLICITLY calculate roll direction from target position
+                rollDirection = (targetX > worldX) ? 1 : -1;
+                isFacingRight = (rollDirection == 1); // Update facing immediately
+            }
+            
+            // Check for walls/edges before moving
+            if (isWallAhead() || isAtEdge() || !isGroundAhead()) {
+                // Hit an obstacle, stop rolling
+                behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
+                attackCooldownTimer = ATTACK_COOLDOWN;
+                isInAttackCooldown = true;
+                return;
+            }
+            
+            // Move in the roll direction
+            setWorldPosition(worldX + (rollDirection * ROLL_SPEED), worldY);
+        }
+        /*
+        int targetX = ((ScrollingActor)target).getWorldX();
+        int desiredDirection = (targetX > worldX) ? 1 : -1;
+        direction = desiredDirection;
+        
+        // Check if close enough to start roll attack
+        int distanceToTarget = Math.abs(targetX - worldX);
+        if (distanceToTarget <= attackRange && !isInAttackCooldown) {
+            // Start roll attack!
+            // EXPLICITLY calculate roll direction from target position
+            rollDirection = (targetX > worldX) ? 1 : -1;
+            isFacingRight = (rollDirection == 1); // Update facing immediately
+        }
         
         // Check for walls/edges before moving
         if (isWallAhead() || isAtEdge() || !isGroundAhead()) {
@@ -173,7 +233,7 @@ public class Fungi extends GroundEnemy
         
         // Move in the roll direction
         setWorldPosition(worldX + (rollDirection * ROLL_SPEED), worldY);
-        
+        */
         // Apply gravity
         fall();
     }
@@ -182,6 +242,14 @@ public class Fungi extends GroundEnemy
     protected void attackCooldown() {
         // Stay still during cooldown
         isMoving = false;
+        if (target != null && target instanceof ScrollingActor) {
+            ScrollingActor scrollTarget = (ScrollingActor) target;
+            int targetX = scrollTarget.getWorldX();
+            
+            int desiredDirection = (targetX > worldX) ? 1 : -1;
+            direction = desiredDirection;
+            isFacingRight = (direction == 1);
+        }
         fall();
     }
     
@@ -206,7 +274,9 @@ public class Fungi extends GroundEnemy
         int distanceToTarget = Math.abs(targetX - worldX);
         if (distanceToTarget <= attackRange && !isInAttackCooldown) {
             // Start roll attack!
-            rollDirection = direction; // Roll in the direction we're facing
+            // EXPLICITLY calculate roll direction from target position
+            rollDirection = (targetX > worldX) ? 1 : -1;
+            isFacingRight = (rollDirection == 1); // Update facing immediately
             behaviour = ENEMY_BEHAVIOUR.ATTACK_ANIMATION;
             attackFrame = 0;
             attackAnimationCounter = 0;
