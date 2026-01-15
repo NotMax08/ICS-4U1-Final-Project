@@ -23,7 +23,8 @@ public class Player extends ScrollingActor {
     private static final int STUN_DURATION = 30; // Acts to remain stunned
     private static final int BASIC_ATTACK_COOLDOWN = 25;
     private static final int BASIC_ATTACK_DAMAGE = 7;
-    private static final int STARTING_HEALTH_POINTS= 5;
+    private static final int STARTING_HEALTH_POINTS= 3;
+    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
     
     private static int currentHealth;
     private static int maxHealth;
@@ -479,7 +480,7 @@ public class Player extends ScrollingActor {
     }
     
     public void increaseMaxHealth(int hp){
-        maxHealth += hp;
+        maxHealth = Math.min(maxHealth + hp, ABSOLUTE_MAX_HEALTH_POINTS);
         currentHealth = maxHealth;
     }
 
@@ -610,6 +611,9 @@ public class Player extends ScrollingActor {
     }
     public int getMaxHealth(){
         return maxHealth;
+    }
+    public int getAbsMaxHealth(){
+        return ABSOLUTE_MAX_HEALTH_POINTS;
     }
     public boolean isInDoor(){
         return inDoor;

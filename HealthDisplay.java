@@ -38,21 +38,22 @@ public class HealthDisplay extends Display
     protected void updateDisplay(){
         int currentHealth = player.getHealth();
         int maxHealth = player.getMaxHealth();
+        int absMaxHealth = player.getAbsMaxHealth();
         
         if(currentHealth != lastHealth || maxHealth != lastMaxHealth){
-            createHealthBar(currentHealth, maxHealth);
+            createHealthBar(currentHealth, maxHealth, absMaxHealth);
             lastHealth = currentHealth;
             lastMaxHealth = maxHealth;
         }
     }
     
-    private void createHealthBar(int health, int maxHealth){
+    private void createHealthBar(int health, int maxHealth, int absMax){
         // Ensure valid values
         health = Math.max(0, Math.min(maxHealth, health));
         maxHealth = Math.max(1, maxHealth); // at least 1
         
-        // Calculate totalWidth from number of health points
-        int totalWidth = (SKULL_SIZE * health) + (SKULL_SPACING * health - 1);
+        // Calculate total width needed for all skulls 
+        int totalWidth = (SKULL_SIZE * absMax) + (SKULL_SPACING * absMax - 1);
         
         // Create image
         GreenfootImage healthBar = new GreenfootImage(totalWidth, SKULL_SIZE);
@@ -63,6 +64,7 @@ public class HealthDisplay extends Display
             
             // Draws full skull if this position is within current health
             // Draws empty skull if health is lower than this position
+            // Doesnt draw an image if the max health is lower than the abs max
             if(i < health){
                 healthBar.drawImage(fullSkull, xPos, 0);
             }else {
