@@ -9,9 +9,9 @@ import java.util.*;
 public class Grim extends GroundEnemy {
     // Stats
     public static final int GRIM_HEALTH = 15;
-    public static final int GRIM_DAMAGE = 5;
-    public static final int GRIM_DETECTION_RANGE = 250;
-    public static final int GRIM_ATTACK_RANGE = 120;
+    public static final int GRIM_DAMAGE = 1;
+    public static final int GRIM_DETECTION_RANGE = 300;
+    public static final int GRIM_ATTACK_RANGE = 100;
     public static final int CHARGE_SPEED = 6;
     public static final int GRAVITY = 1;
     public static final int WALL_CHECK_DISTANCE = 20;
@@ -22,9 +22,9 @@ public class Grim extends GroundEnemy {
     private int originY;
     
     // Animation speeds
-    public static final int IDLE_ANIMATION_SPEED = 8;
-    public static final int ATTACK_ANIMATION_SPEED = 6;
-    public static final int TELEPORT_ANIMATION_SPEED = 8;
+    public static final int IDLE_ANIMATION_SPEED = 3;
+    public static final int ATTACK_ANIMATION_SPEED = 4;
+    public static final int TELEPORT_ANIMATION_SPEED = 7;
     public static final int ATTACK_COOLDOWN = 90; // Cooldown after attack before returning to idle
     
     // Images with different sizes
@@ -43,13 +43,9 @@ public class Grim extends GroundEnemy {
     private boolean isTeleporting = false;
     private int teleportAnimationCounter = 0;
     private boolean hasTeleportedToPlayer = false; // Track if we've teleported this aggro cycle
-    private int lockedTargetX = 0; // Locked target position
-    private int lockedTargetY = 0;
-    private boolean isInvisible = false; // Track if Grim is invisible
-    private int invisibleCounter = 0;
-    private static final int INVISIBLE_DURATION = 20; // Frames to stay invisible
+    private int lockedTargetX = 0; // Locked target X position only
     
-    private static double SCALE = 0.3;
+    private static double SCALE = 0.35;
     
     /**
      * Constructor
@@ -113,9 +109,8 @@ public class Grim extends GroundEnemy {
     private void startTeleportToPlayer() {
         if (target == null) return;
         
-        // Lock onto the player's current position
+        // Lock onto the player's current X position only
         lockedTargetX = ((ScrollingActor)target).getWorldX();
-        lockedTargetY = ((ScrollingActor)target).getWorldY();
         
         isTeleporting = true;
         teleportFrame = 0;
@@ -123,47 +118,16 @@ public class Grim extends GroundEnemy {
     }
     
     private void completeTeleportToPlayer() {
-        // Use the LOCKED position, not current target position
+        // Use the LOCKED X position, keep current Y (ground level)
         int targetX = lockedTargetX;
-        int targetY = lockedTargetY;
+        int currentY = worldY; // Stay at current ground level
         
         // Determine which side of locked position to teleport to
         int side = (targetX > worldX) ? -1 : 1; // Teleport to opposite side
         int teleportX = targetX + (side * TELEPORT_OFFSET);
         
-        // Start at locked Y position
-        int startY = targetY;
-        
-        // Find ground below the target position
-        GameWorld world = (GameWorld) getWorld();
-        if (world != null && world.mapGrid != null) {
-            // Convert to tile coordinates
-            int tileX = world.worldToTileX(teleportX);
-            int checkY = startY;
-            
-            // Search downward for ground (max 200 pixels)
-            boolean foundGround = false;
-            for (int i = 0; i < 200 && checkY < world.WORLD_HEIGHT; i++) {
-                int tileY = world.worldToTileY(checkY);
-                int tileType = world.mapGrid.getTileAt(tileX, tileY);
-                
-                if (tileType == 1 || tileType == 2) { // Wall or platform
-                    // Found ground, place just above it
-                    startY = checkY - (getImage().getHeight() / 2) - 5;
-                    foundGround = true;
-                    break;
-                }
-                checkY += 2;
-            }
-            
-            // If no ground found, use original Y
-            if (!foundGround) {
-                startY = targetY;
-            }
-        }
-        
-        // Teleport to the calculated position
-        setWorldPosition(teleportX, startY);
+        // Teleport to the X position at current ground level
+        setWorldPosition(teleportX, currentY);
         velY = 0;
         
         // Face toward the locked target position
@@ -172,7 +136,6 @@ public class Grim extends GroundEnemy {
         
         // Complete teleport and start attack
         isTeleporting = false;
-        isInvisible = false; // Become visible again
         teleportFrame = 0;
         hasTeleportedToPlayer = true;
         
@@ -192,23 +155,11 @@ public class Grim extends GroundEnemy {
                 teleportFrame++;
                 
                 if (teleportFrame >= teleportImages.size()) {
-                    // Teleport animation complete - now become invisible
-                    isInvisible = true;
-                    invisibleCounter = 0;
-                    teleportFrame = 0; // Reset frame
+                    // Teleport animation complete - now teleport and start attack
+                    completeTeleportToPlayer();
                 }
             }
             return; // Don't update other animations while teleporting
-        }
-        
-        // Handle invisible state (20 frame window)
-        if (isInvisible) {
-            invisibleCounter++;
-            if (invisibleCounter >= INVISIBLE_DURATION) {
-                // Invisible duration complete - now teleport to locked position and attack
-                completeTeleportToPlayer();
-            }
-            return; // Don't update other animations while invisible
         }
         
         // Handle attack animation
@@ -250,15 +201,6 @@ public class Grim extends GroundEnemy {
     @Override
     protected void updateImage() {
         GreenfootImage finalImage;
-        
-        // Don't render if invisible
-        if (isInvisible) {
-            // Create a fully transparent image
-            finalImage = new GreenfootImage(idleImage.getWidth(), idleImage.getHeight());
-            finalImage.setTransparency(0);
-            setImage(finalImage);
-            return;
-        }
         
         // Use teleport animation when teleporting
         if (isTeleporting) {

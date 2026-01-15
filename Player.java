@@ -114,7 +114,7 @@ public class Player extends ScrollingActor {
         checkDoor();
         moveHorizontal();
         moveVertical();
-        System.out.println(getWorldX() + ", " + getWorldY());
+        //System.out.println(getWorldX() + ", " + getWorldY());
     }
     
     private void checkStunned(){
