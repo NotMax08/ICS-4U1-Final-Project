@@ -30,6 +30,7 @@ comment20.target=void\ moveVertical()
 comment21.params=
 comment21.target=void\ checkDoor()
 comment21.text=\r\n\ @author\ Paul\r\n
+<<<<<<< Updated upstream
 comment22.params=
 comment22.target=void\ checkInteractive()
 comment23.params=posX\ posY
@@ -50,6 +51,27 @@ comment27.text=\r\n\ @author\ Paul\r\n
 comment28.params=worldX\ worldY
 comment28.target=boolean\ checkInteractiveAt(int,\ int)
 comment28.text=\r\n\ @author\ Paul\r\n
+=======
+comment22.params=posX\ posY
+comment22.target=boolean\ isSolidAtPosition(int,\ int)
+comment22.text=\r\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\r\n\ @author\ Paul\r\n
+comment23.params=posX\ posY
+comment23.target=boolean\ isDoorAtPosition(int,\ int)
+comment23.text=\r\n\ @author\ Paul\r\n
+comment24.params=worldX\ worldY
+comment24.target=boolean\ checkTileAt(int,\ int)
+comment24.text=\r\n\ \ Check\ if\ a\ specific\ world\ coordinate\ contains\ a\ solid\ tile\r\n\ \ @author\ Paul\r\n
+comment25.params=worldX\ worldY
+comment25.target=boolean\ checkDoorAt(int,\ int)
+comment25.text=\r\n\ @author\ Paul\r\n
+comment26.params=
+comment26.target=void\ enterDoor()
+comment26.text=\r\n\ @author\ Paul\r\n
+comment27.params=
+comment27.target=boolean\ isOnGround()
+comment28.params=
+comment28.target=boolean\ isInDoor()
+>>>>>>> Stashed changes
 comment29.params=
 comment29.target=boolean\ isOnGround()
 comment3.params=

@@ -1,12 +1,17 @@
 #BlueJ class context
 comment0.target=NPC
+<<<<<<< Updated upstream
 comment0.text=\r\n\ @author\ Julian\r\n\ @version\ 2026\r\n
+=======
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ NPC\ here.\r\n\ \r\n\ @author\ Julian\r\n\ @version\ 2026\r\n
+>>>>>>> Stashed changes
 comment1.params=
 comment1.target=void\ act()
 comment2.params=
 comment2.target=void\ interactWithPlayer()
 comment2.text=\r\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\r\n\ @author\ Julian\r\n
 comment3.params=
+<<<<<<< Updated upstream
 comment3.target=void\ dialogue()
 comment4.params=dialogue\ split
 comment4.target=void\ textBoxWriter(java.lang.String,\ boolean)
@@ -14,3 +19,11 @@ comment4.text=\r\n\ Method\ that\ handles\ making\ text\ objects\r\n\ If\ the\ t
 comment5.params=
 comment5.target=void\ removeText()
 numComments=6
+=======
+comment3.target=boolean\ interactWithPlayer()
+comment3.text=\r\n\ method\ to\ check\ if\ player\ is\ near\ NPC\ to\ allow\ player\ to\ interact\ with\ it\r\n\ @return\ true\ if\ a\ Player\ is\ within\ range;\ otherwise\ returns\ false.\r\n\ @author\ Julian\r\n
+comment4.params=
+comment4.target=boolean\ interactOption()
+comment4.text=\r\n\ Method\ that\ returns\ whether\ the\ player\ wants\ to\ interact\ with\ the\ NPC\r\n\ @return\ true\ if\ player\ wants\ to\ interact\ with\ npc;\ false\ otherwise\r\n\ @author\ Julian\r\n
+numComments=5
+>>>>>>> Stashed changes
