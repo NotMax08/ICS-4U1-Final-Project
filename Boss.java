@@ -7,6 +7,7 @@ public class Boss extends Actor
     private boolean entering = false;
     private boolean teleporting = false;
     private boolean attackOne = false;
+    private boolean attackTwo = false;
     
     private int currentX;
     private int currentY;
@@ -55,6 +56,9 @@ public class Boss extends Actor
         if (attackOne){
             attackingOne(attackDirectionLeft);
         }
+        else if (attackTwo){
+            attackingTwo();
+        }
     }
     
     private void attackingOne(boolean left){
@@ -68,6 +72,10 @@ public class Boss extends Actor
             BossRoom.weapon1.attackFly1(attackDirectionLeft);
         }
         attackCounter++;
+    }
+    
+    private void attackingTwo(){
+        
     }
     
     private void attack1(boolean left){
@@ -86,6 +94,14 @@ public class Boss extends Actor
         }
     }
     
+    private void attack2(){
+        attackCounter = 0;
+        attackTwo = true;
+        
+        // Initial teleport
+        teleport(BossRoom.player.getX(),200,"DownUp");
+    }
+   
     private void teleport(int x, int y, String newPose){
         teleportX = x;
         teleportY = y;
@@ -132,5 +148,9 @@ public class Boss extends Actor
         GreenfootImage image = new GreenfootImage("StaBee/Character/" + imageName + ".PNG");
         image.scale((int)(image.getWidth()/scale),(int)(image.getHeight()/scale));
         this.setImage(image);
+    }
+    
+    public void setAttackOneState(boolean state){
+        attackOne = state;
     }
 }

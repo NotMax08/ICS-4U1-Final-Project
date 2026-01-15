@@ -9,7 +9,7 @@ import greenfoot.*;
 public abstract class GameWorld extends World {
     // Core game objects
     protected Camera camera;
-    protected Player player;
+    protected static Player player;
     public MapGrid mapGrid;
 
     // Display icons
