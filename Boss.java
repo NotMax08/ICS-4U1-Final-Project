@@ -5,32 +5,30 @@ import greenfoot.*;
 public class Boss extends Actor
 {   
     private boolean entering = false;
-    
     private boolean teleporting = false;
-    private boolean teleported = false;
-    
-    private int teleportX;
-    private int teleportY;    
-    private String teleportImage;
+    private boolean attackOne = false;
     
     private int currentX;
     private int currentY;
     private String currentImage;
     
-    private double scale = 4;
+    private boolean teleported = false;
+    private int teleportX;
+    private int teleportY;    
+    private String teleportImage;
     
+    public static final double scale = 4;
+    public static final int weaponYOffset = 115;
     private boolean isNew;
+    private boolean attackDirectionLeft;
     
-    GreenfootImage staBeeFront;
-    GreenfootImage staBeeLeftUp;
+    public static double teleportFrames = 25;
+    private int enterSpeedMultiplier = 8;
     
-    private double teleportFrames = 100;
+    private int attackCounter;
     
     public Boss(int variant)
     {
-        staBeeFront = new GreenfootImage("StaBee/Character/Front.PNG");
-        staBeeLeftUp = new GreenfootImage("StaBee/Character/LeftUp.PNG");
-        
         this.setI("Front");
         currentImage = "Front";
         
@@ -49,14 +47,42 @@ public class Boss extends Actor
     
     public void act(){
         if (entering){
-            this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+2);
-            if (this.getY() == 300){
-                entering = false;
-                teleport(600, this.getY(), "LeftUp");
-            }
+            entering();
         }
         if (teleporting){
             teleporting(teleportX, teleportY,teleportImage);
+        }
+        if (attackOne){
+            attackingOne(attackDirectionLeft);
+        }
+    }
+    
+    private void attackingOne(boolean left){
+        if(attackCounter==30){
+            if(attackDirectionLeft){
+                setI("RightThrow");
+            }
+            else{
+                setI("LeftThrow");
+            }
+            BossRoom.weapon1.attackFly1(attackDirectionLeft);
+        }
+        attackCounter++;
+    }
+    
+    private void attack1(boolean left){
+        attackDirectionLeft = left;
+        attackCounter = 0;
+        attackOne = true;
+        
+        // Initial teleport
+        if(attackDirectionLeft){
+            teleport(60,465,"RightUp");
+            BossRoom.weapon1.teleport(60 + 25,465 - weaponYOffset,attackDirectionLeft);
+        }
+        else{
+            teleport(740,465,"LeftUp");
+            BossRoom.weapon1.teleport(740 - 25,465 - weaponYOffset,attackDirectionLeft);
         }
     }
     
@@ -92,6 +118,14 @@ public class Boss extends Actor
     
     private void enterScreen(){
         entering = true;
+    }
+    
+    private void entering(){
+        this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+enterSpeedMultiplier);
+        if (this.getY() >= 300){
+            entering = false;
+            attack1(true);    //////////////////////////////
+        }
     }
     
     private void setI(String imageName){
