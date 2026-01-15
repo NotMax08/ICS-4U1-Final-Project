@@ -11,6 +11,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class PotionMerchant extends NPC
 {   
     private boolean textVisible = false;
+    PotionShop shop;
     public PotionMerchant()
     {
         image = new GreenfootImage("potionMerchant.png");
@@ -30,7 +31,7 @@ public class PotionMerchant extends NPC
     {
         //only writes text if its not already there
         if (!textVisible && !isShopOpen) {
-            textBoxWriter("Would you like to | purchase potions? [E]", true);
+            textWriter("Would you like to | purchase potions? [E]", true);
             textVisible = true; 
         }
         String key = Greenfoot.getKey();
@@ -46,5 +47,16 @@ public class PotionMerchant extends NPC
         
         shop = new PotionShop();
         getWorld().addObject(shop, getWorld().getWidth()/2, getWorld().getHeight()/2);
+    }
+    
+    @Override
+    protected void cleanUp()
+    {
+        if (shop != null && shop.getWorld() != null) {
+            getWorld().removeObject(shop);
+            shop = null;
+        }
+        isShopOpen = false; 
+        textVisible = false;
     }
 }

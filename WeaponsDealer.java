@@ -4,7 +4,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * Write a description of class WeaponsDealer here.
  * 
  * @author Julian Xia 
- * @version 2025
+ * @version 2026
  */
 public class WeaponsDealer extends NPC
 {
@@ -22,7 +22,7 @@ public class WeaponsDealer extends NPC
 
     public void dialogue()
     {
-        textBoxWriter("Would you like to | purchase weapons? [E]", true);
+        textWriter("Would you like to | purchase weapons? [E]", true);
         //textBoxWriter(options);
         if (("e").equals(Greenfoot.getKey())) {
             removeText();

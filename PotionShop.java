@@ -19,6 +19,4 @@ public class PotionShop extends ShopUI
     {
         // Add your action code here.
     }
-    
-    
 }
