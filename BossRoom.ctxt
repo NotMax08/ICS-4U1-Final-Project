@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=BossRoom
-comment0.text=\r\n\ \r\n\ @author\ Paul\ assisted\ by\ Claude\r\n
+comment0.text=\n\ \n\ @author\ Paul\ assisted\ by\ Claude\n
 comment1.params=existingPlayer
 comment1.target=BossRoom(Player)
 comment2.params=
