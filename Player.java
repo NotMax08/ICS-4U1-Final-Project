@@ -242,7 +242,7 @@ public class Player extends ScrollingActor {
         }
 
         // Jump
-        if ((Greenfoot.isKeyDown("space")) && onGround) {
+        if ((Greenfoot.isKeyDown("space") || Greenfoot.isKeyDown("w")) && onGround) {
             velocityY = JUMP_STRENGTH;
             onGround = false;
             // reset frames
