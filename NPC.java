@@ -16,6 +16,8 @@ public abstract class NPC extends Actor
     private TextBox textOne;
     private TextBox textTwo;
     private TextBox text;
+    
+    public GreenfootImage image;
 
     public void act()
     {

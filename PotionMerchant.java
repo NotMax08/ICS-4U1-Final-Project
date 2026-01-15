@@ -7,9 +7,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version 2025
  */
 public class PotionMerchant extends NPC
-{
-    private GreenfootImage image;
-    
+{   
     public PotionMerchant()
     {
         image = new GreenfootImage("potionMerchant.png");
@@ -29,5 +27,10 @@ public class PotionMerchant extends NPC
         if (("e").equals(Greenfoot.getKey())) {
                 removeText();
         }
+    }
+    
+    private void openShop()
+    {
+        
     }
 }
