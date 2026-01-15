@@ -55,11 +55,9 @@ public class BossWeapon extends Actor
         if (attackCounter <= 13){
             if (left){
                 this.setLocation(this.getX() + weaponSpeed, this.getY());
-                System.out.println("left");
             }
             else{
                 this.setLocation(this.getX() - weaponSpeed, this.getY());
-                System.out.println("right");
             }
         }
         else if (attackCounter == 14){
@@ -87,6 +85,8 @@ public class BossWeapon extends Actor
         }
         else if (attackCounter == 31){
             this.setRotation(0);
+            attack1 = false;
+            BossRoom.staBee.setAttackOneState(false);
         }
         attackCounter++;
     }
