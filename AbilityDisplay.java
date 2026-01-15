@@ -1,72 +1,86 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Displays the ability icons, fixed to a position of the camera screen
- * 
+ * Displays the ability icons, shows the player when the ability is avaible to use
  * 
  * @author Robin 
  */
-public class AbilityDisplay extends ScrollingActor
+public class AbilityDisplay extends Display
 {
     // Image variables
     private GreenfootImage slashIcon, magicIcon;
-    private GreenfootImage currentDisplay;
-    private int screenX, screenY;
-    private Player player;
-    
+    private GreenfootImage activeDisplay;
+    private GreenfootImage cooldownDisplay;
+
+    // State tracking
+    private boolean lastMagicState = false;
+    private int lastCooldown = -1;
+
     // Image constants
     private static final int ACTIVE_TRANSPARENCY = 240;
     private static final int COOLDOWN_TRANSPARENCY = 100;
-    private static final int HIDDEN_TRANSPARENCY = 0;
-    private static final int ICON_SPACING = 95; // to change
+    private static final int ICON_SIZE = 75;
+    private static final int ICON_SPACING = 10;
 
     public AbilityDisplay(int screenX, int screenY, Camera camera, Player player){
-        super(camera);
-        this.screenX = screenX;
-        this.screenY = screenY;
-        this.player = player;
+        super(screenX, screenY,camera, player);
 
-        // Scale images
-        slashIcon = new GreenfootImage("slashIcon.png");
-        slashIcon.scale(85, 85);
-        
-        magicIcon = new GreenfootImage("magicIcon.png");
-        magicIcon.scale(85, 85);
-        
-        currentDisplay = new GreenfootImage(85, 85);
-        setImage(currentDisplay);
-    }
+        // Scale images with helper method
+        slashIcon = scaleImage("slashIcon.png", ICON_SIZE, ICON_SIZE);
+        magicIcon = scaleImage("magicIcon.png", ICON_SIZE, ICON_SIZE);
 
-    public void act()
-    {
-        setLocation(screenX, screenY); // Keep at fixed location
-        updateDisplay();
+        initializeDisplays();
     }
     
-    private void updateDisplay(){
+    @Override
+    protected void updateDisplay(){
         boolean magicUnlocked = GameWorld.magicUnlocked;
         int cooldown = player.getAbilityCooldown();
         boolean onCooldown = cooldown > 0;
         
-        int transparency = onCooldown ? COOLDOWN_TRANSPARENCY : ACTIVE_TRANSPARENCY;
+        // If state changes
+        if(magicUnlocked != lastMagicState){
+            initializeDisplays();
+            lastCooldown = -1;
+        }
         
-        int totalWidth = magicUnlocked ? (85 * 2 + ICON_SPACING) : 85;
+        // Update image if cooldown state changed
+        if (cooldown != lastCooldown){
+            setImage(onCooldown ? cooldownDisplay : activeDisplay);
+            lastCooldown = cooldown;
+        }
+    }
+    
+    private void initializeDisplays(){
+        boolean magicUnlocked = GameWorld.magicUnlocked;
+        activeDisplay = createDisplay(ACTIVE_TRANSPARENCY, magicUnlocked);
+        cooldownDisplay = createDisplay(COOLDOWN_TRANSPARENCY, magicUnlocked);
+        lastMagicState = magicUnlocked;
         
-        currentDisplay = new GreenfootImage(totalWidth, 85);
-        
-        GreenfootImage slashCopy = new GreenfootImage(slashIcon);
-        slashCopy.setTransparency(transparency);
-        currentDisplay.drawImage(slashCopy, 0, 0);
-        
+    }
+    
+    private GreenfootImage createDisplay(int transparency, boolean magicUnlocked){
+        int totalWidth = magicUnlocked ? (ICON_SIZE * 3 + 25) : ICON_SIZE;
+        GreenfootImage display = new GreenfootImage(totalWidth, ICON_SIZE);
+
         if(magicUnlocked){
             GreenfootImage magicCopy = new GreenfootImage(magicIcon);
             magicCopy.setTransparency(transparency);
-            currentDisplay.drawImage(magicCopy, 85 + ICON_SPACING, 0);
+            display.drawImage(magicCopy, 0, 0);
+
+            GreenfootImage slashCopy = new GreenfootImage(slashIcon);
+            slashCopy.setTransparency(transparency);
+            display.drawImage(slashCopy, ICON_SIZE + ICON_SPACING, 0);
+        }else{
+            GreenfootImage slashCopy = new GreenfootImage(slashIcon);
+            slashCopy.setTransparency(transparency);
+            display.drawImage(slashCopy, 0, 0);
         }
-        
-        setImage(currentDisplay);
+
+        return display;
     }
 
+    /*
     private void cycleCooldown(){
         int num = player.getAbilityCooldown();
         if(!GameWorld.magicUnlocked){
@@ -86,4 +100,5 @@ public class AbilityDisplay extends ScrollingActor
             }
         }
     }
+    */
 }

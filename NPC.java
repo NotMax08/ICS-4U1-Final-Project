@@ -1,55 +1,108 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
 import java.util.*;
 
 /**
- * Write a description of class NPC here.
- * 
  * @author Julian
  * @version 2026
  */
-public class NPC extends Actor
+public abstract class NPC extends Actor
 {    
-    private String dialogue;
-    private ArrayList<Player> playerInRange; // Stores player(s) that are within the interaction hitbox 
-    private int range = 20; // range at which the npc will have an option to interact
+    private int range = 100; 
+    private boolean promptVisible = false; 
+    public int fontSize = 12;
     
-    public NPC ()
-    {
-        
-    }
-    
+    private TextBox textOne;
+    private TextBox textTwo;
+    private TextBox text;
+
     public void act()
     {
-        if(interactWithPlayer() && interactOption())
+        interactWithPlayer();
+    }
+
+    /**
+     * Method to show prompt and handle dialogue.
+     * @author Julian
+     */
+    private void interactWithPlayer()
+    {
+        ArrayList<Player> playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
+        boolean playerNear = !playerInRange.isEmpty();
+
+        if(playerNear)
         {
-            System.out.println("e clicked");
+            if(!promptVisible)
+            {
+                textBoxWriter("Press 'E' to interact", false);
+                promptVisible = true;
+            }
+            if (("e").equals(Greenfoot.getKey())) {
+                removeText();
+                dialogue();
+            }
+        }
+        else {
+            if (promptVisible) {
+                removeText();
+                promptVisible = false;
+            }
+        }
+    }
+
+    //What the individual npcs do
+    public abstract void dialogue();
+
+    /**
+     * Method that handles making text objects
+     * If the text is too long It splits it into two lines
+     * @author Julian
+     */
+    public void textBoxWriter(String dialogue, boolean split)
+    {
+        removeText();
+        if (split)
+        {
+            int index = 0;
+            String lineOne = "";
+            String lineTwo = "";
+            for (int i = 0; i < dialogue.length()/2; i++)
+            {
+                index ++; 
+                if(dialogue.charAt(i) =='|')
+                {
+                    lineOne = dialogue.substring(0,index - 1);
+                    lineTwo = dialogue.substring(index);
+                    break;
+                }
+            }
+
+            textOne = new TextBox(lineOne, fontSize);
+            textTwo = new TextBox(lineTwo, fontSize);
+
+            getWorld().addObject(textOne, getX(), getY() - 80);
+            getWorld().addObject(textTwo, getX(), getY() - 65);
+        }
+
+        else
+        { 
+            text = new TextBox(dialogue, fontSize);
+            getWorld().addObject(text, getX(), getY() - 65);
         }
     }
     
-    /**
-     * method to check if player is near NPC to allow player to interact with it
-     * @return true if a Player is within range; otherwise returns false.
-     * @author Julian
-     */
-    private boolean interactWithPlayer()
+    public void removeText()
     {
-        playerInRange = (ArrayList<Player>)getObjectsInRange(range, Player.class);
-        if(playerInRange == null)
+        if (text != null && text.getWorld() != null)
         {
-            return false;
+            getWorld().removeObject(text);
         }
-        return true;
+        if (textOne != null && textOne.getWorld() != null)
+        {
+            getWorld().removeObject(textOne);
+        }
+        if (textTwo != null && textTwo.getWorld() != null)
+        {
+            getWorld().removeObject(textTwo);
+        }
     }
-    
-    /**
-     * Method that returns whether the player wants to interact with the NPC
-     * @return true if player wants to interact with npc; false otherwise
-     * @author Julian
-     */
-    private boolean interactOption()
-    {
-        return Greenfoot.isKeyDown("e");
-    }
-    
-    
 }

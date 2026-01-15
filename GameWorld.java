@@ -1,13 +1,23 @@
 import greenfoot.*;
 
+/**
+ * Abstract base class for all game worlds/levels
+ * Handles common functionality like camera, displays and player tracking
+ * 
+ * @author Paul and Robin
+ */
 public abstract class GameWorld extends World {
+    // Core game objects
     protected Camera camera;
     protected Player player;
     public MapGrid mapGrid;
 
     // Display icons
     protected InventoryDisplay inventory;
-    protected AbilityDisplay slashIcon, magicIcon;
+    protected AbilityDisplay abilityDisplay;
+    protected HealthDisplay healthDisplay;
+    
+    // Game state
     protected static boolean magicUnlocked = false; // ability to be unlocked
 
     // World image constants
@@ -19,41 +29,67 @@ public abstract class GameWorld extends World {
     protected static final int TILES_WIDE = WORLD_WIDTH / TILE_SIZE;
     protected static final int TILES_HIGH = WORLD_HEIGHT / TILE_SIZE;
 
+    // Background
     protected GreenfootImage fullBackground;
 
     public GameWorld() {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
 
-        this.setPaintOrder(InventoryDisplay.class, AbilityDisplay.class);
+        setPaintOrder();
+    }
+    
+    protected void setPaintOrder(){
+        setPaintOrder(
+            InventoryDisplay.class,
+            AbilityDisplay.class,
+            HealthDisplay.class,
+            SlashAnimation.class,
+            Player.class
+            );
     }
 
+    /**
+     * Main act loop - update camera, actors and background 
+     */
     public void act() {
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
             updateAllActors();
             updateBackground();
         }
-    }
+        
 
-    protected void setIcons(){
-        // Creates inventory icon
+    }
+    
+    /**
+     * Initialize display elements
+     * Can only be called after the player is created 
+     */
+    protected void initalizeDisplays(){
+        if(player == null){
+            throw new IllegalStateException("Player must be created before initializing displays");
+        }
+        
+        // Create inventory icon
         inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera);
         addObject(inventory, 0, 0);
-
-        // Creates ability icons
-        slashIcon = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
-        addObject(slashIcon, 0, 0);
-
-        magicIcon = new AbilityDisplay(SCREEN_WIDTH - 150, SCREEN_HEIGHT - 50, camera, player);
-        addObject(magicIcon, 0, 0);
+        
+        // Create ability icons
+        abilityDisplay = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
+        addObject(abilityDisplay, 0, 0);
+        
+        // Create health icons
+        healthDisplay = new HealthDisplay(50, 50, camera, player);
+        addObject(healthDisplay, 0, 0);
     }
-
+    
     protected void updateBackground() {
         if (camera == null || fullBackground == null) return;
 
         GreenfootImage bg = getBackground();
         bg.clear();
+        
         GreenfootImage visiblePortion = new GreenfootImage(SCREEN_WIDTH, SCREEN_HEIGHT);
         visiblePortion.drawImage(fullBackground, -camera.getX(), -camera.getY());
         bg.drawImage(visiblePortion, 0, 0);
@@ -71,7 +107,10 @@ public abstract class GameWorld extends World {
         player.setCamera(this.camera);
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(startX, startY);
+        
+        initalizeDisplays();
     }
+    
 
     public Camera getCamera() { return camera; }
 

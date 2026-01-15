@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.ArrayList;
 /**
  * The Player class manages controls related to the Player character
  * Controls such as movement and abilities
@@ -20,11 +21,13 @@ public class Player extends ScrollingActor {
     private static final int ANIMATION_SPEED = 4; 
     private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
     private static final int STUN_DURATION = 30; // Acts to remain stunned
-    private static final int BASIC_ATTACK_COOLDOWN = 80;
+    private static final int BASIC_ATTACK_COOLDOWN = 25;
+    private static final int BASIC_ATTACK_DAMAGE = 7;
 
     // Character states 
     private boolean onGround = false;
     private boolean inDoor = false;
+    private boolean inInteractive = false;
     private boolean direction = true; // false = left, true = right
     private boolean isStunned = false;
     private boolean isAttacking = false;
@@ -201,10 +204,10 @@ public class Player extends ScrollingActor {
             }
 
             // Moving in the air
-            if (Greenfoot.isKeyDown("a")) {
+            if (Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("left")) {
                 direction = false;
                 velocityX = -MOVE_SPEED * 0.85; // Slightly reduced horizontal movement speed while in the air
-            } else if (Greenfoot.isKeyDown("d")) {
+            } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
                 velocityX = MOVE_SPEED * 0.85;
             } else {
@@ -215,11 +218,11 @@ public class Player extends ScrollingActor {
             jumpingAnimCounter.reset();
             fallingAnimCounter.reset();
             // Normal ground movement
-            if (Greenfoot.isKeyDown("a")) {
+            if (Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("left")) {
                 direction = false;
                 velocityX = -MOVE_SPEED;
                 animateRunning();
-            } else if (Greenfoot.isKeyDown("d")) {
+            } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
                 velocityX = MOVE_SPEED;
                 animateRunning();
@@ -248,26 +251,24 @@ public class Player extends ScrollingActor {
         }
 
         // Fall faster
-        if ((Greenfoot.isKeyDown("s") && !onGround)){
+        if ((Greenfoot.isKeyDown("s") || Greenfoot.isKeyDown("down") && !onGround)){
             velocityY += GRAVITY;
         }
     }
 
     private void handleAbility(){
-        // Basic attack
-        if((Greenfoot.mousePressed(null) || Greenfoot.isKeyDown("j")) && abilityCooldownCounter.isZero()){
-            MouseInfo mouse = Greenfoot.getMouseInfo();
-
-            if(mouse == null || mouse.getButton() == 1){
-                basicAttack();
+        if(abilityCooldownCounter.isZero()){
+            if(Greenfoot.mousePressed(null)){
+                MouseInfo mouse = Greenfoot.getMouseInfo();
+                if(mouse.getButton() == 1 || Greenfoot.isKeyDown("j")){
+                    basicAttack();
+                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && GameWorld.magicUnlocked){
+                    magicAttack();
+                }
+                
             }
-        }
-
-        if((Greenfoot.mousePressed(null) || Greenfoot.isKeyDown("k")) && abilityCooldownCounter.isZero()){
-            MouseInfo mouse = Greenfoot.getMouseInfo();
-
-            if(mouse == null || mouse.getButton() == 3){
-                magicAttack();
+            if (Greenfoot.isKeyDown("e")){
+                basicAttack();
             }
         }
     }
@@ -277,7 +278,7 @@ public class Player extends ScrollingActor {
         abilityCooldownCounter.set(BASIC_ATTACK_COOLDOWN);
 
         // slash animation
-        SlashAnimation slash = new SlashAnimation(6,4);
+        SlashAnimation slash = new SlashAnimation(6,2);
 
         // changes depending on which direction the player is facing
         int slashOffsetX = direction ? 30: -30; 
@@ -302,14 +303,28 @@ public class Player extends ScrollingActor {
                 slash.setImage(slashImg);
             }
 
-            checkAttackHit(slashWorldX, slashWorldY);
+            checkAttackHit(slashWorldX, slashWorldY, BASIC_ATTACK_DAMAGE);
         }
     }
 
-    private void checkAttackHit(int attackX, int attackY){
-        // TO DO!!!!!
-        // check for enemies and deal damage
-        // also incorporate ranged attacks and projectiles
+    private void checkAttackHit(int attackX, int attackY, int damage){
+        GameWorld world = (GameWorld) getWorld();
+        if(world == null) return;
+        
+        // 
+        int attackScreenX = camera.worldToScreenX(attackX);
+        int attackScreenY = camera.worldToScreenY(attackY);
+        
+        ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
+            attackScreenX,
+            attackScreenY,
+            BaseEnemy.class
+        ));
+        
+        for(BaseEnemy enemy : enemies){
+            enemy.takeDamage(damage);
+        }
+            
     }
 
     private void magicAttack(){
@@ -451,28 +466,44 @@ public class Player extends ScrollingActor {
      * @author Paul
      */
     private void checkDoor(){
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null) return;
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
-
-            Greenfoot.setWorld(new RoomTwo());
+            if( getWorld() instanceof RoomOne){
+                Greenfoot.setWorld(new RoomTwo());
+            }else if(getWorld() instanceof RoomTwo){
+                Greenfoot.setWorld(new RoomThree());
+            }
         } else {
             inDoor = false;
         }
     }
-
+    private void checkInteractive(){
+        if (isDoorAtPosition(worldX, worldY)) {
+            inInteractive = true;
+            
+        } else {
+            inInteractive = false;
+        }
+    }
     /**
      * Check if the player's hitbox at this position would collide with solid tiles
-     * @author Paul
+     * @author Paul assisted by Claude
      */ 
     private boolean isSolidAtPosition(int posX, int posY) {
         int halfWidth = getImage().getWidth() / 2;
         int halfHeight = getImage().getHeight() / 2;
-
-        // Check four corners of the hitbox (inset by 1 pixel for tighter collision)
-        return checkTileAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left
-        checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right
-        checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left
-        checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1);    // Bottom-right
+    
+        // Check all edges: corners + middle points for better collision
+        return checkTileAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left corner
+               checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right corner
+               checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left corner
+               checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right corner
+               checkTileAt(posX, posY - halfHeight + 1) ||                  // Top-middle (HEAD)
+               checkTileAt(posX, posY + halfHeight - 1) ||                  // Bottom-middle (FEET)
+               checkTileAt(posX - halfWidth + 1, posY) ||                   // Left-middle
+               checkTileAt(posX + halfWidth - 1, posY);                     // Right-middle
     }
 
     /**
@@ -489,7 +520,20 @@ public class Player extends ScrollingActor {
         checkDoorAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
         checkDoorAt(posX, posY);                                      // Center
     }
+    /**
+     * @author Paul
+     */
+    private boolean isInteractiveAtPosition(int posX, int posY) {
+        int halfWidth = getImage().getWidth() / 2;
+        int halfHeight = getImage().getHeight() / 2;
 
+        // Check four corners and center
+        return checkInteractiveAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left
+        checkInteractiveAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right
+        checkInteractiveAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left
+        checkInteractiveAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
+        checkInteractiveAt(posX, posY);                                      // Center
+    }
     /**
      *  Check if a specific world coordinate contains a solid tile
      *  @author Paul
@@ -521,19 +565,19 @@ public class Player extends ScrollingActor {
 
         return tileType == 3 ;
     }
-
     /**
      * @author Paul
      */
-    private void enterDoor() {
+    private boolean checkInteractiveAt(int worldX, int worldY){
         GameWorld world = (GameWorld) getWorld();
-        if (world == null) return;
+        if (world == null) return false;
 
-        if (world instanceof RoomOne) {
-            Greenfoot.setWorld(new RoomTwo(this)); // Pass player to new world
-        } else if (world instanceof RoomTwo) {
-            Greenfoot.setWorld(new RoomOne(this)); // Pass player back
-        }
+        int tileX = world.worldToTileX(worldX);
+        int tileY = world.worldToTileY(worldY);
+
+        int tileType = world.mapGrid.getTileAt(tileX, tileY);
+
+        return tileType == 5 ;
     }
     
     // Getters
@@ -544,7 +588,9 @@ public class Player extends ScrollingActor {
     public boolean isInDoor(){
         return inDoor;
     }
-
+    public boolean isInInteractive(){
+        return inInteractive;
+    }
     public double getVelocityX() {
         return velocityX;
     }
