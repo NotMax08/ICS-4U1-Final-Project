@@ -13,8 +13,10 @@ public class ManaDisplay extends Display
     private GreenfootImage[] manaImages;
     
     // Constants
-    private static final int MANA_WIDTH = 75;
-    private static final int MANA_HEIGHT = 20;
+    private static final int MANA_WIDTH = 300;
+    private static final int MANA_HEIGHT = 55;
+    
+    private int previousMana = -1;
     
     public ManaDisplay(int screenX, int screenY, Camera camera, Player player){
         super(screenX, screenY, camera, player);
@@ -26,19 +28,18 @@ public class ManaDisplay extends Display
         manaImages = new GreenfootImage[9]; // 0 through 8
         for(int i = 0; i < manaImages.length; i++){
             manaImages[i] = new GreenfootImage("mana" + i + ".png");
+            manaImages[i].scale(MANA_WIDTH, MANA_HEIGHT);
         }
+        updateDisplay();
     }
     
     @Override
     protected void updateDisplay(){
+        int currentMana = Math.min(player.getMana(), 8);
         
-    }
-    /**
-     * Act - do whatever the ManaDisplay wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act()
-    {
-        // Add your action code here.
+        if(currentMana != previousMana){
+            setImage(manaImages[currentMana]);
+            previousMana = currentMana;
+        }
     }
 }

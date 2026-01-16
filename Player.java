@@ -25,9 +25,11 @@ public class Player extends ScrollingActor {
     private static final int BASIC_ATTACK_DAMAGE = 7;
     private static final int STARTING_HEALTH_POINTS= 3;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int MAX_MANA = 8;
     
     private static int currentHealth;
     private static int maxHealth;
+    private static int currentMana;
 
     // Character states 
     private boolean onGround = false;
@@ -91,6 +93,7 @@ public class Player extends ScrollingActor {
 
         this.maxHealth = STARTING_HEALTH_POINTS;
         this.currentHealth = maxHealth;
+        this.currentMana = 0;
         
         // Initialize Counters
         fallCounter = new Counter();
@@ -340,6 +343,7 @@ public class Player extends ScrollingActor {
         
         for(BaseEnemy enemy : enemies){
             enemy.takeDamage(damage);
+            currentMana++;
         }
             
     }
@@ -622,6 +626,9 @@ public class Player extends ScrollingActor {
     }
     public int getAbsMaxHealth(){
         return ABSOLUTE_MAX_HEALTH_POINTS;
+    }
+    public int getMana(){
+        return currentMana;
     }
     public boolean isInDoor(){
         return inDoor;

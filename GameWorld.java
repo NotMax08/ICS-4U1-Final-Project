@@ -87,7 +87,7 @@ public abstract class GameWorld extends World {
         addObject(healthDisplay, 0, 0);
         
         // Create mana bar
-        manaDisplay = new ManaDisplay(100, 100, camera, player);
+        manaDisplay = new ManaDisplay(150, 100, camera, player);
         addObject(manaDisplay, 0, 0);
     }
     
