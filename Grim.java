@@ -11,7 +11,7 @@ public class Grim extends GroundEnemy {
     public static final int GRIM_HEALTH = 15;
     public static final int GRIM_DAMAGE = 1;
     public static final int GRIM_DETECTION_RANGE = 300;
-    public static final int GRIM_ATTACK_RANGE = 100;
+    public static final int GRIM_ATTACK_RANGE = 150;
     public static final int CHARGE_SPEED = 6;
     public static final int GRAVITY = 1;
     public static final int WALL_CHECK_DISTANCE = 20;
@@ -25,7 +25,7 @@ public class Grim extends GroundEnemy {
     public static final int IDLE_ANIMATION_SPEED = 3;
     public static final int ATTACK_ANIMATION_SPEED = 4;
     public static final int TELEPORT_ANIMATION_SPEED = 7;
-    public static final int ATTACK_COOLDOWN = 90; // Cooldown after attack before returning to idle
+    public static final int ATTACK_COOLDOWN = 60; // Cooldown after attack before returning to idle
     
     // Images with different sizes
     private GreenfootImage idleImage;
@@ -170,7 +170,7 @@ public class Grim extends GroundEnemy {
                 attackFrame++;
                 
                 // Deal damage at frame 2 (when the big swing happens)
-                if (attackFrame == 2) {
+                if (attackFrame == 2 || attackFrame == 3 || attackFrame == 4 || attackFrame == 5) {
                     dealAttackDamage();
                 }
                 

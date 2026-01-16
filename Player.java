@@ -25,9 +25,11 @@ public class Player extends ScrollingActor {
     private static final int BASIC_ATTACK_DAMAGE = 7;
     private static final int STARTING_HEALTH_POINTS= 3;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int MAX_MANA = 8;
     
     private static int currentHealth;
     private static int maxHealth;
+    private static int currentMana;
 
     // Character states 
     private boolean onGround = false;
@@ -82,12 +84,16 @@ public class Player extends ScrollingActor {
     private GreenfootImage fallL1;
     private GreenfootImage fallL2;
     private GreenfootImage[] fallingLeft;
+    
+    //Item data
+    public int[][] itemData;
 
     public Player(Camera camera) {
         super(camera);
 
         this.maxHealth = STARTING_HEALTH_POINTS;
         this.currentHealth = maxHealth;
+        this.currentMana = 0;
         
         // Initialize Counters
         fallCounter = new Counter();
@@ -107,6 +113,7 @@ public class Player extends ScrollingActor {
 
     public void act() {
         //checkStunned();
+        checkHealth();
         checkAbilityCooldown();
         handleInput();
         applyGravity();
@@ -115,6 +122,16 @@ public class Player extends ScrollingActor {
         moveHorizontal();
         moveVertical();
         //System.out.println(getWorldX() + ", " + getWorldY());
+    }
+    
+    private void checkHealth(){
+        if(currentHealth <= 0){
+            endScreen();
+        }
+    }
+    
+    private void endScreen(){
+        //TODO!!!!1
     }
     
     private void checkStunned(){
@@ -268,17 +285,10 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
-            if(Greenfoot.mousePressed(null)){
-                MouseInfo mouse = Greenfoot.getMouseInfo();
-                if(mouse.getButton() == 1 || Greenfoot.isKeyDown("j")){
-                    basicAttack();
-                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && GameWorld.magicUnlocked){
-                    magicAttack();
-                }
-                
-            }
-            if (Greenfoot.isKeyDown("e")){
+            if(Greenfoot.isKeyDown("j")){
                 basicAttack();
+            }else if(Greenfoot.isKeyDown("k") && GameWorld.magicUnlocked){
+                magicAttack();
             }
         }
     }
@@ -333,12 +343,13 @@ public class Player extends ScrollingActor {
         
         for(BaseEnemy enemy : enemies){
             enemy.takeDamage(damage);
+            currentMana++;
         }
             
     }
 
     private void magicAttack(){
-        // add mana bar
+        
     }
 
     private void animateRunning(){
@@ -616,6 +627,9 @@ public class Player extends ScrollingActor {
     public int getAbsMaxHealth(){
         return ABSOLUTE_MAX_HEALTH_POINTS;
     }
+    public int getMana(){
+        return currentMana;
+    }
     public boolean isInDoor(){
         return inDoor;
     }
@@ -630,5 +644,8 @@ public class Player extends ScrollingActor {
     }
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
+    }
+    public int[][] getItemData(){
+        return itemData;
     }
 }
