@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=NPC
-comment0.text=\n\ @author\ Julian\n\ @version\ 2026\n
+comment0.text=\n\ @author\ Julian\n\ @version\ 2026\n\ \n\ image\ generated\ by\ Google\ AI\ studio\n
 comment1.params=
 comment1.target=void\ act()
 comment2.params=
@@ -13,4 +13,5 @@ comment4.target=void\ textBoxWriter(java.lang.String,\ boolean)
 comment4.text=\n\ Method\ that\ handles\ making\ text\ objects\n\ If\ the\ text\ is\ too\ long\ It\ splits\ it\ into\ two\ lines\n\ @author\ Julian\n
 comment5.params=
 comment5.target=void\ removeText()
+comment5.text=\n\ Removes\ all\ text\n\ @author\ Julian\n
 numComments=6

@@ -8,6 +8,7 @@ public class Boss extends Actor
     private boolean teleporting = false;
     private boolean attackOne = false;
     private boolean attackTwo = false;
+    private boolean attackThree = false;
     
     private int currentX;
     private int currentY;
@@ -28,12 +29,18 @@ public class Boss extends Actor
     
     private int attackCounter;
     
+    private int attackNumber;
+    
+    private int[] attackPattern = {1,2,3};
+    
     public Boss(int variant)
     {
         this.setI("Front");
         currentImage = "Front";
         
         isNew = true;
+        
+        attackNumber = 0;
         
         if (variant == 1){
             enterScreen();
@@ -50,6 +57,10 @@ public class Boss extends Actor
         if (entering){
             entering();
         }
+        else{
+            attackSequence();
+        }
+        
         if (teleporting){
             teleporting(teleportX, teleportY,teleportImage);
         }
@@ -59,6 +70,35 @@ public class Boss extends Actor
         else if (attackTwo){
             attackingTwo();
         }
+        else if (attackThree){
+            attackingThree();
+        }
+    }
+    
+    private void attack3(boolean teleport,boolean invert){
+        attackCounter = 0;
+        attackThree = true;
+        int type;
+        
+        // Initial teleport
+        if (teleport){
+            teleport(400,300,"FrontUp");
+            BossRoom.weapon1.teleport(490,280,true,270);
+        }
+        if (!invert){
+            type=3;
+        }
+        else{
+            type=4;
+        }
+        getWorld().addObject(new BossWeaponEffect(type), 400, 290);
+    }
+    
+    private void attackingThree(){
+        if (attackCounter==81){
+            attackThree = false;
+        }
+        attackCounter++;
     }
     
     private void attackingOne(boolean left){
@@ -71,11 +111,23 @@ public class Boss extends Actor
             }
             BossRoom.weapon1.attackFly1(attackDirectionLeft);
         }
+        if(attackCounter==62){
+            attackOne = false;
+        }
         attackCounter++;
     }
     
     private void attackingTwo(){
-        
+        if (attackCounter==0){
+            BossRoom.weapon1.attackFly2();
+        }
+        if(attackCounter==45){
+            setI("DownDown");
+        }
+        if(attackCounter==134){
+            attackTwo = false;
+        }
+        attackCounter++;
     }
     
     private void attack1(boolean left){
@@ -86,11 +138,11 @@ public class Boss extends Actor
         // Initial teleport
         if(attackDirectionLeft){
             teleport(60,465,"RightUp");
-            BossRoom.weapon1.teleport(60 + 25,465 - weaponYOffset,attackDirectionLeft);
+            BossRoom.weapon1.teleport(60 + 25,465 - weaponYOffset,attackDirectionLeft,0);
         }
         else{
             teleport(740,465,"LeftUp");
-            BossRoom.weapon1.teleport(740 - 25,465 - weaponYOffset,attackDirectionLeft);
+            BossRoom.weapon1.teleport(740 - 25,465 - weaponYOffset,attackDirectionLeft,0);
         }
     }
     
@@ -99,7 +151,9 @@ public class Boss extends Actor
         attackTwo = true;
         
         // Initial teleport
-        teleport(BossRoom.player.getX(),200,"DownUp");
+        int playerLocation = BossRoom.player.getX();
+        teleport(playerLocation,200,"DownUp");
+        BossRoom.weapon1.teleport(playerLocation,200 - weaponYOffset - 40,true,90);
     }
    
     private void teleport(int x, int y, String newPose){
@@ -140,7 +194,6 @@ public class Boss extends Actor
         this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+enterSpeedMultiplier);
         if (this.getY() >= 300){
             entering = false;
-            attack1(true);    //////////////////////////////
         }
     }
     
@@ -152,5 +205,40 @@ public class Boss extends Actor
     
     public void setAttackOneState(boolean state){
         attackOne = state;
+    }
+    
+    private boolean isAttacking(){
+        if (attackOne==false && attackTwo==false && attackThree==false){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    private void attackSequence(){
+        int attackType=-1;
+        
+        if (attackNumber == attackPattern.length){
+            attackNumber=0;
+        }
+        
+        if (!isAttacking()){
+            attackType = attackPattern[attackNumber];
+            attackNumber++;
+        }
+        
+        if (attackType==1){
+            System.out.println("attack1");
+            attack1(false);
+        }
+        else if (attackType==2){
+            System.out.println("attack2");
+            attack2();
+        }
+        else if (attackType==3){
+            System.out.println("attack3");
+            attack3(true,false);
+        }
     }
 }
