@@ -25,9 +25,11 @@ public class Player extends ScrollingActor {
     private static final int BASIC_ATTACK_DAMAGE = 7;
     private static final int STARTING_HEALTH_POINTS= 3;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int MAX_MANA = 8;
     
     private static int currentHealth;
     private static int maxHealth;
+    private static int currentMana;
 
     // Character states 
     private boolean onGround = false;
@@ -84,13 +86,14 @@ public class Player extends ScrollingActor {
     private GreenfootImage[] fallingLeft;
     
     //Item data
-    public int[] itemCount = new int[4];
+    public int[][] itemData;
 
     public Player(Camera camera) {
         super(camera);
 
         this.maxHealth = STARTING_HEALTH_POINTS;
         this.currentHealth = maxHealth;
+        this.currentMana = 0;
         
         // Initialize Counters
         fallCounter = new Counter();
@@ -110,6 +113,7 @@ public class Player extends ScrollingActor {
 
     public void act() {
         //checkStunned();
+        checkHealth();
         checkAbilityCooldown();
         handleInput();
         applyGravity();
@@ -117,15 +121,19 @@ public class Player extends ScrollingActor {
         checkDoor();
         moveHorizontal();
         moveVertical();
-        updateItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
     }
-    private void updateItems(){
-        itemCount[0] = 1;
-        itemCount[1] = 3;
-        itemCount[2] = 0;
-        itemCount[3] = 6;
+    
+    private void checkHealth(){
+        if(currentHealth <= 0){
+            endScreen();
+        }
     }
+    
+    private void endScreen(){
+        //TODO!!!!1
+    }
+    
     private void checkStunned(){
         // If stunned, count down stun timer and don't allow movement
         if (isStunned) {
@@ -277,17 +285,10 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
-            if(Greenfoot.mousePressed(null)){
-                MouseInfo mouse = Greenfoot.getMouseInfo();
-                if(mouse.getButton() == 1 || Greenfoot.isKeyDown("j")){
-                    basicAttack();
-                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && GameWorld.magicUnlocked){
-                    magicAttack();
-                }
-                
-            }
-            if (Greenfoot.isKeyDown("e")){
+            if(Greenfoot.isKeyDown("j")){
                 basicAttack();
+            }else if(Greenfoot.isKeyDown("k") && GameWorld.magicUnlocked){
+                magicAttack();
             }
         }
     }
@@ -342,12 +343,13 @@ public class Player extends ScrollingActor {
         
         for(BaseEnemy enemy : enemies){
             enemy.takeDamage(damage);
+            currentMana++;
         }
             
     }
 
     private void magicAttack(){
-        // add mana bar
+        
     }
 
     private void animateRunning(){
@@ -537,7 +539,7 @@ public class Player extends ScrollingActor {
                checkTileAt(posX - halfWidth + 1, posY) ||                   // Left-middle
                checkTileAt(posX + halfWidth - 1, posY);                     // Right-middle
     }
-        
+
     /**
      * @author Paul
      */
@@ -613,9 +615,6 @@ public class Player extends ScrollingActor {
     }
     
     // Getters
-    public int getItemCount(int item){
-        return itemCount[item];
-    }
     public boolean isOnGround() {
         return onGround;
     }
@@ -627,6 +626,9 @@ public class Player extends ScrollingActor {
     }
     public int getAbsMaxHealth(){
         return ABSOLUTE_MAX_HEALTH_POINTS;
+    }
+    public int getMana(){
+        return currentMana;
     }
     public boolean isInDoor(){
         return inDoor;
@@ -643,5 +645,7 @@ public class Player extends ScrollingActor {
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
-    
+    public int[][] getItemData(){
+        return itemData;
+    }
 }

@@ -1,7 +1,5 @@
 import greenfoot.*;
 import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * A display that shows the player inventory, including weapons and items
@@ -14,18 +12,11 @@ public class InventoryDisplay extends Display {
     // Image variables
     private GreenfootImage openInv = new GreenfootImage("openInv.png");
     private GreenfootImage closedInv = new GreenfootImage("closedInv.png");
-    private GreenfootImage pt1 = new GreenfootImage("pt1.png");
-    private GreenfootImage pt2 = new GreenfootImage("pt2.png");
-    private GreenfootImage pt3 = new GreenfootImage("pt3.png");
-    private GreenfootImage pt4 = new GreenfootImage("pt4.png");
     private boolean isOpen = false;
     private boolean tabWasDown = false;
-    
-    private Player player;
 
     // Inventory utility
     private ArrayList<InventoryItem> items;
-    private int[] counts;
     private int[][] slotLocations; 
     private final int maxSlots = 15;
     private final int COLS = 3;
@@ -37,10 +28,9 @@ public class InventoryDisplay extends Display {
      * @param screenX X position on screen (not world position)
      * @param screenY Y position on screen (not world position)
      */
-    public InventoryDisplay(int screenX, int screenY, Camera camera, Player player) {
+    public InventoryDisplay(int screenX, int screenY, Camera camera) {
         super(screenX, screenY, camera);
         this.items = new ArrayList<InventoryItem>();
-        this.player = player;
         
         closedInv = scaleImage("closedInv.png", 100, 100, 225);
         openInv = scaleImage("openInv.png", 600, 600, 242);
@@ -52,25 +42,15 @@ public class InventoryDisplay extends Display {
     }
     
     private void createSlotMap(){
-        slotLocations = new int[maxSlots][2];
-
-        int startX = 295;
-        int startY = 90;
-        int slotSpacing = 90; 
-        int slotsPerRow = 3;
-    
-        for (int i = 0; i < maxSlots; i++) {
-            int row = i / slotsPerRow;
-            int col = i % slotsPerRow;
+        slotLocations = new int[][]{
             
-            slotLocations[i][0] = startX + (col * slotSpacing);
-            slotLocations[i][1] = startY + (row * slotSpacing);
-        }
+        };
+        
+        
     }
     
     @Override
     protected void updateDisplay(){
-        addToItems(player);
         if(!isOpen){
             setLocation(screenX, screenY);
             setImage(closedInv);
@@ -86,33 +66,7 @@ public class InventoryDisplay extends Display {
     
     // Draws items on the inventory
     private void drawItems(GreenfootImage img){
-        int index = 0;
-        int minus = 0;
-        for (int i = 0; i < items.size(); i++) {
-            InventoryItem item = items.get(i);
-            minus = 0;
-            if (item.getCount() <= 0) {
-                minus = 1;
-                continue;
-            }
-            
-            GreenfootImage icon = item.getIcon();
-            int x = slotLocations[index][0];
-            int y = slotLocations[index][1];
-    
-            // Draw potion icon
-            img.drawImage(icon, x, y);
-    
-            // Draw quantity text
-            img.setFont(new Font("Arial", true, false, 24));
-            img.setColor(Color.WHITE);
-            img.drawString(
-                String.valueOf(item.getCount()),
-                x + 40,
-                y + 60
-            );
-            index = index + 1 + minus;
-        }
+        
     }
     
     @Override
@@ -161,26 +115,7 @@ public class InventoryDisplay extends Display {
         }
         return false; // Inventory full
     }
-    public void addToItems(Player player){
-        items.clear();
-        pt1.scale(60,60);
-        pt2.scale(60,60);
-        pt3.scale(60,60);
-        pt4.scale(60,60);
-        InventoryItem pot1 = new InventoryItem("potionOne", pt1, player.getItemCount(0));
-        InventoryItem pot2 = new InventoryItem("potionTwo", pt2, player.getItemCount(1));
-        InventoryItem pot3 = new InventoryItem("potionThree", pt3, player.getItemCount(2));
-        InventoryItem pot4 = new InventoryItem("potionFour", pt4, player.getItemCount(3));
-        
-        items.addAll(List.of(pot1, pot2, pot3, pot4));
-    }
-    public int getItemCount(int item){
-        try {
-            return counts[item];
-        } catch(ArrayIndexOutOfBoundsException e){
-            return 0;
-        }
-    }
+
     /**
      * Remove an item from inventory
      */
@@ -263,5 +198,9 @@ class InventoryItem {
 
     public void decrementCount() {
         if (count > 0) count--;
+    }
+    
+    public GreenfootImage getImage(){
+        return icon;
     }
 }

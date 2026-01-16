@@ -1,11 +1,15 @@
 import greenfoot.*;
 import java.util.*;
 
+/**
+ * Flying enemy class that has a hover range and shoots towards the player, and attack cooldow
+ * Author: Max & Claude
+ */
 public class BasicFly extends FlyingEnemy {
     public static final int FLY_HEALTH = 14;
-    public static final int FLY_DAMAGE = 15;
+    public static final int FLY_DAMAGE = 1;
     public static final int FLY_DETECTION_RANGE = 350;
-    public static final int FLY_ATTACK_RANGE = 80;
+    public static final int FLY_ATTACK_RANGE = 100;
     public static final int PATROL_SPEED = 2;
     public static final int DIVE_SPEED = 14;
     public static final int RETREAT_SPEED = 12;
@@ -139,14 +143,12 @@ public class BasicFly extends FlyingEnemy {
             
             double distance = Math.hypot(targetX - worldX, targetY - worldY);
             if (distance <= DIVE_SPEED) {
-                Player player = (Player) getOneIntersectingWorldObject(Player.class);
-                if (player != null) {
-                    // player.takeDamage(damage);
-                }
+                dealAttackDamage();
                 
                 retreatTargetX = leftBoundary + Greenfoot.getRandomNumber(rightBoundary - leftBoundary);
                 retreatTargetY = patrolY;
                 isRetreating = true;
+                hasDealtDamageThisAttack = false;
             }
         } else {
             moveTowards(retreatTargetX, retreatTargetY, RETREAT_SPEED);
