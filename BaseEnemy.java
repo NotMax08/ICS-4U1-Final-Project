@@ -102,7 +102,7 @@ public abstract class BaseEnemy extends ScrollingActor {
     }
     
     /**
-     * NEW METHOD: Deal damage to player during attack animation
+     * Deal damage to player during attack animation
      * This should be called during the attack animation when the hit should occur
      * It will only deal damage once per attack animation
      */
@@ -122,23 +122,30 @@ public abstract class BaseEnemy extends ScrollingActor {
             
             // Damage player if they're in front of the enemy
             if ((isFacingRight && relativePosition > 0) || (!isFacingRight && relativePosition < 0)) {
+
                 // Check vertical alignment (player should be roughly at same height)
                 int playerY = ((ScrollingActor)player).getWorldY();
                 int verticalDistance = Math.abs(playerY - worldY);
                 
-                // Only damage if player is within reasonable vertical range
-                if (verticalDistance < getImage().getHeight() + 20) {
+                if (this instanceof GroundEnemy){
+                    // Only damage if player is within reasonable vertical range
+                    if (verticalDistance < getImage().getHeight() + 20) {
+                        player.takeDamage(damage);
+                        hasDealtDamageThisAttack = true; // Mark damage as dealt
+                        System.out.println("damage bam");
+                        break; // Only damage once per attack
+                    }
+                } else {
                     player.takeDamage(damage);
                     hasDealtDamageThisAttack = true; // Mark damage as dealt
                     System.out.println("damage bam");
-                    break; // Only damage once per attack
+                    break;
                 }
+                
             }
         }
     }
-    
-    // DEPRECATED: Use dealAttackDamage() instead
-    // Kept for backwards compatibility
+
     protected void checkForPlayerAndDamage() {
         dealAttackDamage();
     }

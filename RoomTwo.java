@@ -52,6 +52,22 @@ public class RoomTwo extends GameWorld {
         Grim grim = new Grim (camera, false);
         addObject(grim, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         grim.setWorldPosition(2120, 1100);
+        
+        Grim grim2 = new Grim (camera, false);
+        addObject(grim2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        grim2.setWorldPosition(260, 800);
+        
+        Grim grim3 = new Grim (camera, false);
+        addObject(grim3, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        grim3.setWorldPosition(1260, 250);
+        
+        Knight knight = new Knight(camera);
+        addObject(knight, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        knight.setWorldPosition(1260, 1100);
+        
+        Knight knight2 = new Knight (camera);
+        addObject(knight2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        knight2.setWorldPosition(1700, 250);
     }
     
     public RoomTwo() {

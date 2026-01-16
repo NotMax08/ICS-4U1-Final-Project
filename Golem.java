@@ -5,7 +5,7 @@ public class Golem extends GroundEnemy {
     public static final int GOLEM_HEALTH = 50;
     public static final int GOLEM_DAMAGE = 2;
     public static final int GOLEM_DETECTION_RANGE = 300;
-    public static final int GOLEM_ATTACK_RANGE = 130;
+    public static final int GOLEM_ATTACK_RANGE = 100;
     public static final int PATROL_SPEED = 1;
     public static final int CHASE_SPEED = 4;
     public static final int GRAVITY = 1;
