@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public abstract class ShopUI extends Actor
 {
     public GreenfootImage image;
-    protected int startXOffset = -60; 
-    protected int startYOffset = -40;
+    protected int startXOffset = 60; 
+    protected int startYOffset = -97;
     protected int spacing = 10;
     
     public void act()

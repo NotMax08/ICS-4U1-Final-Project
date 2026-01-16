@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class HealthPotionIcon extends ShopIcons
 {
-    private String description = "Magical elixir of life found only in the most | sacred fountains. Restores 25 HP. Purchase?"; 
+    private String description = "Restores 25 HP.|Purchase for 25 gems?"; 
     public HealthPotionIcon()
     {
         image = new GreenfootImage("healthptIcon.jpg");
