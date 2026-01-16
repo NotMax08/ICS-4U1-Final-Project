@@ -16,6 +16,7 @@ public abstract class GameWorld extends World {
     protected InventoryDisplay inventory;
     protected AbilityDisplay abilityDisplay;
     protected HealthDisplay healthDisplay;
+    protected ManaDisplay manaDisplay;
     
     // Game state
     protected static boolean magicUnlocked = true; // ability to be unlocked
@@ -47,6 +48,7 @@ public abstract class GameWorld extends World {
             InventoryDisplay.class,
             AbilityDisplay.class,
             HealthDisplay.class,
+            ManaDisplay.class,
             SlashAnimation.class,
             Player.class
             );
@@ -61,8 +63,6 @@ public abstract class GameWorld extends World {
             updateAllActors();
             updateBackground();
         }
-        
-
     }
     
     /**
@@ -85,6 +85,10 @@ public abstract class GameWorld extends World {
         // Create health icons
         healthDisplay = new HealthDisplay(190, 40, camera, player);
         addObject(healthDisplay, 0, 0);
+        
+        // Create mana bar
+        manaDisplay = new ManaDisplay(100, 100, camera, player);
+        addObject(manaDisplay, 0, 0);
     }
     
     protected void updateBackground() {

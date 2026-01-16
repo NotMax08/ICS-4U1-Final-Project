@@ -110,6 +110,7 @@ public class Player extends ScrollingActor {
 
     public void act() {
         //checkStunned();
+        checkHealth();
         checkAbilityCooldown();
         handleInput();
         applyGravity();
@@ -118,6 +119,16 @@ public class Player extends ScrollingActor {
         moveHorizontal();
         moveVertical();
         //System.out.println(getWorldX() + ", " + getWorldY());
+    }
+    
+    private void checkHealth(){
+        if(currentHealth <= 0){
+            endScreen();
+        }
+    }
+    
+    private void endScreen(){
+        //TODO!!!!1
     }
     
     private void checkStunned(){
