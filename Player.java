@@ -267,17 +267,10 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
-            if(Greenfoot.mousePressed(null)){
-                MouseInfo mouse = Greenfoot.getMouseInfo();
-                if(mouse.getButton() == 1 || Greenfoot.isKeyDown("j")){
-                    basicAttack();
-                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && GameWorld.magicUnlocked){
-                    magicAttack();
-                }
-                
-            }
-            if (Greenfoot.isKeyDown("e")){
+            if(Greenfoot.isKeyDown("j")){
                 basicAttack();
+            }else if(Greenfoot.isKeyDown("k") && GameWorld.magicUnlocked){
+                magicAttack();
             }
         }
     }
@@ -337,7 +330,7 @@ public class Player extends ScrollingActor {
     }
 
     private void magicAttack(){
-        // add mana bar
+        
     }
 
     private void animateRunning(){

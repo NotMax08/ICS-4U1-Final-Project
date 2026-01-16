@@ -43,10 +43,10 @@ public class InventoryDisplay extends Display {
     
     private void createSlotMap(){
         slotLocations = new int[][]{
-            {0, 0}, // Slot 1
-            {0, 0},
             
         };
+        
+        
     }
     
     @Override
@@ -198,5 +198,9 @@ class InventoryItem {
 
     public void decrementCount() {
         if (count > 0) count--;
+    }
+    
+    public GreenfootImage getImage(){
+        return icon;
     }
 }

@@ -18,7 +18,7 @@ public abstract class GameWorld extends World {
     protected HealthDisplay healthDisplay;
     
     // Game state
-    protected static boolean magicUnlocked = false; // ability to be unlocked
+    protected static boolean magicUnlocked = true; // ability to be unlocked
 
     // World image constants
     protected static final int WORLD_WIDTH = 2500;
