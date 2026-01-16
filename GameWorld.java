@@ -44,6 +44,7 @@ public abstract class GameWorld extends World {
             TextBox.class,
             ShopIcons.class,
             ShopUI.class,    
+            MapGridDebugOverlay.class,
             InventoryDisplay.class,
             AbilityDisplay.class,
             HealthDisplay.class,
@@ -75,7 +76,7 @@ public abstract class GameWorld extends World {
         }
         
         // Create inventory icon
-        inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera);
+        inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera, player);
         addObject(inventory, 0, 0);
         
         // Create ability icons

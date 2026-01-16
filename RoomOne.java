@@ -80,6 +80,11 @@ public class RoomOne extends GameWorld {
             gridDebug.toggle();
             Greenfoot.delay(10); // debounce
         }
+        /*
+        if (existingPlayer == null) {
+            HighScoreManager.startRun();
+        }
+        */
     }
     protected void initializeMapGrid() {
         // Platforms in world coordinates

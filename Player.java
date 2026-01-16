@@ -84,7 +84,7 @@ public class Player extends ScrollingActor {
     private GreenfootImage[] fallingLeft;
     
     //Item data
-    public int[][] itemData;
+    public int[] itemCount = new int[4];
 
     public Player(Camera camera) {
         super(camera);
@@ -117,9 +117,15 @@ public class Player extends ScrollingActor {
         checkDoor();
         moveHorizontal();
         moveVertical();
+        updateItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
     }
-    
+    private void updateItems(){
+        itemCount[0] = 1;
+        itemCount[1] = 3;
+        itemCount[2] = 0;
+        itemCount[3] = 6;
+    }
     private void checkStunned(){
         // If stunned, count down stun timer and don't allow movement
         if (isStunned) {
@@ -531,7 +537,7 @@ public class Player extends ScrollingActor {
                checkTileAt(posX - halfWidth + 1, posY) ||                   // Left-middle
                checkTileAt(posX + halfWidth - 1, posY);                     // Right-middle
     }
-
+        
     /**
      * @author Paul
      */
@@ -607,6 +613,9 @@ public class Player extends ScrollingActor {
     }
     
     // Getters
+    public int getItemCount(int item){
+        return itemCount[item];
+    }
     public boolean isOnGround() {
         return onGround;
     }
@@ -634,7 +643,5 @@ public class Player extends ScrollingActor {
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
-    public int[][] getItemData(){
-        return itemData;
-    }
+    
 }
