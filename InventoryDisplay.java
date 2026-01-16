@@ -17,8 +17,10 @@ public class InventoryDisplay extends Display {
 
     // Inventory utility
     private ArrayList<InventoryItem> items;
-    private int[][] slotLocations; // set this
-    private int maxSlots = 15;
+    private int[][] slotLocations; 
+    private final int maxSlots = 15;
+    private final int COLS = 3;
+    private final int ROWS = 5;
 
     /**
      * Create inventory display at a fixed screen position
@@ -33,7 +35,18 @@ public class InventoryDisplay extends Display {
         closedInv = scaleImage("closedInv.png", 100, 100, 225);
         openInv = scaleImage("openInv.png", 600, 600, 242);
         
+        // Initialize 2D coordinate map 
+        createSlotMap();
+        
         setImage(closedInv);
+    }
+    
+    private void createSlotMap(){
+        slotLocations = new int[][]{
+            {0, 0}, // Slot 1
+            {0, 0},
+            
+        };
     }
     
     @Override
@@ -43,8 +56,17 @@ public class InventoryDisplay extends Display {
             setImage(closedInv);
         }else {
             setLocation(screenX + 350, screenY - 250);
-            setImage(openInv);
+            
+            // Create image with items
+            GreenfootImage canvas = new GreenfootImage(openInv);
+            drawItems(canvas);
+            setImage(canvas);
         }
+    }
+    
+    // Draws items on the inventory
+    private void drawItems(GreenfootImage img){
+        
     }
     
     @Override

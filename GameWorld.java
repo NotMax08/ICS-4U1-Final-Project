@@ -41,6 +41,9 @@ public abstract class GameWorld extends World {
     
     protected void setPaintOrder(){
         setPaintOrder(
+            TextBox.class,
+            ShopIcons.class,
+            ShopUI.class,    
             InventoryDisplay.class,
             AbilityDisplay.class,
             HealthDisplay.class,
@@ -80,7 +83,7 @@ public abstract class GameWorld extends World {
         addObject(abilityDisplay, 0, 0);
         
         // Create health icons
-        healthDisplay = new HealthDisplay(50, 50, camera, player);
+        healthDisplay = new HealthDisplay(190, 40, camera, player);
         addObject(healthDisplay, 0, 0);
     }
     

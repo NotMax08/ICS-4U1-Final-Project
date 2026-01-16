@@ -16,8 +16,15 @@ public abstract class GroundEnemy extends BaseEnemy {
     protected ArrayList<GreenfootImage> idleImages = new ArrayList<>();
     protected ArrayList<GreenfootImage> walkImages = new ArrayList<>();
     protected ArrayList<GreenfootImage> attackImages = new ArrayList<>();
+    protected ArrayList<GreenfootImage> dieImages = new ArrayList<>();
+    
     protected int animationCounter = 0;
     protected int currentFrame = 0;
+    
+    protected boolean isDying = false;
+    protected int dieFrame = 0;
+    protected int dieTimer = 0;
+    protected static final int DIE_FRAME_DELAY = 15; // Death animation speed
     
     public GroundEnemy(Camera camera, GreenfootImage img,
                       int health, int damage,
@@ -45,7 +52,7 @@ public abstract class GroundEnemy extends BaseEnemy {
     protected boolean onGround() {
         // Check directly below the enemy's feet
         int checkX = worldX;
-        int checkY = worldY + (getImage().getHeight() / 2) + 3;
+        int checkY = worldY + (getImage().getHeight() / 2) + 1;
         
         return isSolidAtPosition(checkX, checkY);
     }
@@ -95,5 +102,38 @@ public abstract class GroundEnemy extends BaseEnemy {
     protected void chase() {
         fall();
         // Default chase logic can be overridden
+    }
+    
+    protected void animateDeath(){
+        if (isDying) {
+            dieTimer++;
+            if (dieTimer >= DIE_FRAME_DELAY) {
+                dieTimer = 0;
+                dieFrame++;
+                
+                if (dieFrame >= dieImages.size()) {
+                    // Animation complete - remove from world
+                    if (getWorld() != null) {
+                        getWorld().removeObject(this);
+                    }
+                    return;
+                }
+            }
+            return; // Skip normal animation updates when dying
+        }
+    }
+    
+    protected void updateDeathImages(){
+        if (isDying) {
+            int frameIndex = Math.min(dieFrame, dieImages.size());
+            GreenfootImage deathImage = new GreenfootImage(dieImages.get(frameIndex));
+            
+            if (!isFacingRight) {
+                deathImage.mirrorHorizontally();
+            }
+            
+            setImage(deathImage);
+            return; // Skip normal image updates when dying
+        }
     }
 }
