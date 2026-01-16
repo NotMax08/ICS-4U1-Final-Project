@@ -35,7 +35,11 @@ public class RoomOne extends GameWorld {
         // Create different enemy types easily
         Golem golem = new Golem(camera);
         addObject(golem, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-        golem.setWorldPosition(500, 1100 - golem.getImage().getHeight()/2);
+        //golem.setWorldPosition(500, 1100 - golem.getImage().getHeight()/2);
+        
+        Grim grim = new Grim (camera, false);
+        addObject(grim, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        grim.setWorldPosition(500, 1000);
         
         BasicFly fly1 = new BasicFly(camera, 1200, 1800, 1100);
         addObject(fly1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);

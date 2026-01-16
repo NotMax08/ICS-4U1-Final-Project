@@ -94,4 +94,6 @@ public class TextBox extends Actor
     {
         // Currently empty - used if you want the text to move or change later
     }
+    
+    
 }

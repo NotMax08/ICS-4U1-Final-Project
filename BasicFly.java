@@ -2,7 +2,7 @@ import greenfoot.*;
 import java.util.*;
 
 public class BasicFly extends FlyingEnemy {
-    public static final int FLY_HEALTH = 30;
+    public static final int FLY_HEALTH = 14;
     public static final int FLY_DAMAGE = 15;
     public static final int FLY_DETECTION_RANGE = 350;
     public static final int FLY_ATTACK_RANGE = 80;
