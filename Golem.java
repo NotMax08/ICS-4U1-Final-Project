@@ -3,11 +3,11 @@ import java.util.*;
 
 public class Golem extends GroundEnemy {
     public static final int GOLEM_HEALTH = 50;
-    public static final int GOLEM_DAMAGE = 10;
+    public static final int GOLEM_DAMAGE = 2;
     public static final int GOLEM_DETECTION_RANGE = 300;
-    public static final int GOLEM_ATTACK_RANGE = 150;
+    public static final int GOLEM_ATTACK_RANGE = 130;
     public static final int PATROL_SPEED = 1;
-    public static final int CHASE_SPEED = 3;
+    public static final int CHASE_SPEED = 4;
     public static final int GRAVITY = 1;
     public static final int WALL_CHECK_DISTANCE = 10;
     public static final int IMAGE_SIZE = 220;
@@ -16,6 +16,7 @@ public class Golem extends GroundEnemy {
     private GreenfootImage normalIdleImage;
     private GreenfootImage alertIdleImage;
     private ArrayList<GreenfootImage> alertWalkImages = new ArrayList<>();
+    private ArrayList<GreenfootImage> dieImages = new ArrayList<>();
     
     // Animation state
     private int currentAlpha = 0;
@@ -71,7 +72,6 @@ public class Golem extends GroundEnemy {
     
     @Override
     public void act() {
-        // Call parent for basic enemy logic
         super.act();
         
         // Update animations
@@ -115,6 +115,11 @@ public class Golem extends GroundEnemy {
                         if (player != null) {
                             // player.takeDamage(damage);
                         }
+                    }
+                    
+                    if (attackFrame == 3) {
+                        System.out.println("damage");// Choose appropriate frame for golem
+                        dealAttackDamage();
                     }
                 }
             } else {
@@ -206,13 +211,14 @@ public class Golem extends GroundEnemy {
     @Override
     protected void takeDamage(int dmg) {
         super.takeDamage(dmg);
-        
         // Reset attack animation when hurt
         attackFrame = 0;
         attackTimer = 0;
         isAttackComplete = false;
         attackHoldTimer = 0;
     }
+    
+    
     
     @Override
     protected void idleBehavior() {

@@ -9,15 +9,19 @@ public class BossWeapon extends Actor
     
     private int teleportX;
     private int teleportY;   
+    private int teleportRotation;
     
     private boolean left = true;
     
     private double teleportFrames = Boss.teleportFrames;
     
     private boolean attack1 = false;
+    private boolean attack2 = false;
     
     private int weaponSpeed = 45;
     private int attackCounter;
+    
+    private int playerLocation;
     
     /**
      * Constructor for objects of class BossWeapon
@@ -34,15 +38,39 @@ public class BossWeapon extends Actor
         if (attack1){
             attackFlying1(left);
         }
+        else if (attack2){
+            attackFlying2();
+        }
     }
     
-    public void teleport(int x, int y, boolean left){
+    public void teleport(int x, int y, boolean left, int rotation){
         setI(!left);
         teleportX = x;
         teleportY = y;
         
+        teleportRotation = rotation;
+        
         teleporting = true;
         teleported = false;
+    }
+    
+    public void attackFly2(){
+        attack2=true;
+        attackCounter = 0;
+        playerLocation = BossRoom.player.getX();
+    }
+    
+    private void attackFlying2(){
+        if (attackCounter >= 45 && attackCounter<=52){
+            this.setLocation(this.getX(), this.getY() + weaponSpeed + 2);
+        }
+        else if (attackCounter == 53){
+            getWorld().addObject(new BossWeaponEffect(1), playerLocation, 500);
+        }
+        else if (attackCounter == 93){
+            getWorld().addObject(new BossWeaponEffect(2), playerLocation, 531);
+        }
+        attackCounter++;
     }
     
     public void attackFly1(boolean left){
@@ -84,7 +112,7 @@ public class BossWeapon extends Actor
             }
         }
         else if (attackCounter == 31){
-            this.setRotation(0);
+            //this.setRotation(0);
             attack1 = false;
             BossRoom.staBee.setAttackOneState(false);
         }
@@ -102,6 +130,7 @@ public class BossWeapon extends Actor
         if (newTransparency <= 0){
             newTransparency = 0;
             this.setLocation(teleportX,teleportY);
+            this.setRotation(teleportRotation);
             teleported = true;
         }
         else if(newTransparency >= 255){

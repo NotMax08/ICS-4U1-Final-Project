@@ -102,55 +102,55 @@ public abstract class ScrollingActor extends SuperSmoothMover {
     }
     
     // Add this method to Enemies class
-protected <T extends Actor> List<T> getObjectsInWorldRange(int worldRange, Class<T> cls) {
-    List<T> allObjects = getWorld().getObjects(cls);
-    List<T> objectsInRange = new ArrayList<>();
-    
-    for (T obj : allObjects) {
-        if (obj instanceof ScrollingActor) {
-            ScrollingActor scrollObj = (ScrollingActor) obj;
-            int dx = scrollObj.getWorldX() - worldX;
-            int dy = scrollObj.getWorldY() - worldY;
-            double distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance <= worldRange) {
-                objectsInRange.add(obj);
+    protected <T extends Actor> List<T> getObjectsInWorldRange(int worldRange, Class<T> cls) {
+        List<T> allObjects = getWorld().getObjects(cls);
+        List<T> objectsInRange = new ArrayList<>();
+        
+        for (T obj : allObjects) {
+            if (obj instanceof ScrollingActor) {
+                ScrollingActor scrollObj = (ScrollingActor) obj;
+                int dx = scrollObj.getWorldX() - worldX;
+                int dy = scrollObj.getWorldY() - worldY;
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance <= worldRange) {
+                    objectsInRange.add(obj);
+                }
+            }
+            // For non-scrolling actors, use screen coordinates (fallback)
+            else {
+                int dx = obj.getX() - getX();
+                int dy = obj.getY() - getY();
+                double distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance <= worldRange) {
+                    objectsInRange.add(obj);
+                }
             }
         }
-        // For non-scrolling actors, use screen coordinates (fallback)
-        else {
-            int dx = obj.getX() - getX();
-            int dy = obj.getY() - getY();
-            double distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance <= worldRange) {
-                objectsInRange.add(obj);
-            }
+        
+        // Sort by distance (closest first)
+        objectsInRange.sort((a, b) -> {
+            double distA = calculateDistanceTo(a);
+            double distB = calculateDistanceTo(b);
+            return Double.compare(distA, distB);
+        });
+        
+        return objectsInRange;
+    }
+    
+    private double calculateDistanceTo(Actor actor) {
+        if (actor instanceof ScrollingActor) {
+            ScrollingActor scrollActor = (ScrollingActor) actor;
+            int dx = scrollActor.getWorldX() - worldX;
+            int dy = scrollActor.getWorldY() - worldY;
+            return Math.sqrt(dx * dx + dy * dy);
+        } else {
+            int dx = actor.getX() - getX();
+            int dy = actor.getY() - getY();
+            return Math.sqrt(dx * dx + dy * dy);
         }
     }
-    
-    // Sort by distance (closest first)
-    objectsInRange.sort((a, b) -> {
-        double distA = calculateDistanceTo(a);
-        double distB = calculateDistanceTo(b);
-        return Double.compare(distA, distB);
-    });
-    
-    return objectsInRange;
-}
-
-private double calculateDistanceTo(Actor actor) {
-    if (actor instanceof ScrollingActor) {
-        ScrollingActor scrollActor = (ScrollingActor) actor;
-        int dx = scrollActor.getWorldX() - worldX;
-        int dy = scrollActor.getWorldY() - worldY;
-        return Math.sqrt(dx * dx + dy * dy);
-    } else {
-        int dx = actor.getX() - getX();
-        int dy = actor.getY() - getY();
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-}
     
     /**
      * Get intersecting objects (checking world coordinate bounding boxes)
@@ -208,5 +208,63 @@ private double calculateDistanceTo(Actor actor) {
         int dx = other.getWorldX() - worldX;
         int dy = other.getWorldY() - worldY;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+     /**
+     * Check if another scrolling actor is within a specific rectangular area in front
+     * @param rangeX Horizontal range in front
+     * @param rangeY Vertical range (height check)
+     * @param cls The class to check for
+     * @return List of actors in the attack area
+     */
+    protected <T> List<T> getObjectsInAttackArea(int rangeX, int rangeY, Class<T> cls) {
+        List<T> result = new ArrayList<>();
+        List<T> objects = getWorld().getObjects(cls);
+        
+        // Calculate attack area bounds based on facing direction
+        int attackLeft, attackRight, attackTop, attackBottom;
+        
+        if (isFacingRight) {
+            attackLeft = worldX;
+            attackRight = worldX + rangeX;
+        } else {
+            attackLeft = worldX - rangeX;
+            attackRight = worldX;
+        }
+        
+        attackTop = worldY - rangeY / 2;
+        attackBottom = worldY + rangeY / 2;
+        
+        // Ensure left < right
+        if (attackLeft > attackRight) {
+            int temp = attackLeft;
+            attackLeft = attackRight;
+            attackRight = temp;
+        }
+        
+        for (T obj : objects) {
+            if (obj instanceof ScrollingActor) {
+                ScrollingActor scrollObj = (ScrollingActor) obj;
+                
+                int objX = scrollObj.getWorldX();
+                int objY = scrollObj.getWorldY();
+                
+                // Check if object is within the attack area
+                if (objX >= attackLeft && objX <= attackRight &&
+                    objY >= attackTop && objY <= attackBottom) {
+                    result.add(obj);
+                }
+            }
+        }
+        return result;
+    }
+    
+    protected boolean isFacingRight = true;
+    
+    public boolean isFacingRight() {
+        return isFacingRight;
+    }
+    
+    public void setFacingRight(boolean facingRight) {
+        this.isFacingRight = facingRight;
     }
 }

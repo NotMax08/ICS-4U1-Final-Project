@@ -56,9 +56,9 @@ public class StunAnimation extends ScrollingActor {
     }
     
     private void addImages(int width, int height) {
-        slashImages.add(getUniformImage("stun1.png", width, height));
-        slashImages.add(getUniformImage("stun2.png", width, height));
-        slashImages.add(getUniformImage("stun3.png", width, height));
+        slashImages.add(getUniformImage("hit.png", width, height));
+        slashImages.add(getUniformImage("hit1.png", width, height));
+        slashImages.add(getUniformImage("hit2.png", width, height));
     }
     
     protected static GreenfootImage getUniformImage(String filename, int width, int height) {
