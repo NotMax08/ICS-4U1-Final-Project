@@ -24,7 +24,7 @@ public class RoomOne extends GameWorld {
         
         initalizeDisplays();
         
-        visuals = true;
+        visuals = false;
         if(visuals){
             createPlatformVisuals();
             
