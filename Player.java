@@ -23,6 +23,9 @@ public class Player extends ScrollingActor {
     private static final int STUN_DURATION = 30; // Acts to remain stunned
     private static final int BASIC_ATTACK_COOLDOWN = 25;
     private static final int BASIC_ATTACK_DAMAGE = 7;
+    private static final int MAGIC_ATTACK_COOLDOWN = 80;
+    private static final int MAGIC_ATTACK_DAMAGE = 20;
+    private static final int MAGIC_ATTACK_RADIUS = 30;
     private static final int STARTING_HEALTH_POINTS= 3;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
     private static final int MAX_MANA = 8;
@@ -330,17 +333,57 @@ public class Player extends ScrollingActor {
                 slash.setImage(slashImg);
             }
 
-            checkAttackHit(slashWorldX, slashWorldY, BASIC_ATTACK_DAMAGE);
+            checkSlashHit(slashScreenX, slashScreenY, BASIC_ATTACK_DAMAGE, world);
         }
     }
-
-    private void checkAttackHit(int attackX, int attackY, int damage){
+    
+    private void magicAttack(){
+        isAttacking = true;
+        abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
+        
+        SlashAnimation magic = new SlashAnimation(3,4);
+        
+        // changes direction based on where the player is facing
+        int magicOffsetX = direction ? 30 : -30;
+        int magicOffsetY = 0;
+        
         GameWorld world = (GameWorld) getWorld();
+        if(world != null){
+            // World position
+            int magicWorldX = worldX + magicOffsetX;
+            int magicWorldY = worldY + magicOffsetY;
+            // Screen position
+            int magicScreenX = camera.worldToScreenX(magicWorldX);
+            int magicScreenY = camera.worldToScreenY(magicWorldY);
+            
+            world.addObject(magic, magicScreenX, magicScreenY);
+            
+            // Flip if facing left
+            if(!direction){
+                GreenfootImage magicImg = magic.getImage();
+                magicImg.mirrorHorizontally();
+                magic.setImage(magicImg);
+            }
+            
+            // spawn projectile
+            checkRadiusHit(magicScreenX, magicScreenY, MAGIC_ATTACK_RADIUS, MAGIC_ATTACK_DAMAGE, world);
+        }
+    }
+    
+    private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
         if(world == null) return;
         
-        // 
-        int attackScreenX = camera.worldToScreenX(attackX);
-        int attackScreenY = camera.worldToScreenY(attackY);
+        int attackScreenX = attackX;
+        int attackScreenY = attackY;
+        
+        //ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsInRange(radius, BaseEnemy.class));
+    }
+
+    private void checkSlashHit(int attackX, int attackY, int damage, World world){
+        if(world == null) return;
+        
+        int attackScreenX = attackX;
+        int attackScreenY = attackY;
         
         ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
             attackScreenX,
@@ -354,11 +397,7 @@ public class Player extends ScrollingActor {
         }
             
     }
-
-    private void magicAttack(){
-        
-    }
-
+    
     private void animateRunning(){
         runningAnimCounter.increment();
 

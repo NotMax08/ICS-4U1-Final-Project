@@ -10,6 +10,7 @@ comment11.target=void\ handleInput()
 comment12.params=
 comment12.target=void\ handleMovement()
 comment13.params=
+<<<<<<< Updated upstream
 comment13.target=void\ handleAbility()
 comment14.params=
 comment14.target=void\ basicAttack()
@@ -17,6 +18,15 @@ comment15.params=attackX\ attackY\ damage
 comment15.target=void\ checkAttackHit(int,\ int,\ int)
 comment16.params=
 comment16.target=void\ magicAttack()
+=======
+comment13.target=void\ basicAttack()
+comment14.params=
+comment14.target=void\ magicAttack()
+comment15.params=attackX\ attackY\ radius\ damage\ world
+comment15.target=void\ checkRadiusHit(int,\ int,\ int,\ int,\ greenfoot.World)
+comment16.params=attackX\ attackY\ damage\ world
+comment16.target=void\ checkSlashHit(int,\ int,\ int,\ greenfoot.World)
+>>>>>>> Stashed changes
 comment17.params=
 comment17.target=void\ animateRunning()
 comment18.params=
@@ -41,16 +51,25 @@ comment26.params=hp
 comment26.target=void\ increaseMaxHealth(int)
 comment27.params=
 comment27.target=void\ checkDoor()
+<<<<<<< Updated upstream
 comment27.text=\r\n\ @author\ Paul\r\n
+=======
+comment27.text=\n\ @author\ Paul\n
+>>>>>>> Stashed changes
 comment28.params=
 comment28.target=void\ checkInteractive()
 comment29.params=posX\ posY
 comment29.target=boolean\ isSolidAtPosition(int,\ int)
+<<<<<<< Updated upstream
 comment29.text=\r\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\r\n\ @author\ Paul\ assisted\ by\ Claude\r\n
+=======
+comment29.text=\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\n\ @author\ Paul\ assisted\ by\ Claude\n
+>>>>>>> Stashed changes
 comment3.params=
 comment3.target=void\ countItems()
 comment30.params=posX\ posY
 comment30.target=boolean\ isDoorAtPosition(int,\ int)
+<<<<<<< Updated upstream
 comment30.text=\r\n\ @author\ Paul\r\n
 comment31.params=posX\ posY
 comment31.target=boolean\ isInteractiveAtPosition(int,\ int)
@@ -64,6 +83,21 @@ comment33.text=\r\n\ @author\ Paul\r\n
 comment34.params=worldX\ worldY
 comment34.target=boolean\ checkInteractiveAt(int,\ int)
 comment34.text=\r\n\ @author\ Paul\r\n
+=======
+comment30.text=\n\ @author\ Paul\n
+comment31.params=posX\ posY
+comment31.target=boolean\ isInteractiveAtPosition(int,\ int)
+comment31.text=\n\ @author\ Paul\n
+comment32.params=worldX\ worldY
+comment32.target=boolean\ checkTileAt(int,\ int)
+comment32.text=\n\ \ Check\ if\ a\ specific\ world\ coordinate\ contains\ a\ solid\ tile\n\ \ @author\ Paul\n
+comment33.params=worldX\ worldY
+comment33.target=boolean\ checkDoorAt(int,\ int)
+comment33.text=\n\ @author\ Paul\n
+comment34.params=worldX\ worldY
+comment34.target=boolean\ checkInteractiveAt(int,\ int)
+comment34.text=\n\ @author\ Paul\n
+>>>>>>> Stashed changes
 comment35.params=
 comment35.target=boolean\ isOnGround()
 comment36.params=
@@ -86,8 +120,13 @@ comment43.params=
 comment43.target=double\ getVelocityY()
 comment44.params=
 comment44.target=int\ getAbilityCooldown()
+<<<<<<< Updated upstream
 comment45.params=item
 comment45.target=int\ getItemCount(int)
+=======
+comment45.params=
+comment45.target=int[][]\ getItemData()
+>>>>>>> Stashed changes
 comment5.params=
 comment5.target=void\ endScreen()
 comment6.params=
@@ -97,5 +136,9 @@ comment7.target=void\ checkAbilityCooldown()
 comment8.params=
 comment8.target=void\ scaleImages()
 comment9.params=
+<<<<<<< Updated upstream
 comment9.target=void\ createMirroredImages()
+=======
+comment9.target=void\ setupAnimationArrays()
+>>>>>>> Stashed changes
 numComments=46
