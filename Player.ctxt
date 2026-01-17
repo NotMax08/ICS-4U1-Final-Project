@@ -14,6 +14,7 @@ comment13.params=
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment13.target=void\ handleAbility()
 comment14.params=
 comment14.target=void\ basicAttack()
@@ -22,6 +23,8 @@ comment15.target=void\ checkAttackHit(int,\ int,\ int)
 comment16.params=
 comment16.target=void\ magicAttack()
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
@@ -38,6 +41,9 @@ comment16.target=void\ checkSlashHit(int,\ int,\ int,\ greenfoot.World)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -73,7 +79,11 @@ comment27.target=void\ checkDoor()
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment27.text=\r\n\ @author\ Paul\r\n
+=======
+comment27.text=\n\ @author\ Paul\n
+>>>>>>> Stashed changes
 =======
 comment27.text=\n\ @author\ Paul\n
 >>>>>>> Stashed changes
@@ -94,7 +104,11 @@ comment29.target=boolean\ isSolidAtPosition(int,\ int)
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment29.text=\r\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\r\n\ @author\ Paul\ assisted\ by\ Claude\r\n
+=======
+comment29.text=\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\n\ @author\ Paul\ assisted\ by\ Claude\n
+>>>>>>> Stashed changes
 =======
 comment29.text=\n\ Check\ if\ the\ player's\ hitbox\ at\ this\ position\ would\ collide\ with\ solid\ tiles\n\ @author\ Paul\ assisted\ by\ Claude\n
 >>>>>>> Stashed changes
@@ -111,6 +125,7 @@ comment3.params=
 comment3.target=void\ countItems()
 comment30.params=posX\ posY
 comment30.target=boolean\ isDoorAtPosition(int,\ int)
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
@@ -171,6 +186,17 @@ comment32.text=\n\ \ Check\ if\ a\ specific\ world\ coordinate\ contains\ a\ sol
 comment33.params=worldX\ worldY
 comment33.target=boolean\ checkDoorAt(int,\ int)
 >>>>>>> Stashed changes
+=======
+comment30.text=\n\ @author\ Paul\n
+comment31.params=posX\ posY
+comment31.target=boolean\ isInteractiveAtPosition(int,\ int)
+comment31.text=\n\ @author\ Paul\n
+comment32.params=worldX\ worldY
+comment32.target=boolean\ checkTileAt(int,\ int)
+comment32.text=\n\ \ Check\ if\ a\ specific\ world\ coordinate\ contains\ a\ solid\ tile\n\ \ @author\ Paul\n
+comment33.params=worldX\ worldY
+comment33.target=boolean\ checkDoorAt(int,\ int)
+>>>>>>> Stashed changes
 comment33.text=\n\ @author\ Paul\n
 comment34.params=worldX\ worldY
 comment34.target=boolean\ checkInteractiveAt(int,\ int)
@@ -178,6 +204,9 @@ comment34.text=\n\ @author\ Paul\n
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -211,8 +240,13 @@ comment44.target=int\ getAbilityCooldown()
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 comment45.params=item
 comment45.target=int\ getItemCount(int)
+=======
+comment45.params=
+comment45.target=int[][]\ getItemData()
+>>>>>>> Stashed changes
 =======
 comment45.params=
 comment45.target=int[][]\ getItemData()
@@ -245,6 +279,9 @@ comment9.target=void\ setupAnimationArrays()
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
