@@ -16,7 +16,7 @@ public abstract class ShopIcons extends Actor
     protected boolean isHovering = false; 
     private int fontSize = 12;
     protected int offsetX;
-    protected int offsetY = 200;
+    protected int offsetY = 175;
 
     public void act()
     {

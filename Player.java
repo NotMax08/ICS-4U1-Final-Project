@@ -23,11 +23,16 @@ public class Player extends ScrollingActor {
     private static final int STUN_DURATION = 30; // Acts to remain stunned
     private static final int BASIC_ATTACK_COOLDOWN = 25;
     private static final int BASIC_ATTACK_DAMAGE = 7;
+    private static final int MAGIC_ATTACK_COOLDOWN = 80;
+    private static final int MAGIC_ATTACK_DAMAGE = 20;
+    private static final int MAGIC_ATTACK_RADIUS = 30;
     private static final int STARTING_HEALTH_POINTS= 3;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int MAX_MANA = 8;
     
     private static int currentHealth;
     private static int maxHealth;
+    private static int currentMana;
 
     // Character states 
     private boolean onGround = false;
@@ -82,12 +87,16 @@ public class Player extends ScrollingActor {
     private GreenfootImage fallL1;
     private GreenfootImage fallL2;
     private GreenfootImage[] fallingLeft;
+    
+    //Item data
+    public int[] itemCount = new int[4];
 
     public Player(Camera camera) {
         super(camera);
 
         this.maxHealth = STARTING_HEALTH_POINTS;
         this.currentHealth = maxHealth;
+        this.currentMana = 0;
         
         // Initialize Counters
         fallCounter = new Counter();
@@ -103,10 +112,12 @@ public class Player extends ScrollingActor {
         createMirroredImages();
         setupAnimationArrays();
         setImage(standingRight);
+        
     }
 
     public void act() {
         //checkStunned();
+        checkHealth();
         checkAbilityCooldown();
         handleInput();
         applyGravity();
@@ -114,7 +125,23 @@ public class Player extends ScrollingActor {
         checkDoor();
         moveHorizontal();
         moveVertical();
+        countItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
+    }
+    public void countItems(){
+        itemCount[0] = 6;
+        itemCount[1] = 0;
+        itemCount[2] = 3;
+        itemCount[3] = 1;
+    }
+    private void checkHealth(){
+        if(currentHealth <= 0){
+            endScreen();
+        }
+    }
+    
+    private void endScreen(){
+        //TODO!!!!1
     }
     
     private void checkStunned(){
@@ -192,7 +219,7 @@ public class Player extends ScrollingActor {
         fallingRight = new GreenfootImage[]{fallR1, fallR2};
         fallingLeft = new GreenfootImage[]{fallL1, fallL2};
     }
-
+    
     private void handleInput() {
         handleMovement();
         handleAbility();
@@ -268,17 +295,10 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
-            if(Greenfoot.mousePressed(null)){
-                MouseInfo mouse = Greenfoot.getMouseInfo();
-                if(mouse.getButton() == 1 || Greenfoot.isKeyDown("j")){
-                    basicAttack();
-                }else if((mouse.getButton() == 3 || Greenfoot.isKeyDown("k")) && GameWorld.magicUnlocked){
-                    magicAttack();
-                }
-                
-            }
-            if (Greenfoot.isKeyDown("e")){
+            if(Greenfoot.isKeyDown("j") || Greenfoot.isKeyDown("e")){
                 basicAttack();
+            }else if(Greenfoot.isKeyDown("k") && GameWorld.magicUnlocked){
+                magicAttack();
             }
         }
     }
@@ -313,17 +333,57 @@ public class Player extends ScrollingActor {
                 slash.setImage(slashImg);
             }
 
-            checkAttackHit(slashWorldX, slashWorldY, BASIC_ATTACK_DAMAGE);
+            checkSlashHit(slashScreenX, slashScreenY, BASIC_ATTACK_DAMAGE, world);
         }
     }
-
-    private void checkAttackHit(int attackX, int attackY, int damage){
+    
+    private void magicAttack(){
+        isAttacking = true;
+        abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
+        
+        SlashAnimation magic = new SlashAnimation(3,4);
+        
+        // changes direction based on where the player is facing
+        int magicOffsetX = direction ? 30 : -30;
+        int magicOffsetY = 0;
+        
         GameWorld world = (GameWorld) getWorld();
+        if(world != null){
+            // World position
+            int magicWorldX = worldX + magicOffsetX;
+            int magicWorldY = worldY + magicOffsetY;
+            // Screen position
+            int magicScreenX = camera.worldToScreenX(magicWorldX);
+            int magicScreenY = camera.worldToScreenY(magicWorldY);
+            
+            world.addObject(magic, magicScreenX, magicScreenY);
+            
+            // Flip if facing left
+            if(!direction){
+                GreenfootImage magicImg = magic.getImage();
+                magicImg.mirrorHorizontally();
+                magic.setImage(magicImg);
+            }
+            
+            // spawn projectile
+            checkRadiusHit(magicScreenX, magicScreenY, MAGIC_ATTACK_RADIUS, MAGIC_ATTACK_DAMAGE, world);
+        }
+    }
+    
+    private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
         if(world == null) return;
         
-        // 
-        int attackScreenX = camera.worldToScreenX(attackX);
-        int attackScreenY = camera.worldToScreenY(attackY);
+        int attackScreenX = attackX;
+        int attackScreenY = attackY;
+        
+        //ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsInRange(radius, BaseEnemy.class));
+    }
+
+    private void checkSlashHit(int attackX, int attackY, int damage, World world){
+        if(world == null) return;
+        
+        int attackScreenX = attackX;
+        int attackScreenY = attackY;
         
         ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
             attackScreenX,
@@ -333,14 +393,11 @@ public class Player extends ScrollingActor {
         
         for(BaseEnemy enemy : enemies){
             enemy.takeDamage(damage);
+            currentMana++;
         }
             
     }
-
-    private void magicAttack(){
-        // add mana bar
-    }
-
+    
     private void animateRunning(){
         runningAnimCounter.increment();
 
@@ -616,6 +673,9 @@ public class Player extends ScrollingActor {
     public int getAbsMaxHealth(){
         return ABSOLUTE_MAX_HEALTH_POINTS;
     }
+    public int getMana(){
+        return currentMana;
+    }
     public boolean isInDoor(){
         return inDoor;
     }
@@ -630,5 +690,8 @@ public class Player extends ScrollingActor {
     }
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
+    }
+    public int getItemCount(int item){
+        return itemCount[item];
     }
 }

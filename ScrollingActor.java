@@ -2,7 +2,7 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * @author Claude
+ * @author Claude prompted by Paul
  */
 public abstract class ScrollingActor extends SuperSmoothMover {
     protected int worldX, worldY;
