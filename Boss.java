@@ -229,15 +229,12 @@ public class Boss extends Actor
         }
         
         if (attackType==1){
-            System.out.println("attack1");
             attack1(false);
         }
         else if (attackType==2){
-            System.out.println("attack2");
             attack2();
         }
         else if (attackType==3){
-            System.out.println("attack3");
             attack3(true,false);
         }
     }
