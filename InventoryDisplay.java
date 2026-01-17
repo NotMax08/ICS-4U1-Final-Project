@@ -1,5 +1,7 @@
 import greenfoot.*;
 import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A display that shows the player inventory, including weapons and items
@@ -12,8 +14,14 @@ public class InventoryDisplay extends Display {
     // Image variables
     private GreenfootImage openInv = new GreenfootImage("openInv.png");
     private GreenfootImage closedInv = new GreenfootImage("closedInv.png");
+    private GreenfootImage pt1 = new GreenfootImage("pt1.png");
+    private GreenfootImage pt2 = new GreenfootImage("pt2.png");
+    private GreenfootImage pt3 = new GreenfootImage("pt3.png");
+    private GreenfootImage pt4 = new GreenfootImage("pt4.png");
     private boolean isOpen = false;
     private boolean tabWasDown = false;
+    
+    private Player player;
 
     // Inventory utility
     private ArrayList<InventoryItem> items;
@@ -28,9 +36,10 @@ public class InventoryDisplay extends Display {
      * @param screenX X position on screen (not world position)
      * @param screenY Y position on screen (not world position)
      */
-    public InventoryDisplay(int screenX, int screenY, Camera camera) {
+    public InventoryDisplay(int screenX, int screenY, Camera camera, Player player) {
         super(screenX, screenY, camera);
         this.items = new ArrayList<InventoryItem>();
+        this.player = player;
         
         closedInv = scaleImage("closedInv.png", 100, 100, 225);
         openInv = scaleImage("openInv.png", 600, 600, 242);
@@ -38,19 +47,33 @@ public class InventoryDisplay extends Display {
         // Initialize 2D coordinate map 
         createSlotMap();
         
+        //Scale Images
+        scaleImages();
+        
         setImage(closedInv);
     }
     
     private void createSlotMap(){
-        slotLocations = new int[][]{
+        slotLocations = new int[15][2]; // Fixed: 15 slots, 2 coordinates each
+
+        // Adjust these values to match where your grid starts in openInv.png
+        int startX = 325; // X position of first slot
+        int startY = 120;  // Y position of first slot
+        int slotSpacing = 90; // Space between slot centers
+        int slotsPerRow = 3;
+
+        for (int i = 0; i < maxSlots; i++) {
+            int row = i / slotsPerRow;
+            int col = i % slotsPerRow;
             
-        };
-        
-        
+            slotLocations[i][0] = startX + (col * slotSpacing);
+            slotLocations[i][1] = startY + (row * slotSpacing);
+        }
     }
     
     @Override
     protected void updateDisplay(){
+        addToItems(player);
         if(!isOpen){
             setLocation(screenX, screenY);
             setImage(closedInv);
@@ -63,10 +86,45 @@ public class InventoryDisplay extends Display {
             setImage(canvas);
         }
     }
-    
+    private void scaleImages(){
+        pt1.scale(60,60);
+        pt2.scale(60,60);
+        pt3.scale(60,60);
+        pt4.scale(60,60);
+    }
     // Draws items on the inventory
     private void drawItems(GreenfootImage img){
-        
+         int index = 0;
+         int minus = 0;
+        for (int i = 0; i < items.size(); i++) {
+            InventoryItem item = items.get(i);
+            minus = 0;
+            if (item.getCount() <= 0){
+                minus = 1;
+                continue;
+            }
+    
+            GreenfootImage icon = item.getIcon();
+            int x = slotLocations[index][0];
+            int y = slotLocations[index][1];
+    
+            // Center the icon in the slot
+            int iconX = x - (icon.getWidth() / 2);
+            int iconY = y - (icon.getHeight() / 2);
+    
+            // Draw potion icon
+            img.drawImage(icon, iconX, iconY);
+    
+            // Draw quantity text
+            img.setFont(new Font("Arial", true, false, 24)); // Set font size
+            img.setColor(Color.WHITE);
+            img.drawString(
+                String.valueOf(item.getCount()),
+                x + 15,  // Adjust for text position
+                y + 35
+            );
+            index = index + 1 - minus;
+        }
     }
     
     @Override
@@ -109,13 +167,25 @@ public class InventoryDisplay extends Display {
      * Add an item to the inventory
      */
     public boolean addItem(InventoryItem item) {
+        // Fixed: Removed items.clear() that was here
         if (items.size() < maxSlots) {
             items.add(item);
             return true;
         }
         return false; // Inventory full
     }
-
+    
+    public void addToItems(Player player){
+        items.clear(); // Fixed: Clear before adding to prevent duplicates
+        
+        InventoryItem pot1 = new InventoryItem("potionOne", pt1, player.getItemCount(0));
+        InventoryItem pot2 = new InventoryItem("potionTwo", pt2, player.getItemCount(1));
+        InventoryItem pot3 = new InventoryItem("potionThree", pt3, player.getItemCount(2));
+        InventoryItem pot4 = new InventoryItem("potionFour", pt4, player.getItemCount(3));
+        
+        items.addAll(List.of(pot1, pot2, pot3, pot4));
+    }
+    
     /**
      * Remove an item from inventory
      */
@@ -198,9 +268,5 @@ class InventoryItem {
 
     public void decrementCount() {
         if (count > 0) count--;
-    }
-    
-    public GreenfootImage getImage(){
-        return icon;
     }
 }

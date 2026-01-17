@@ -86,7 +86,7 @@ public class Player extends ScrollingActor {
     private GreenfootImage[] fallingLeft;
     
     //Item data
-    public int[][] itemData;
+    public int[] itemCount = new int[4];
 
     public Player(Camera camera) {
         super(camera);
@@ -109,6 +109,7 @@ public class Player extends ScrollingActor {
         createMirroredImages();
         setupAnimationArrays();
         setImage(standingRight);
+        
     }
 
     public void act() {
@@ -121,9 +122,15 @@ public class Player extends ScrollingActor {
         checkDoor();
         moveHorizontal();
         moveVertical();
+        countItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
     }
-    
+    public void countItems(){
+        itemCount[0] = 6;
+        itemCount[1] = 0;
+        itemCount[2] = 3;
+        itemCount[3] = 1;
+    }
     private void checkHealth(){
         if(currentHealth <= 0){
             endScreen();
@@ -209,7 +216,7 @@ public class Player extends ScrollingActor {
         fallingRight = new GreenfootImage[]{fallR1, fallR2};
         fallingLeft = new GreenfootImage[]{fallL1, fallL2};
     }
-
+    
     private void handleInput() {
         handleMovement();
         handleAbility();
@@ -285,7 +292,7 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
-            if(Greenfoot.isKeyDown("j")){
+            if(Greenfoot.isKeyDown("j") || Greenfoot.isKeyDown("e")){
                 basicAttack();
             }else if(Greenfoot.isKeyDown("k") && GameWorld.magicUnlocked){
                 magicAttack();
@@ -645,7 +652,7 @@ public class Player extends ScrollingActor {
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
-    public int[][] getItemData(){
-        return itemData;
+    public int getItemCount(int item){
+        return itemCount[item];
     }
 }
