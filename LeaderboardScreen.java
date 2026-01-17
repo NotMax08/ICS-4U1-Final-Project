@@ -1,4 +1,7 @@
 import greenfoot.*;
+/**
+ * @author Paul and Claude
+ */
 public class LeaderboardScreen extends World {
     
     public LeaderboardScreen() {

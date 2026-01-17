@@ -3,8 +3,7 @@ import java.util.*;
 /**
  * Write a description of class Fungi3 here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Max
  */
 public class Fungi extends GroundEnemy
 {

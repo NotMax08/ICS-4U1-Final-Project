@@ -3,7 +3,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Grid to be called for each world. 
  * 
- * @author Paul
+ * @author Paul assisted by Claude
  * 
  */
 public class MapGrid
