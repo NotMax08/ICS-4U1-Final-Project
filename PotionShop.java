@@ -9,13 +9,12 @@ import java.util.*;
  */
 public class PotionShop extends ShopUI
 {
+    ArrayList<ShopIcons> items;
     public PotionShop()
     {
         image = new GreenfootImage ("potionsUI.png");
         image.scale(image.getWidth() + 100, image.getHeight() + 100);
         setImage(image);
-        
-        addItems();
     }
     
     public void act()
@@ -23,9 +22,14 @@ public class PotionShop extends ShopUI
         // Add your action code here.
     }
     
+    protected void addedToWorld(World world)
+    {
+        addItems();
+    }
+    
     private void addItems()
     {
-        ArrayList<ShopIcons> items = new ArrayList<>();
+        items = new ArrayList<>();
         items.add(new HealthPotionIcon());
         items.add(new HealthPotionIcon());
         items.add(new HealthPotionIcon());
