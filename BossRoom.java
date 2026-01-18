@@ -1,7 +1,7 @@
 import greenfoot.*;
 /**
  * 
- * @author Paul & Angelina assisted by Claude
+ * @author Paul assisted by Claude adjusted for boss by Angelina
  */
 public class BossRoom extends GameWorld {
     // Override world dimensions to be same as screen - makes room static
