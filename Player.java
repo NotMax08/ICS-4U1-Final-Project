@@ -30,9 +30,9 @@ public class Player extends ScrollingActor {
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
     private static final int MAX_MANA = 8;
     
-    private static int currentHealth;
-    private static int maxHealth;
-    private static int currentMana;
+    private static int maxHealth = STARTING_HEALTH_POINTS;
+    private static int currentHealth = maxHealth;
+    private static int currentMana = 0;
 
     // Character states 
     private boolean onGround = false;
@@ -94,10 +94,6 @@ public class Player extends ScrollingActor {
     public Player(Camera camera) {
         super(camera);
 
-        this.maxHealth = STARTING_HEALTH_POINTS;
-        this.currentHealth = maxHealth;
-        this.currentMana = 0;
-        
         // Initialize Counters
         fallCounter = new Counter();
         stunCounter = new Counter(STUN_DURATION);
@@ -142,6 +138,7 @@ public class Player extends ScrollingActor {
     
     private void endScreen(){
         //TODO!!!!1
+        System.out.println("going to end screen");
     }
     
     private void checkStunned(){
@@ -551,9 +548,9 @@ public class Player extends ScrollingActor {
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
             if( getWorld() instanceof RoomOne){
-                Greenfoot.setWorld(new RoomTwo());
+                Greenfoot.setWorld(new RoomTwo(this));
             }else if(getWorld() instanceof RoomTwo){
-                Greenfoot.setWorld(new RoomThree());
+                Greenfoot.setWorld(new RoomThree(this));
             }
         } else {
             inDoor = false;
@@ -658,6 +655,13 @@ public class Player extends ScrollingActor {
         int tileType = world.mapGrid.getTileAt(tileX, tileY);
 
         return tileType == 5 ;
+    }
+    // Setters
+    public void setHealth(int health){
+        currentHealth = health;
+    }
+    public void setMana(int mana){
+        currentMana = mana;
     }
     
     // Getters
