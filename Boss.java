@@ -31,8 +31,13 @@ public class Boss extends Actor
     
     private int attackNumber;
     
-    private static final int totalHealth = 100;
+    private static final int totalHealth = 80;
     private int currentHealth;
+    
+    private SuperStatBar bossHealthBar;
+    
+    private Color green = new Color(200,255,200);
+    private Color black = new Color(0,0,0);
     
     /**
      * 1 & 2 (attackOne), 
@@ -40,7 +45,7 @@ public class Boss extends Actor
      * 4 & 5 (attackThree w/ teleport), 
      * 6 & 7 (attackThree no teleport)
      */
-    private int[] attackPattern = {1,2,3,4,5,6,7};
+    private int[] attackPattern = {1,2,3,3,4,5,4,5};
     
     public Boss(int variant)
     {
@@ -204,6 +209,8 @@ public class Boss extends Actor
     private void entering(){
         this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+enterSpeedMultiplier);
         if (this.getY() >= 300){
+            bossHealthBar = new SuperStatBar(totalHealth, totalHealth, null, 400, 30, 0, green, black, false, black, 3);
+            getWorld().addObject(bossHealthBar,400,50);
             entering = false;
         }
     }
@@ -264,10 +271,11 @@ public class Boss extends Actor
     
     public void takeDamage(int damage){
         currentHealth -= damage;
-        System.out.println(currentHealth);
+        bossHealthBar.update(currentHealth);
         
         if (currentHealth <= 0){
             getWorld().removeObject(this);
+            BossRoom.weapon1.removeSelf();
         }
     }
 }

@@ -71,7 +71,6 @@ public class BossWeaponEffect extends Actor
             }
             else{
                 p.takeDamage(1);
-                System.out.println("Hit 2");
                 lethal = false;
                 return true;
             }
@@ -110,7 +109,6 @@ public class BossWeaponEffect extends Actor
                 if (!getObjectsAtOffset(startX, startY, Player.class).isEmpty()){
                     getObjectsAtOffset(startX, startY, Player.class).get(0).takeDamage(1);
                     lethal = false;
-                    System.out.println("Hit 3");
                     return true;
                 }
     
@@ -129,7 +127,6 @@ public class BossWeaponEffect extends Actor
                     if (!getObjectsAtOffset(interX, interY, Player.class).isEmpty()){
                         getObjectsAtOffset(interX, interY, Player.class).get(0).takeDamage(1);
                         lethal = false;
-                        System.out.println("Hit 3");
                         return true;
                     }
                 }
@@ -139,7 +136,6 @@ public class BossWeaponEffect extends Actor
             if(!getObjectsAtOffset(points[14], points[15], Player.class).isEmpty()){
                 getObjectsAtOffset(points[14], points[15], Player.class).get(0).takeDamage(1);
                 lethal = false;
-                System.out.println("Hit 3");
                 return true;
             }
             else{

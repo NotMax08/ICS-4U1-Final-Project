@@ -183,14 +183,16 @@ public class BossWeapon extends Actor
         else{
             if (attack1){
                 p.takeDamage(1);
-                System.out.println("Hit 1");
             }
             else if (attack2){
                 p.takeDamage(1);
-                System.out.println("Hit 2");
             }
             lethal = false;
             return true;
         }
+    }
+    
+    public void removeSelf(){
+        getWorld().removeObject(this);
     }
 }
