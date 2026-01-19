@@ -59,7 +59,9 @@ public class NPCRoom extends GameWorld {
             updateAllActors();
             updateBackground();
         }
-
+        
+        PotionMerchant potionMerchant = new PotionMerchant();
+        addObject(potionMerchant, getWidth()/2, getHeight()/2 + 200);
     }
     
     public NPCRoom() {
