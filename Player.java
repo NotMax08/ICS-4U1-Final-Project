@@ -575,7 +575,7 @@ public class Player extends ScrollingActor {
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
             if( getWorld() instanceof RoomOne){
-                Greenfoot.setWorld(new RoomTwo(this));
+                Greenfoot.setWorld(new RoomTwo("RoomTwo"));
             }else if(getWorld() instanceof RoomTwo){
                 Greenfoot.setWorld(new RoomThree(this));
             }
