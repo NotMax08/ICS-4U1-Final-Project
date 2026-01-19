@@ -40,4 +40,10 @@ public class StrengthPotionIcon extends ShopIcons
             getWorld().removeObject(strengthPotion);
         }
     }
+    
+    public void removeIcon()
+    {
+        cleanUp();
+        getWorld().removeObject(this);
+    }
 }

@@ -35,6 +35,11 @@ public abstract class ShopIcons extends Actor
         {
             cleanUp();
         }
+        
+        if (Greenfoot.mouseClicked(this))
+        {
+            System.out.println("waosjfda");
+        }
     }
     
     /**
