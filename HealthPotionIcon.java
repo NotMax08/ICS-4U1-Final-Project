@@ -48,4 +48,9 @@ public class HealthPotionIcon extends ShopIcons
         cleanUp();
         getWorld().removeObject(this);
     }
+    
+    protected void purchase()
+    {
+        
+    }
 }

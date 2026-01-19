@@ -47,4 +47,9 @@ public class ShieldPotionIcon extends ShopIcons
         cleanUp();
         getWorld().removeObject(this);
     }
+    
+    protected void purchase()
+    {
+        
+    }
 }
