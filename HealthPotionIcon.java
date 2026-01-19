@@ -34,12 +34,12 @@ public class HealthPotionIcon extends ShopIcons
         }
     }
 
-    protected void cleanUp()
+    protected void cleanUp(World world)
     {
         removeText();
         if(getWorld() != null && healthPotion != null && healthPotion.getWorld() != null)
         {
-            getWorld().removeObject(healthPotion);
+            world.removeObject(healthPotion);
         }
     }
 }

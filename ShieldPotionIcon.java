@@ -33,12 +33,12 @@ public class ShieldPotionIcon extends ShopIcons
         }
     }
     
-    protected void cleanUp()
+    protected void cleanUp(World world)
     {
         removeText();
         if(getWorld() != null && shieldPotion != null && shieldPotion.getWorld() != null)
         {
-            getWorld().removeObject(shieldPotion);
+            world.removeObject(shieldPotion);
         }
     }
 }

@@ -33,7 +33,7 @@ public abstract class ShopIcons extends Actor
         }
         else
         {
-            cleanUp();
+            cleanUp(getWorld());
         }
     }
 
@@ -91,11 +91,5 @@ public abstract class ShopIcons extends Actor
 
     protected abstract void description();
 
-    protected abstract void cleanUp();
-
-    @Override
-    public void removedFromWorld(World world)
-    {
-        cleanUp();
-    }
+    protected abstract void cleanUp(World world);
 }
