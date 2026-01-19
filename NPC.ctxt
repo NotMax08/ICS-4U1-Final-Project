@@ -1,11 +1,11 @@
 #BlueJ class context
 comment0.target=NPC
-comment0.text=\r\n\ @author\ Julian\r\n\ @version\ 2026\r\n\ \r\n\ image\ generated\ by\ Google\ AI\ studio\r\n
+comment0.text=\n\ @author\ Julian\n\ @version\ 2026\n\ \n\ image\ generated\ by\ Google\ AI\ studio\n
 comment1.params=
 comment1.target=void\ act()
 comment2.params=
 comment2.target=void\ interactWithPlayer()
-comment2.text=\r\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\r\n\ @author\ Julian\r\n
+comment2.text=\n\ Method\ to\ show\ prompt\ and\ handle\ dialogue.\n\ @author\ Julian\n
 comment3.params=
 comment3.target=void\ dialogue()
 comment4.params=dialogue\ split
@@ -14,5 +14,5 @@ comment5.params=
 comment5.target=void\ removeText()
 comment6.params=
 comment6.target=void\ cleanUp()
-comment6.text=\r\n\ overrided\ method,\ cleans\ up\ whatever\ npcs\ need\ to\ cleanup\r\n
+comment6.text=\n\ overrided\ method,\ cleans\ up\ whatever\ npcs\ need\ to\ cleanup\n
 numComments=7

@@ -9,9 +9,9 @@ import greenfoot.*;
 public class TextManager
 {    
     // We keep these static so that new text replaces old text globally
-    static TextBox text; 
-    static TextBox textOne;
-    static TextBox textTwo;
+    TextBox text; 
+    TextBox textOne;
+    TextBox textTwo;
 
     /**
      * @param world The world to add the text to (pass 'getWorld()' from your actor)
@@ -23,7 +23,7 @@ public class TextManager
      * @param fontSize The size
      * @param split Whether to split at '|'
      */
-    static void textBoxWriter(World world, int x, int y, int offX, int offY, String dialogue, int fontSize, boolean split)
+    void textBoxWriter(World world, int x, int y, int offX, int offY, String dialogue, int fontSize, boolean split)
     {
         // Must pass world to the remove method too
         removeText(world);
@@ -62,7 +62,7 @@ public class TextManager
     /**
      * removes text from the world
      */
-    static void removeText(World world)
+    void removeText(World world)
     {
         // We check world != null because static methods don't have a 'built-in' world
         if (world == null) return;

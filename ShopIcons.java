@@ -17,7 +17,12 @@ public abstract class ShopIcons extends Actor
     private int fontSize = 12;
     protected int offsetX;
     protected int offsetY = 175;
-
+    protected String description;
+    
+    protected int potionX = - 147;
+    protected int potionY = -30;
+    
+    private TextManager textManager = new TextManager();
     public void act()
     {
         hoverEffect();
@@ -25,6 +30,10 @@ public abstract class ShopIcons extends Actor
         if(isHovering)
         {
             description();
+        }
+        else
+        {
+            cleanUp();
         }
     }
     
@@ -73,13 +82,15 @@ public abstract class ShopIcons extends Actor
     
     protected void textWriter(String description, boolean split)
     {
-        TextManager.textBoxWriter(getWorld(), getWorld().getWidth()/2, getWorld().getHeight()/2, offsetX, offsetY, description, fontSize, split);
+        textManager.textBoxWriter(getWorld(), getWorld().getWidth()/2, getWorld().getHeight()/2, offsetX, offsetY, description, fontSize, split);
     }
     
     protected void removeText()
     {
-        TextManager.removeText(getWorld());
+        textManager.removeText(getWorld());
     }
     
     protected abstract void description();
+    
+    protected abstract void cleanUp();
 }

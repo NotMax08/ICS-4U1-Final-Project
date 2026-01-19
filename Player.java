@@ -42,7 +42,8 @@ public class Player extends ScrollingActor {
     private boolean isStunned = false;
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
-    private boolean isAttackUpgraded = true;
+    private boolean attackUpgraded = false;
+    private boolean magicUnlocked = false;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -94,6 +95,7 @@ public class Player extends ScrollingActor {
 
     /**
      * Main constructor for player
+     * 
      * @param Camera tracks the player 
      */
     public Player(Camera camera) {
@@ -148,21 +150,12 @@ public class Player extends ScrollingActor {
     }
 
     private void endScreen(){
-        //TODO!!!!1
-        System.out.println("going to end screen");
-    }
-
-    private void checkStunned(){
-        // If stunned, count down stun timer and don't allow movement
-        if (isStunned) {
-            stunCounter.decrement();
-            if (stunCounter.isZero()) {
-                isStunned = false;
-            }
-            applyGravity();
-            moveVertical(); // Still affected by gravity while stunned
-            return; // Skip normal input handling
-        }
+        // Reset stats for next game
+        maxHealth = STARTING_HEALTH_POINTS;
+        currentHealth = STARTING_HEALTH_POINTS;
+        currentMana = 0;
+        
+        Greenfoot.setWorld(new DeathScreen());
     }
 
     private void checkAbilityCooldown(){
@@ -305,7 +298,7 @@ public class Player extends ScrollingActor {
         if(abilityCooldownCounter.isZero()){
             if(Greenfoot.isKeyDown("j") || Greenfoot.isKeyDown("e")){
                 basicAttack();
-            }else if(Greenfoot.isKeyDown("k") && GameWorld.magicUnlocked){
+            }else if(Greenfoot.isKeyDown("k") && magicUnlocked){
                 magicAttack();
             }
         }
@@ -317,7 +310,7 @@ public class Player extends ScrollingActor {
 
         // slash animation
         SlashAnimation slash;
-        if(!isAttackUpgraded){
+        if(!attackUpgraded){
             slash = new SlashAnimation(6, 2, false, false);
         }else{
             slash = new SlashAnimation(6, 2, false, true);
@@ -383,6 +376,7 @@ public class Player extends ScrollingActor {
         }
     }
 
+    //TODO!!!!
     private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
         if(world == null) return;
 
@@ -411,12 +405,20 @@ public class Player extends ScrollingActor {
                 ));
 
         for(BaseEnemy enemy : enemies){
-            enemy.takeDamage(damage);
+            if(!attackUpgraded){
+                enemy.takeDamage(damage);
+            }else{
+                enemy.takeDamage(damage*2);
+            }
             currentMana++;
         }
 
         for(Boss boss : bosses){
-            boss.takeDamage(damage);
+            if(!attackUpgraded){
+                boss.takeDamage(damage);
+            }else{
+                boss.takeDamage(damage*2);
+            }
             currentMana++;
         }
 
@@ -574,8 +576,8 @@ public class Player extends ScrollingActor {
         if (world == null) return;
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
-            if( getWorld() instanceof RoomOne){
-                Greenfoot.setWorld(new RoomTwo("RoomTwo"));
+            if(getWorld() instanceof RoomOne){
+                Greenfoot.setWorld(new RoomTwo("RoomOne"));
             }else if(getWorld() instanceof RoomTwo){
                 Greenfoot.setWorld(new RoomThree(this));
             }
@@ -692,12 +694,23 @@ public class Player extends ScrollingActor {
     public void setHealth(int health){
         currentHealth = health;
     }
-
     public void setMana(int mana){
         currentMana = mana;
     }
+    public void upgradeBasicAttack(){
+        attackUpgraded = true;
+    }
+    public void unlockMagicAttack(){
+        magicUnlocked = true;
+    }
 
     // Getters
+    public boolean isAttackUpgraded(){
+        return attackUpgraded;
+    }
+    public boolean isMagicUnlocked(){
+        return magicUnlocked;
+    }
     public boolean isOnGround() {
         return onGround;
     }

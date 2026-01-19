@@ -60,10 +60,8 @@ public class NPCRoom extends GameWorld {
             updateBackground();
         }
         
-        // Add NPCs here
-        // Example:
-        // NPC shopkeeper = new NPC(camera);
-        // addObject(shopkeeper, 400, 450);
+        PotionMerchant potionMerchant = new PotionMerchant();
+        addObject(potionMerchant, getWidth()/2, getHeight()/2 + 200);
     }
     
     public NPCRoom() {
