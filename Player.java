@@ -150,8 +150,12 @@ public class Player extends ScrollingActor {
     }
 
     private void endScreen(){
-        //TODO!!!!1
-        System.out.println("going to end screen");
+        // Reset stats for next game
+        currentHealth = STARTING_HEALTH_POINTS;
+        currentMana = 0;
+        maxHealth = STARTING_HEALTH_POINTS;
+        
+        Greenfoot.setWorld(new DeathScreen());
     }
 
     private void checkAbilityCooldown(){
