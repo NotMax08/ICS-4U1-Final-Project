@@ -30,6 +30,7 @@ public class Player extends ScrollingActor {
     private static final int STARTING_HEALTH_POINTS= 5;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 10;
     private static final int MAX_MANA = 8;
+    private static final int HEALING_SPEED = 60;
 
     private int maxHealth = STARTING_HEALTH_POINTS;
     private int currentHealth = maxHealth;
@@ -45,6 +46,7 @@ public class Player extends ScrollingActor {
     private boolean isTakingDamage = false;
     private boolean attackUpgraded = false;
     private static boolean magicUnlocked = true;
+    private boolean isHealing = false;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -54,6 +56,7 @@ public class Player extends ScrollingActor {
     private Counter fallingAnimCounter;
     private Counter frameCounter;
     private Counter abilityCooldownCounter;
+    private Counter healCounter;
 
     // Player image constants
     private static int P_WIDTH = 50;
@@ -110,6 +113,7 @@ public class Player extends ScrollingActor {
         fallingAnimCounter = new Counter(ANIMATION_SPEED * 2);
         frameCounter = new Counter();
         abilityCooldownCounter = new Counter(BASIC_ATTACK_COOLDOWN);
+        healCounter = new Counter();
 
         // Initialize images
         scaleImages(); 
@@ -127,6 +131,7 @@ public class Player extends ScrollingActor {
         //checkStunned();
         checkHealth();
         checkAbilityCooldown();
+        checkHealing();
         handleInput();
         applyGravity();
         //checkFall();
@@ -165,6 +170,18 @@ public class Player extends ScrollingActor {
             abilityCooldownCounter.decrement();
             if(abilityCooldownCounter.isZero()){
                 isAttacking = false;
+            }
+        }
+    }
+    
+    private void checkHealing(){
+        if(isHealing){
+            healCounter.increment();
+            if(healCounter.getCount() >= HEALING_SPEED){
+                heal(1);
+                currentMana -= 4;
+                isHealing = false;
+                healCounter.reset();
             }
         }
     }
@@ -297,12 +314,19 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
+            if(Greenfoot.isKeyDown("h") && currentMana >= 4 && currentHealth < maxHealth){
+                isHealing = true;
+            }
             if(Greenfoot.isKeyDown("j") || Greenfoot.isKeyDown("e")){
                 basicAttack();
             }else if(Greenfoot.isKeyDown("k") && magicUnlocked){
                 magicAttack();
             }
         }
+    }
+    
+    private void healAbility(){
+        
     }
 
     private void basicAttack(){
@@ -403,7 +427,7 @@ public class Player extends ScrollingActor {
     private void checkRadiusHit(int attackWorldX, int attackWorldY, int radius, int damage, World world){
         if(world == null) return;
 
-        int EFFECTIVE_RADIUS = MAGIC_ATTACK_RADIUS + 15;
+        int EFFECTIVE_RADIUS = MAGIC_ATTACK_RADIUS + HITBOX_EXPANSION;
         // Get all potential targets
         ArrayList<Actor> targets = new ArrayList<>();
         targets.addAll(world.getObjects(BaseEnemy.class));
