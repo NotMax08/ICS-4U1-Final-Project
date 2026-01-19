@@ -388,8 +388,19 @@ public class Player extends ScrollingActor {
             BaseEnemy.class
         ));
         
+        ArrayList<Boss> bosses = new ArrayList<Boss>(world.getObjectsAt(
+            attackScreenX,
+            attackScreenY,
+            Boss.class
+        ));
+        
         for(BaseEnemy enemy : enemies){
             enemy.takeDamage(damage);
+            currentMana++;
+        }
+        
+        for(Boss boss : bosses){
+            boss.takeDamage(damage);
             currentMana++;
         }
             
