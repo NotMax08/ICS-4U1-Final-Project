@@ -313,7 +313,7 @@ public class Player extends ScrollingActor {
         abilityCooldownCounter.set(BASIC_ATTACK_COOLDOWN);
 
         // slash animation
-        SlashAnimation slash = new SlashAnimation(6,2);
+        SlashAnimation slash = new SlashAnimation(6,2, false);
 
         // changes depending on which direction the player is facing
         int slashOffsetX = direction ? 30: -30; 
@@ -346,10 +346,10 @@ public class Player extends ScrollingActor {
         isAttacking = true;
         abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
         
-        SlashAnimation magic = new SlashAnimation(3,4);
+        SlashAnimation magic = new SlashAnimation(3,4,true);
         
         // changes direction based on where the player is facing
-        int magicOffsetX = direction ? 50 : -50;
+        int magicOffsetX = direction ? 150 : -150;
         int magicOffsetY = 0;
         
         GameWorld world = (GameWorld) getWorld();

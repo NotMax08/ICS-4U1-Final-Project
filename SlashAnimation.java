@@ -13,49 +13,57 @@ public class SlashAnimation extends Actor
     private int frameIndex = 0;
     private int actCount = 0;
     private int framesPerImage = 3; // acts to wait before changing image
-    
+
     /**
      * Constructor - Simple version with default settings
      */
     public SlashAnimation()
     {
-        this(6, 5); // 4 frames, 50ms each
+        this(6, 5, false); // 4 frames, 50ms each
     }
-    
+
     /**
      * Constructor - Customizable version
      * 
      * @param numFrames Number of animation frames (images)
      * @param speed Acts between frame changes (lower = faster)
      */
-    public SlashAnimation(int numFrames, int speed)
+    public SlashAnimation(int numFrames, int speed, boolean unlocked)
     {
         slashFrames = new GreenfootImage[numFrames];
         this.framesPerImage = speed;
-        
-        // Load slash animation frames
-        for (int i = 0; i < slashFrames.length; i++)
-        {
-            slashFrames[i] = new GreenfootImage("images/slash" + i + ".png");
-            slashFrames[i].scale(160, 80);
+
+        if(!unlocked){
+            // Load slash animation frames
+            for (int i = 0; i < slashFrames.length; i++)
+            {
+                slashFrames[i] = new GreenfootImage("images/slash" + i + ".png");
+                slashFrames[i].scale(160, 80);
+            }
+        }else{
+            // Load magic animation frames
+            for (int i = 0 ; i < slashFrames.length; i++){
+                slashFrames[i] = new GreenfootImage("images/magic" + i + ".png");
+                slashFrames[i].scale(300,250);
+            }
         }
         
         setImage(slashFrames[0]);
     }
-    
+
     /**
      * Animate the sword slash by switching frames.
      */
     public void animateSlash()
     {
         actCount++;
-        
+
         // Change frame every 'framesPerImage' acts
         if (actCount >= framesPerImage)
         {
             actCount = 0;
             frameIndex++;
-            
+
             // Remove when animation completes
             if (frameIndex >= slashFrames.length)
             {
@@ -65,10 +73,11 @@ public class SlashAnimation extends Actor
                 }
                 return;
             }
-            
+
             setImage(slashFrames[frameIndex]);
         }
     }
+
     /**
      * Cycles through the various frames for the animation.
      */
