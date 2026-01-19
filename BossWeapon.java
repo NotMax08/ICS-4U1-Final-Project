@@ -4,6 +4,7 @@ import greenfoot.*;
  */
 public class BossWeapon extends Actor
 {
+    
     private boolean teleporting = false;
     private boolean teleported = false;
     
@@ -27,9 +28,9 @@ public class BossWeapon extends Actor
     
     private boolean facingLeft;
     
-    /**
-     * Constructor for objects of class BossWeapon
-     */
+    
+    //Constructor for objects of class BossWeapon
+     
     public BossWeapon()
     {
         this.setRotation(0);
@@ -193,4 +194,5 @@ public class BossWeapon extends Actor
             return true;
         }
     }
+    
 }

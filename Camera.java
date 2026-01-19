@@ -1,6 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
- * @author Claude
+ * @author Claude prompted by Paul
  */
 // ===== CAMERA CLASS =====
 class Camera {

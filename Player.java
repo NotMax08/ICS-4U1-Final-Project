@@ -29,7 +29,7 @@ public class Player extends ScrollingActor {
     private static final int STARTING_HEALTH_POINTS= 3;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
     private static final int MAX_MANA = 8;
-    
+
     private static int maxHealth = STARTING_HEALTH_POINTS;
     private static int currentHealth = maxHealth;
     private static int currentMana = 0;
@@ -42,6 +42,7 @@ public class Player extends ScrollingActor {
     private boolean isStunned = false;
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
+    private boolean isAttackUpgraded = true;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -87,10 +88,14 @@ public class Player extends ScrollingActor {
     private GreenfootImage fallL1;
     private GreenfootImage fallL2;
     private GreenfootImage[] fallingLeft;
-    
+
     //Item data
     public int[] itemCount = new int[4];
 
+    /**
+     * Main constructor for player
+     * @param Camera tracks the player 
+     */
     public Player(Camera camera) {
         super(camera);
 
@@ -108,9 +113,13 @@ public class Player extends ScrollingActor {
         createMirroredImages();
         setupAnimationArrays();
         setImage(standingRight);
-        
+
     }
 
+    /**
+     * Main act method 
+     * 
+     */
     public void act() {
         //checkStunned();
         checkHealth();
@@ -124,23 +133,25 @@ public class Player extends ScrollingActor {
         countItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
     }
+
     public void countItems(){
         itemCount[0] = 6;
         itemCount[1] = 0;
         itemCount[2] = 3;
         itemCount[3] = 1;
     }
+
     private void checkHealth(){
         if(currentHealth <= 0){
             endScreen();
         }
     }
-    
+
     private void endScreen(){
         //TODO!!!!1
         System.out.println("going to end screen");
     }
-    
+
     private void checkStunned(){
         // If stunned, count down stun timer and don't allow movement
         if (isStunned) {
@@ -153,7 +164,7 @@ public class Player extends ScrollingActor {
             return; // Skip normal input handling
         }
     }
-    
+
     private void checkAbilityCooldown(){
         // Count down attack cooldown
         if(!abilityCooldownCounter.isZero()){
@@ -216,7 +227,7 @@ public class Player extends ScrollingActor {
         fallingRight = new GreenfootImage[]{fallR1, fallR2};
         fallingLeft = new GreenfootImage[]{fallL1, fallL2};
     }
-    
+
     private void handleInput() {
         handleMovement();
         handleAbility();
@@ -305,7 +316,12 @@ public class Player extends ScrollingActor {
         abilityCooldownCounter.set(BASIC_ATTACK_COOLDOWN);
 
         // slash animation
-        SlashAnimation slash = new SlashAnimation(6,2);
+        SlashAnimation slash;
+        if(!isAttackUpgraded){
+            slash = new SlashAnimation(6, 2, false, false);
+        }else{
+            slash = new SlashAnimation(6, 2, false, true);
+        }
 
         // changes depending on which direction the player is facing
         int slashOffsetX = direction ? 30: -30; 
@@ -333,17 +349,17 @@ public class Player extends ScrollingActor {
             checkSlashHit(slashScreenX, slashScreenY, BASIC_ATTACK_DAMAGE, world);
         }
     }
-    
+
     private void magicAttack(){
         isAttacking = true;
         abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
-        
-        SlashAnimation magic = new SlashAnimation(3,4);
-        
+
+        SlashAnimation magic = new SlashAnimation(3,4,true, false);
+
         // changes direction based on where the player is facing
-        int magicOffsetX = direction ? 30 : -30;
+        int magicOffsetX = direction ? 150 : -150;
         int magicOffsetY = 0;
-        
+
         GameWorld world = (GameWorld) getWorld();
         if(world != null){
             // World position
@@ -352,49 +368,60 @@ public class Player extends ScrollingActor {
             // Screen position
             int magicScreenX = camera.worldToScreenX(magicWorldX);
             int magicScreenY = camera.worldToScreenY(magicWorldY);
-            
+
             world.addObject(magic, magicScreenX, magicScreenY);
-            
+
             // Flip if facing left
             if(!direction){
                 GreenfootImage magicImg = magic.getImage();
                 magicImg.mirrorHorizontally();
                 magic.setImage(magicImg);
             }
-            
+
             // spawn projectile
             checkRadiusHit(magicScreenX, magicScreenY, MAGIC_ATTACK_RADIUS, MAGIC_ATTACK_DAMAGE, world);
         }
     }
-    
+
     private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
         if(world == null) return;
-        
+
         int attackScreenX = attackX;
         int attackScreenY = attackY;
-        
+
         //ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsInRange(radius, BaseEnemy.class));
     }
 
     private void checkSlashHit(int attackX, int attackY, int damage, World world){
         if(world == null) return;
-        
+
         int attackScreenX = attackX;
         int attackScreenY = attackY;
-        
+
         ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
-            attackScreenX,
-            attackScreenY,
-            BaseEnemy.class
-        ));
-        
+                    attackScreenX,
+                    attackScreenY,
+                    BaseEnemy.class
+                ));
+
+        ArrayList<Boss> bosses = new ArrayList<Boss>(world.getObjectsAt(
+                    attackScreenX,
+                    attackScreenY,
+                    Boss.class
+                ));
+
         for(BaseEnemy enemy : enemies){
             enemy.takeDamage(damage);
             currentMana++;
         }
-            
+
+        for(Boss boss : bosses){
+            boss.takeDamage(damage);
+            currentMana++;
+        }
+
     }
-    
+
     private void animateRunning(){
         runningAnimCounter.increment();
 
@@ -525,15 +552,15 @@ public class Player extends ScrollingActor {
             velocityY = 0;
         }
     }
-    
+
     public void takeDamage(int dmg){
         currentHealth = Math.max(0, currentHealth - dmg);
     }
-    
+
     public void heal(int hp){
         currentHealth = Math.min(maxHealth, currentHealth + hp);
     }
-    
+
     public void increaseMaxHealth(int hp){
         maxHealth = Math.min(maxHealth + hp, ABSOLUTE_MAX_HEALTH_POINTS);
         currentHealth = maxHealth;
@@ -548,7 +575,7 @@ public class Player extends ScrollingActor {
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
             if( getWorld() instanceof RoomOne){
-                Greenfoot.setWorld(new RoomTwo(this));
+                Greenfoot.setWorld(new RoomTwo("RoomTwo"));
             }else if(getWorld() instanceof RoomTwo){
                 Greenfoot.setWorld(new RoomThree(this));
             }
@@ -556,14 +583,16 @@ public class Player extends ScrollingActor {
             inDoor = false;
         }
     }
+
     private void checkInteractive(){
         if (isDoorAtPosition(worldX, worldY)) {
             inInteractive = true;
-            
+
         } else {
             inInteractive = false;
         }
     }
+
     /**
      * Check if the player's hitbox at this position would collide with solid tiles
      * @author Paul assisted by Claude
@@ -571,16 +600,16 @@ public class Player extends ScrollingActor {
     private boolean isSolidAtPosition(int posX, int posY) {
         int halfWidth = getImage().getWidth() / 2;
         int halfHeight = getImage().getHeight() / 2;
-    
+
         // Check all edges: corners + middle points for better collision
         return checkTileAt(posX - halfWidth + 1, posY - halfHeight + 1) ||  // Top-left corner
-               checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right corner
-               checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left corner
-               checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right corner
-               checkTileAt(posX, posY - halfHeight + 1) ||                  // Top-middle (HEAD)
-               checkTileAt(posX, posY + halfHeight - 1) ||                  // Bottom-middle (FEET)
-               checkTileAt(posX - halfWidth + 1, posY) ||                   // Left-middle
-               checkTileAt(posX + halfWidth - 1, posY);                     // Right-middle
+        checkTileAt(posX + halfWidth - 1, posY - halfHeight + 1) ||  // Top-right corner
+        checkTileAt(posX - halfWidth + 1, posY + halfHeight - 1) ||  // Bottom-left corner
+        checkTileAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right corner
+        checkTileAt(posX, posY - halfHeight + 1) ||                  // Top-middle (HEAD)
+        checkTileAt(posX, posY + halfHeight - 1) ||                  // Bottom-middle (FEET)
+        checkTileAt(posX - halfWidth + 1, posY) ||                   // Left-middle
+        checkTileAt(posX + halfWidth - 1, posY);                     // Right-middle
     }
 
     /**
@@ -597,6 +626,7 @@ public class Player extends ScrollingActor {
         checkDoorAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
         checkDoorAt(posX, posY);                                      // Center
     }
+
     /**
      * @author Paul
      */
@@ -611,6 +641,7 @@ public class Player extends ScrollingActor {
         checkInteractiveAt(posX + halfWidth - 1, posY + halfHeight - 1) ||  // Bottom-right
         checkInteractiveAt(posX, posY);                                      // Center
     }
+
     /**
      *  Check if a specific world coordinate contains a solid tile
      *  @author Paul
@@ -642,6 +673,7 @@ public class Player extends ScrollingActor {
 
         return tileType == 3 ;
     }
+
     /**
      * @author Paul
      */
@@ -660,41 +692,52 @@ public class Player extends ScrollingActor {
     public void setHealth(int health){
         currentHealth = health;
     }
+
     public void setMana(int mana){
         currentMana = mana;
     }
-    
+
     // Getters
     public boolean isOnGround() {
         return onGround;
     }
+
     public int getHealth(){
         return currentHealth;
     }
+
     public int getMaxHealth(){
         return maxHealth;
     }
+
     public int getAbsMaxHealth(){
         return ABSOLUTE_MAX_HEALTH_POINTS;
     }
+
     public int getMana(){
         return currentMana;
     }
+
     public boolean isInDoor(){
         return inDoor;
     }
+
     public boolean isInInteractive(){
         return inInteractive;
     }
+
     public double getVelocityX() {
         return velocityX;
     }
+
     public double getVelocityY() {
         return velocityY;
     }
+
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
+
     public int getItemCount(int item){
         return itemCount[item];
     }

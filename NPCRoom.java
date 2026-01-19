@@ -9,7 +9,16 @@ public class NPCRoom extends GameWorld {
     
     private static final int NPC_TILES_WIDE = NPC_WORLD_WIDTH / TILE_SIZE;
     private static final int NPC_TILES_HIGH = NPC_WORLD_HEIGHT / TILE_SIZE;
-    public NPCRoom(Player existingPlayer) {
+    
+    // Default spawn for new game (center of room)
+    private static final int DEFAULT_SPAWN_X = 400;
+    private static final int DEFAULT_SPAWN_Y = 500;
+    
+    // Safe spawn when entering from another room (away from doors, on platform)
+    private static final int ENTRY_SPAWN_X = 150;
+    private static final int ENTRY_SPAWN_Y = 500;
+    
+    public NPCRoom(String sourceRoom) {
         super(); // This creates the camera
         
         camera.centerOn(NPC_WORLD_WIDTH / 2, NPC_WORLD_HEIGHT / 2);
@@ -21,15 +30,28 @@ public class NPCRoom extends GameWorld {
         createPlatformVisuals();
         createInteractiveDoorVisuals();
         
+        // Determine spawn position
+        int spawnX = DEFAULT_SPAWN_X;
+        int spawnY = DEFAULT_SPAWN_Y;
         
-        if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 400, 500);
-        } else {
-            player = new Player(camera);
-            addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(400, 500);
+        if (sourceRoom != null) {
+            RoomPositionTracker tracker = RoomPositionTracker.getInstance();
+            RoomPositionTracker.SpawnPosition spawn = tracker.getSpawnPosition(sourceRoom, "NPCRoom");
+            
+            if (spawn != null) {
+                spawnX = spawn.x;
+                spawnY = spawn.y;
+            } else {
+                // If no specific mapping, use safe entry spawn
+                spawnX = ENTRY_SPAWN_X;
+                spawnY = ENTRY_SPAWN_Y;
+            }
         }
         
+        // Create player at spawn position
+        player = new Player(camera);
+        addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        player.setWorldPosition(spawnX, spawnY);
         
         initalizeDisplays();
         
@@ -37,13 +59,11 @@ public class NPCRoom extends GameWorld {
             updateAllActors();
             updateBackground();
         }
-        
-        PotionMerchant potionMerchant = new PotionMerchant();
-        addObject(potionMerchant, getWidth()/2, getHeight()/2 + 200);
+
     }
     
     public NPCRoom() {
-        this(null);
+        this((String)null);
     }
     
     // Override act() to keep camera static (don't follow player)
@@ -106,7 +126,7 @@ public class NPCRoom extends GameWorld {
             }
         }
         
-        // Walls - outer boundaries for 800x600 room (40 tiles wide x 30 tiles high)
+        // Walls - outer boundaries for 800x600 room
         java.util.ArrayList<Integer> wallXList = new java.util.ArrayList<>();
         java.util.ArrayList<Integer> wallYList = new java.util.ArrayList<>();
         
@@ -116,7 +136,7 @@ public class NPCRoom extends GameWorld {
             wallYList.add(y);
         }
         
-        // Right wall (x=39, all y)
+        // Right wall
         for (int y = 0; y < NPC_TILES_HIGH; y++) {
             wallXList.add(NPC_TILES_WIDE - 1);
             wallYList.add(y);
@@ -128,8 +148,7 @@ public class NPCRoom extends GameWorld {
             wallYList.add(0);
         }
         
-        // Bottom wall (y=29, all x) - removed to prevent glitching
-        // Add a floor platform instead if needed in platformData
+        // Bottom wall removed to prevent glitching
         
         int[] wallsX = new int[wallXList.size()];
         int[] wallsY = new int[wallYList.size()];
@@ -138,16 +157,16 @@ public class NPCRoom extends GameWorld {
             wallsY[i] = wallYList.get(i);
         }
         
-        // Doors at left side (scaled for smaller room)
+        // Regular door tiles at left side - AVOID spawning on these
         int[] doorX = new int[]{0};
-        int[] doorY = new int[]{15}; // Mid-height door for 30-tile-high room
+        int[] doorY = new int[]{15}; // Mid-height door
         
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
         
-        //Interactive Doors (scaled for 800x600 room)
+        // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
+            {50, 500, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -199,8 +218,8 @@ public class NPCRoom extends GameWorld {
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
-            NPC_WORLD_WIDTH,  // Use 800 instead of WORLD_WIDTH
-            NPC_WORLD_HEIGHT, // Use 600 instead of WORLD_HEIGHT
+            NPC_WORLD_WIDTH,
+            NPC_WORLD_HEIGHT,
             true,
             true,
             true,
@@ -238,7 +257,7 @@ public class NPCRoom extends GameWorld {
     
     private void createInteractiveDoorVisuals() {
         int[][] doorRegions = {
-            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
+            {50, 500, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {
@@ -247,10 +266,10 @@ public class NPCRoom extends GameWorld {
             int width = region[2];
             int height = region[3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height, "bossroom");
+            // FIXED: Changed door ID from "bossroom" to "npcroom"
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, "npcroom");
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
     }
 }
-

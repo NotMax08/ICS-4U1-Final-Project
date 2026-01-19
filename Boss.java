@@ -4,6 +4,7 @@ import greenfoot.*;
  */
 public class Boss extends Actor
 {   
+    
     private boolean entering = false;
     private boolean teleporting = false;
     private boolean attackOne = false;
@@ -31,6 +32,9 @@ public class Boss extends Actor
     
     private int attackNumber;
     
+    private static final int totalHealth = 100;
+    private int currentHealth;
+    
     /**
      * 1 & 2 (attackOne), 
      * 3 (attackTwo), 
@@ -47,6 +51,8 @@ public class Boss extends Actor
         isNew = true;
         
         attackNumber = 0;
+        
+        currentHealth = totalHealth;
         
         if (variant == 1){
             enterScreen();
@@ -256,4 +262,14 @@ public class Boss extends Actor
             attack3(false,true);
         }
     }
+    
+    public void takeDamage(int damage){
+        currentHealth -= damage;
+        System.out.println(currentHealth);
+        
+        if (currentHealth <= 0){
+            getWorld().removeObject(this);
+        }
+    }
+    
 }
