@@ -45,7 +45,7 @@ public abstract class GameWorld extends World {
             Potions.class,
             TextBox.class,
             ShopIcons.class,
-            ShopUI.class,    
+            ShopUI.class,
             MapGridDebugOverlay.class,
             InventoryDisplay.class,
             AbilityDisplay.class,
