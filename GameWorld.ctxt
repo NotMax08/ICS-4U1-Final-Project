@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=GameWorld
-comment0.text=\r\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\r\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\r\n\ \r\n\ @author\ Paul\ and\ Robin\r\n
+comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ @author\ Paul\ and\ Robin\n
 comment1.params=
 comment1.target=GameWorld()
 comment10.params=
@@ -19,10 +19,10 @@ comment2.params=
 comment2.target=void\ setPaintOrder()
 comment3.params=
 comment3.target=void\ act()
-comment3.text=\r\n\ Main\ act\ loop\ -\ update\ camera,\ actors\ and\ background\ \r\n
+comment3.text=\n\ Main\ act\ loop\ -\ update\ camera,\ actors\ and\ background\ \n
 comment4.params=
 comment4.target=void\ initalizeDisplays()
-comment4.text=\r\n\ Initialize\ display\ elements\r\n\ Can\ only\ be\ called\ after\ the\ player\ is\ created\ \r\n
+comment4.text=\n\ Initialize\ display\ elements\n\ Can\ only\ be\ called\ after\ the\ player\ is\ created\ \n
 comment5.params=
 comment5.target=void\ updateBackground()
 comment6.params=
