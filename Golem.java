@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Golem extends GroundEnemy {
     public static final int GOLEM_HEALTH = 50;
-    public static final int GOLEM_DAMAGE = 2;
+    public static final int GOLEM_DAMAGE = 1;
     public static final int GOLEM_DETECTION_RANGE = 300;
     public static final int GOLEM_ATTACK_RANGE = 100;
     public static final int PATROL_SPEED = 1;

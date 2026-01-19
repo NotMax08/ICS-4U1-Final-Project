@@ -26,8 +26,8 @@ public class Player extends ScrollingActor {
     private static final int MAGIC_ATTACK_COOLDOWN = 80;
     private static final int MAGIC_ATTACK_DAMAGE = 20;
     private static final int MAGIC_ATTACK_RADIUS = 30;
-    private static final int STARTING_HEALTH_POINTS= 3;
-    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int STARTING_HEALTH_POINTS= 5;
+    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 10;
     private static final int MAX_MANA = 8;
 
     private static int maxHealth = STARTING_HEALTH_POINTS;
@@ -43,7 +43,7 @@ public class Player extends ScrollingActor {
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
     private boolean attackUpgraded = false;
-    private boolean magicUnlocked = false;
+    private static boolean magicUnlocked = false;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -708,7 +708,7 @@ public class Player extends ScrollingActor {
     public boolean isAttackUpgraded(){
         return attackUpgraded;
     }
-    public boolean isMagicUnlocked(){
+    public static boolean isMagicUnlocked(){
         return magicUnlocked;
     }
     public boolean isOnGround() {

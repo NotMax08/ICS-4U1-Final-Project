@@ -4,7 +4,6 @@ import greenfoot.*;
  */
 public class BossWeapon extends Actor
 {
-    
     private boolean teleporting = false;
     private boolean teleported = false;
     
@@ -28,9 +27,9 @@ public class BossWeapon extends Actor
     
     private boolean facingLeft;
     
-    
-    //Constructor for objects of class BossWeapon
-     
+    /**
+     * Constructor for objects of class BossWeapon
+     */
     public BossWeapon()
     {
         this.setRotation(0);
@@ -184,15 +183,16 @@ public class BossWeapon extends Actor
         else{
             if (attack1){
                 p.takeDamage(1);
-                System.out.println("Hit 1");
             }
             else if (attack2){
                 p.takeDamage(1);
-                System.out.println("Hit 2");
             }
             lethal = false;
             return true;
         }
     }
     
+    public void removeSelf(){
+        getWorld().removeObject(this);
+    }
 }

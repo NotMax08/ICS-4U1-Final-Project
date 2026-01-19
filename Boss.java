@@ -4,12 +4,12 @@ import greenfoot.*;
  */
 public class Boss extends Actor
 {   
-    
     private boolean entering = false;
     private boolean teleporting = false;
     private boolean attackOne = false;
     private boolean attackTwo = false;
     private boolean attackThree = false;
+    private boolean waiting = false;
     
     private int currentX;
     private int currentY;
@@ -32,16 +32,29 @@ public class Boss extends Actor
     
     private int attackNumber;
     
-    private static final int totalHealth = 100;
+    private static final int totalHealth = 80;
     private int currentHealth;
+    
+    private SuperStatBar bossHealthBar;
+    
+    private Color green = new Color(200,255,200);
+    private Color black = new Color(0,0,0);
+    
+    private int waitFrames;
+    
+    public static boolean secondPhase = false;
+    
+    private int variant;
     
     /**
      * 1 & 2 (attackOne), 
      * 3 (attackTwo), 
      * 4 & 5 (attackThree w/ teleport), 
-     * 6 & 7 (attackThree no teleport)
+     * 6 & 7 (attackThree no teleport),
+     * 8 (wait for 15 frames),
+     * 9 (wait for 45 frames)
      */
-    private int[] attackPattern = {1,2,3,4,5,6,7};
+    private int[] attackPattern = {1,2,3,8,3,8,4,5,4,5,9};
     
     public Boss(int variant)
     {
@@ -53,6 +66,8 @@ public class Boss extends Actor
         attackNumber = 0;
         
         currentHealth = totalHealth;
+        
+        this.variant = variant;
         
         if (variant == 1){
             enterScreen();
@@ -84,6 +99,9 @@ public class Boss extends Actor
         }
         else if (attackThree){
             attackingThree();
+        }
+        else if (waiting){
+            waiting();
         }
     }
     
@@ -205,6 +223,8 @@ public class Boss extends Actor
     private void entering(){
         this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+enterSpeedMultiplier);
         if (this.getY() >= 300){
+            bossHealthBar = new SuperStatBar(totalHealth, totalHealth, null, 400, 30, 0, green, black, false, black, 3);
+            getWorld().addObject(bossHealthBar,400,50);
             entering = false;
         }
     }
@@ -220,11 +240,24 @@ public class Boss extends Actor
     }
     
     private boolean isAttacking(){
-        if (attackOne==false && attackTwo==false && attackThree==false){
+        if (attackOne==false && attackTwo==false && attackThree==false && waiting==false){
             return false;
         }
         else{
             return true;
+        }
+    }
+    
+    private void waitFrames(int frames){
+        waiting = true;
+        attackCounter = 0;
+        waitFrames = frames;
+    }
+    
+    private void waiting(){
+        attackCounter++;
+        if (attackCounter==waitFrames){
+            waiting = false;
         }
     }
     
@@ -261,15 +294,24 @@ public class Boss extends Actor
         else if (attackType==7){
             attack3(false,true);
         }
+        else if (attackType==8){
+            waitFrames(15);
+        }
+        else if (attackType==9){
+            waitFrames(45);
+        }
     }
     
     public void takeDamage(int damage){
         currentHealth -= damage;
-        System.out.println(currentHealth);
+        bossHealthBar.update(currentHealth);
         
         if (currentHealth <= 0){
+            if (variant == 1){
+                //getWorld().addObject
+            }
             getWorld().removeObject(this);
+            BossRoom.weapon1.removeSelf();
         }
     }
-    
 }
