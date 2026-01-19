@@ -43,7 +43,7 @@ public class Player extends ScrollingActor {
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
     private boolean attackUpgraded = false;
-    private boolean magicUnlocked = false;
+    private static boolean magicUnlocked = false;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -708,7 +708,7 @@ public class Player extends ScrollingActor {
     public boolean isAttackUpgraded(){
         return attackUpgraded;
     }
-    public boolean isMagicUnlocked(){
+    public static boolean isMagicUnlocked(){
         return magicUnlocked;
     }
     public boolean isOnGround() {
