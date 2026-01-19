@@ -397,20 +397,21 @@ public class Player extends ScrollingActor {
     private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
         if(world == null) return;
 
-        int attackScreenX = attackX;
-        int attackScreenY = attackY;
+        
+        GameWorld gameWorld = (GameWorld) world;
 
         // Get all enemies within the radius
-        java.util.List<BaseEnemy> allEnemies = new ArrayList<BaseEnemy>(world.getObjects(BaseEnemy.class));
-        java.util.List<Boss> allBosses = new ArrayList<Boss>(world.getObjects(Boss.class));
-        
+        ArrayList<BaseEnemy> allEnemies = new ArrayList<BaseEnemy>(world.getObjects(BaseEnemy.class));
+        ArrayList<Boss> allBosses = new ArrayList<Boss>(world.getObjects(Boss.class));
         
         // Check distance to each enemy and damage if within radius
         for(BaseEnemy enemy : allEnemies){
-            int enemyX = enemy.getX();
-            int enemyY = enemy.getY();
+            // Get enemy's WORLD position
+            int enemyWorldX = enemy.getWorldX();
+            int enemyWorldY = enemy.getWorldY();
             
-            double distance = Math.sqrt(Math.pow(enemyX - attackX , 2 ) + Math.pow(enemyY - attackY, 2));
+            // Calculate distance in world coordinates
+            double distance = Math.sqrt(Math.pow(enemyWorldX - attackX, 2) + Math.pow(enemyWorldY - attackY, 2));
             
             if(distance <= radius){
                 enemy.takeDamage(damage);
@@ -419,11 +420,12 @@ public class Player extends ScrollingActor {
         
         // Check distance to each boss and damage if within radius
         for(Boss boss : allBosses){
-            int bossX = boss.getX();
-            int bossY = boss.getY();
+            // Get boss's WORLD position
+            int bossWorldX = boss.getWorldX();
+            int bossWorldY = boss.getWorldY();
             
-            // Calculate distance from attack center
-            double distance = Math.sqrt(Math.pow(bossX - attackX, 2) + Math.pow(bossY - attackY, 2));
+            // Calculate distance in world coordinates
+            double distance = Math.sqrt(Math.pow(bossWorldX - attackX, 2) + Math.pow(bossWorldY - attackY, 2));
             
             if(distance <= radius){
                 boss.takeDamage(damage);

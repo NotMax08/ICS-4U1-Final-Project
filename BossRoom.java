@@ -12,8 +12,9 @@ public class BossRoom extends GameWorld {
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
     // Static references for Boss class to access
-    public static BossWeapon weapon1 = new BossWeapon();
     public static Boss staBee;
+    public static Boss staBeePhaseTwo1;
+    public static Boss staBeePhaseTwo2;
     
     // Default spawn for new game (center of room)
     private static final int DEFAULT_SPAWN_X = 400;
@@ -68,8 +69,9 @@ public class BossRoom extends GameWorld {
         }
         
         staBee = new Boss(1);
+        staBeePhaseTwo1 = new Boss(2);
+        staBeePhaseTwo2 = new Boss(3);
         addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn off screen
-        addObject(weapon1, -200, -200);
     }
     
     public BossRoom() {

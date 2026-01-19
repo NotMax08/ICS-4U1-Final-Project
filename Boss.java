@@ -32,7 +32,7 @@ public class Boss extends Actor
     
     private int attackNumber;
     
-    private static final int totalHealth = 80;
+    private static final int totalHealth = 20;
     private int currentHealth;
     
     private SuperStatBar bossHealthBar;
@@ -46,6 +46,8 @@ public class Boss extends Actor
     
     private int variant;
     
+    private BossWeapon weapon;
+    
     /**
      * 1 & 2 (attackOne), 
      * 3 (attackTwo), 
@@ -54,7 +56,7 @@ public class Boss extends Actor
      * 8 (wait for 15 frames),
      * 9 (wait for 45 frames)
      */
-    private int[] attackPattern = {1,2,3,8,3,8,4,5,4,5,9};
+    private int[] attackPattern;
     
     public Boss(int variant)
     {
@@ -69,15 +71,25 @@ public class Boss extends Actor
         
         this.variant = variant;
         
-        if (variant == 1){
-            enterScreen();
+        if (variant==1){
+            attackPattern = new int[]{1,2,3,3,8,4,5,4,5,9};
         }
+        else if (variant==2){
+            attackPattern = new int[]{1,2,3,9,3,9,4,9,4,9,9};
+        }
+        else{
+            attackPattern = new int[]{9,1,2,3,9,3,9,9,5,9,5};
+        }
+        enterScreen();
     }
     
-    private void addedToWorld(){
+    protected void addedToWorld(World world){
         currentX = this.getX();
         currentY = this.getY();
         isNew=false;
+        weapon = new BossWeapon();
+        world.addObject(weapon, -200, -200);
+        getWorld().addObject(weapon, -200, -200);
     }
     
     public void act(){
@@ -113,7 +125,7 @@ public class Boss extends Actor
         // Initial teleport
         if (teleport){
             teleport(400,300,"FrontUp");
-            BossRoom.weapon1.teleport(490,280,true,270);
+            weapon.teleport(490,280,true,270);
         }
         if (!invert){
             type=3;
@@ -139,7 +151,7 @@ public class Boss extends Actor
             else{
                 setI("LeftThrow");
             }
-            BossRoom.weapon1.attackFly1(attackDirectionLeft);
+            weapon.attackFly1(attackDirectionLeft);
         }
         if(attackCounter==62){
             attackOne = false;
@@ -149,7 +161,7 @@ public class Boss extends Actor
     
     private void attackingTwo(){
         if (attackCounter==0){
-            BossRoom.weapon1.attackFly2();
+            weapon.attackFly2();
         }
         if(attackCounter==45){
             setI("DownDown");
@@ -168,11 +180,11 @@ public class Boss extends Actor
         // Initial teleport
         if(attackDirectionLeft){
             teleport(60,465,"RightUp");
-            BossRoom.weapon1.teleport(60 + 25,465 - weaponYOffset,attackDirectionLeft,0);
+            weapon.teleport(60 + 25,465 - weaponYOffset,attackDirectionLeft,0);
         }
         else{
             teleport(740,465,"LeftUp");
-            BossRoom.weapon1.teleport(740 - 25,465 - weaponYOffset,attackDirectionLeft,0);
+            weapon.teleport(740 - 25,465 - weaponYOffset,attackDirectionLeft,0);
         }
     }
     
@@ -183,7 +195,7 @@ public class Boss extends Actor
         // Initial teleport
         int playerLocation = BossRoom.player.getX();
         teleport(playerLocation,200,"DownUp");
-        BossRoom.weapon1.teleport(playerLocation,200 - weaponYOffset - 40,true,90);
+        weapon.teleport(playerLocation,200 - weaponYOffset - 40,true,90);
     }
    
     private void teleport(int x, int y, String newPose){
@@ -221,7 +233,7 @@ public class Boss extends Actor
     }
     
     private void entering(){
-        this.setLocation(BossRoom.BOSS_WORLD_WIDTH/2,this.getY()+enterSpeedMultiplier);
+        this.setLocation(this.getX(),this.getY()+enterSpeedMultiplier);
         if (this.getY() >= 300){
             bossHealthBar = new SuperStatBar(totalHealth, totalHealth, null, 400, 30, 0, green, black, false, black, 3);
             getWorld().addObject(bossHealthBar,400,50);
@@ -308,10 +320,19 @@ public class Boss extends Actor
         
         if (currentHealth <= 0){
             if (variant == 1){
-                //getWorld().addObject
+                getWorld().addObject(BossRoom.staBeePhaseTwo1,200,-150);
+                getWorld().addObject(BossRoom.staBeePhaseTwo2,600,-150);
             }
             getWorld().removeObject(this);
-            BossRoom.weapon1.removeSelf();
+            weapon.removeSelf();
         }
+    }
+    
+    public int getWorldX(){
+        return this.getX();
+    }
+    
+    public int getWorldY(){
+        return this.getY();
     }
 }
