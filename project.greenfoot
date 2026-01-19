@@ -488,7 +488,11 @@ dependency99.type=UsesDependency
 editor.fx.0.height=923
 editor.fx.0.width=736
 editor.fx.0.x=734
+<<<<<<< Updated upstream
 editor.fx.0.y=34
+=======
+editor.fx.0.y=33
+>>>>>>> Stashed changes
 height=753
 package.numDependencies=162
 package.numTargets=64
