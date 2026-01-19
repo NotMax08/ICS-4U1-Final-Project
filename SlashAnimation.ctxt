@@ -4,8 +4,8 @@ comment0.text=\n\ Sword\ slashing\ animation\ effect\n\ \n\ @author\ Abithan,\ a
 comment1.params=
 comment1.target=SlashAnimation()
 comment1.text=\n\ Constructor\ -\ Simple\ version\ with\ default\ settings\n
-comment2.params=numFrames\ speed\ unlocked
-comment2.target=SlashAnimation(int,\ int,\ boolean)
+comment2.params=numFrames\ speed\ unlocked\ upgraded
+comment2.target=SlashAnimation(int,\ int,\ boolean,\ boolean)
 comment2.text=\n\ Constructor\ -\ Customizable\ version\n\ \n\ @param\ numFrames\ Number\ of\ animation\ frames\ (images)\n\ @param\ speed\ Acts\ between\ frame\ changes\ (lower\ \=\ faster)\n
 comment3.params=
 comment3.target=void\ animateSlash()

@@ -19,7 +19,7 @@ public class SlashAnimation extends Actor
      */
     public SlashAnimation()
     {
-        this(6, 5, false); // 4 frames, 50ms each
+        this(6, 5, false, false); // 4 frames, 50ms each
     }
 
     /**
@@ -28,7 +28,7 @@ public class SlashAnimation extends Actor
      * @param numFrames Number of animation frames (images)
      * @param speed Acts between frame changes (lower = faster)
      */
-    public SlashAnimation(int numFrames, int speed, boolean unlocked)
+    public SlashAnimation(int numFrames, int speed, boolean unlocked, boolean upgraded)
     {
         slashFrames = new GreenfootImage[numFrames];
         this.framesPerImage = speed;
@@ -37,8 +37,13 @@ public class SlashAnimation extends Actor
             // Load slash animation frames
             for (int i = 0; i < slashFrames.length; i++)
             {
-                slashFrames[i] = new GreenfootImage("images/slash" + i + ".png");
-                slashFrames[i].scale(160, 80);
+                if(!upgraded){
+                    slashFrames[i] = new GreenfootImage("images/slash" + i + ".png");
+                    slashFrames[i].scale(160, 80);
+                }else{
+                    slashFrames[i] = new GreenfootImage("images/slashUpgrade" + i + ".png");
+                    slashFrames[i].scale(200, 100);
+                }
             }
         }else{
             // Load magic animation frames
@@ -47,7 +52,7 @@ public class SlashAnimation extends Actor
                 slashFrames[i].scale(300,250);
             }
         }
-        
+
         setImage(slashFrames[0]);
     }
 
