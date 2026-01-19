@@ -1,4 +1,5 @@
-import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import greenfoot.*;
+
 /**
  * @author Paul
  */
@@ -9,6 +10,7 @@ class InteractiveDoor extends ScrollingActor {
     private boolean showingMessage = false;
     private Message messageActor = null;
     private boolean debugVisuals;
+    
     public InteractiveDoor(Camera camera, int width, int height, String id) {
         super(camera);
         this.width = width;
@@ -28,104 +30,105 @@ class InteractiveDoor extends ScrollingActor {
             img.fillRect(0,0, width, height);
             setImage(img);
         }
-        
     }
+    
     public void act(){
         handleInput();
     }
+    
     public boolean containsWorldPoint(int worldX, int worldY) {
         GameWorld world = (GameWorld) getWorld();
         int tileX = world.worldToTileX(worldX);
         int tileY = world.worldToTileY(worldY);
         
-        // Check tile if is interactive door
         int tileType = world.getMapGrid().getTileAt(tileX, tileY);
-        return tileType == 4; // 2 = interactive door
+        return tileType == 5; // 5 = interactive door
     }
+    
     public void handleInput(){
         World world = getWorld();
         if (world == null) return;
+        
         if (isTouching(Player.class)){
-            if(id.equals("roomone")){
-                if (messageActor == null) {
-                    messageActor = new Message("entermsg.png",camera );
-                    world.addObject(messageActor, 0,0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                  if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new BossRoom());
-                }
-            } else if(id.equals("backtormone")){
-                if (messageActor == null){
-                    messageActor = new Message("entermsg.png", camera);
-                    world.addObject(messageActor, 0,0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                  if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomOne());
-                }
-            }else if(id.equals("enterboss")){
-                if (messageActor == null) {
-                    messageActor = new Message("entermsg.png", camera);
-                    world.addObject(messageActor, 0,0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                  if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new BossRoomTwo());
-                }
-            }else if(id.equals("npcenter")){
-                if (messageActor == null) {
-                    messageActor = new Message("entermsg.png", camera);
-                    world.addObject(messageActor, 0, 0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new NPCRoom());
-                }
-            } else if (id.equals("bossroom")){
-                if (messageActor == null) {
-                    messageActor = new Message("entermsg.png", camera);
-                    world.addObject(messageActor, 0,0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomOne());
-                }
-            }else if (id.equals("npcroom")){
-                if (messageActor == null) {
-                    messageActor = new Message("entermsg.png", camera);
-                    world.addObject(messageActor, 0,0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomTwo());
-                }
-            }else if (id.equals("bossroomtwo")){
-                if (messageActor == null) {
-                    messageActor = new Message("entermsg.png", camera);
-                    world.addObject(messageActor, 0,0);
-                    messageActor.setWorldPosition(worldX, worldY - 80);
-                }
-                if (Greenfoot.isKeyDown("f")) {
-                    Greenfoot.setWorld(new RoomTwo());
-                }
+            // Show message
+            if (messageActor == null) {
+                messageActor = new Message("entermsg.png", camera);
+                world.addObject(messageActor, 0, 0);
+                messageActor.setWorldPosition(worldX, worldY - 80);
             }
             
-            
-        }else {
+            // Handle door transitions
+            if (Greenfoot.isKeyDown("f")) {
+                String currentRoom = getCurrentRoomName(world);
+                
+                // Transition to new room with source room info
+                transitionToRoom(id, currentRoom);
+            }
+        } else {
             if (messageActor != null) {
                 world.removeObject(messageActor);
                 messageActor = null;
             }
         }
     }
+    
+    /**
+     * Get the current room name based on world class
+     */
+    private String getCurrentRoomName(World world) {
+        return world.getClass().getSimpleName();
+    }
+    
+    /**
+     * Get target room name from door ID
+     */
+    private String getTargetRoomName(String doorId) {
+        switch(doorId) {
+            case "roomone": return "BossRoom";
+            case "backtormone": return "RoomOne";
+            case "enterboss": return "BossRoomTwo";
+            case "npcenter": return "NPCRoom";
+            case "bossroom": return "RoomOne";
+            case "npcroom": return "RoomTwo";
+            case "bossroomtwo": return "RoomTwo";
+            default: return "";
+        }
+    }
+    
+    /**
+     * Transition to the appropriate room based on door ID
+     */
+    private void transitionToRoom(String doorId, String sourceRoom) {
+        switch(doorId) {
+            case "roomone":
+                Greenfoot.setWorld(new BossRoom(sourceRoom));
+                break;
+            case "backtormone":
+                Greenfoot.setWorld(new RoomOne(sourceRoom));
+                break;
+            case "enterboss":
+                Greenfoot.setWorld(new BossRoomTwo(sourceRoom));
+                break;
+            case "npcenter":
+                Greenfoot.setWorld(new NPCRoom(sourceRoom));
+                break;
+            case "bossroom":
+                Greenfoot.setWorld(new RoomOne(sourceRoom));
+                break;
+            case "npcroom":
+                Greenfoot.setWorld(new RoomTwo(sourceRoom));
+                break;
+            case "bossroomtwo":
+                Greenfoot.setWorld(new RoomTwo(sourceRoom));
+                break;
+        }
+    }
+    
     public int getWidth() { 
         return width; 
     }
+    
     public int getHeight() { 
         return height; 
     }
 }
-
-
-
