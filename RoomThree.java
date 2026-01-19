@@ -25,7 +25,7 @@ public class RoomThree extends GameWorld {
         }
         createInteractiveDoors();
         
-        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
+        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class, Fog.class, BaseEnemy.class, Spawner.class);
         
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -45,6 +45,10 @@ public class RoomThree extends GameWorld {
         player = new Player(camera);
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(spawnX, spawnY);
+        
+        // Create fog world effect to reduce visibility
+        Fog fog = new Fog(player);
+        addObject(fog, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         
         initalizeDisplays();
         

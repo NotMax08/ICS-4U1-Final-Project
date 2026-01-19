@@ -53,7 +53,7 @@ public class RoomPositionTracker {
         
         // RoomTwo -> RoomOne (via "backtormone" door at 700, 1130)
         // Vertical door, spawn above it on platform
-        doorEntries.put("RoomTwo->RoomOne", new DoorEntry(700, 1130, 0, -200));
+        doorEntries.put("RoomTwo->RoomOne", new DoorEntry(1330, 130, 0, 0));
         
         // RoomOne -> RoomTwo (reverse)
         doorEntries.put("RoomOne->RoomTwo", new DoorEntry(700, 1130, 0, -200));
