@@ -84,8 +84,8 @@ public class RoomTwo extends GameWorld {
         knight.setWorldPosition(1260, 1100);
         
         Knight knight2 = new Knight(camera);
-        addObject(knight2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-        knight2.setWorldPosition(1700, 250);
+        //addObject(knight2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        //knight2.setWorldPosition(1700, 250);
     }
     
     // Default constructor for new game

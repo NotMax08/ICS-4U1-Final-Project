@@ -12,7 +12,7 @@ public class Knight extends GroundEnemy {
     public static final int WALL_CHECK_DISTANCE = 10;
     
     // Scale factor for all images
-    private static final double SCALE = 0.35;
+    private static final double SCALE = 0.4;
     
     // Animation images
     private GreenfootImage idleImage;
