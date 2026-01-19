@@ -436,9 +436,52 @@ public class Player extends ScrollingActor {
     private void checkSlashHit(int attackX, int attackY, int damage, World world){
         if(world == null) return;
 
-        int attackScreenX = attackX;
-        int attackScreenY = attackY;
+        GameWorld gameWorld = (GameWorld) world;
+        
+        // Define slash hitbox size (width x height)
+        int slashWidth = attackUpgraded ? 100 : 80;  // Upgraded slash is wider
+        int slashHeight = attackUpgraded ? 50 : 40;
+        
+        // Get all enemies and bosses
+        ArrayList<BaseEnemy> allEnemies = new ArrayList<BaseEnemy>(world.getObjects(BaseEnemy.class));
+        ArrayList<Boss> allBosses = new ArrayList<Boss>(world.getObjects(Boss.class));
 
+        // Check if each enemy is within the slash hitbox
+        for(BaseEnemy enemy : allEnemies){
+            int enemyWorldX = enemy.getWorldX();
+            int enemyWorldY = enemy.getWorldY();
+            
+            // Check if enemy is within rectangular hitbox
+            if(Math.abs(enemyWorldX - attackX) <= slashWidth/2 && 
+               Math.abs(enemyWorldY - attackY) <= slashHeight/2){
+                if(!attackUpgraded){
+                    enemy.takeDamage(damage);
+                }else{
+                    enemy.takeDamage(damage * 2);
+                }
+                currentMana = Math.min(currentMana + 1, MAX_MANA);
+            }
+        }
+
+        // Check if each boss is within the slash hitbox
+        for(Boss boss : allBosses){
+            int bossWorldX = boss.getWorldX();
+            int bossWorldY = boss.getWorldY();
+            
+            // Check if boss is within rectangular hitbox
+            if(Math.abs(bossWorldX - attackX) <= slashWidth/2 && 
+               Math.abs(bossWorldY - attackY) <= slashHeight/2){
+                if(!attackUpgraded){
+                    boss.takeDamage(damage);
+                }else{
+                    boss.takeDamage(damage * 2);
+                }
+                currentMana = Math.min(currentMana + 1, MAX_MANA);
+            }
+        }
+        
+        
+        /*
         ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
                     attackScreenX,
                     attackScreenY,
@@ -451,6 +494,8 @@ public class Player extends ScrollingActor {
                     Boss.class
                 ));
 
+                
+               
         for(BaseEnemy enemy : enemies){
             if(!attackUpgraded){
                 enemy.takeDamage(damage);
@@ -468,6 +513,7 @@ public class Player extends ScrollingActor {
             }
             currentMana++;
         }
+        */
 
     }
 
