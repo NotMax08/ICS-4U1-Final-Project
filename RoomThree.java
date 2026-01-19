@@ -6,7 +6,12 @@ import greenfoot.*;
 public class RoomThree extends GameWorld {
     private MapGridDebugOverlay gridDebug;
     private boolean visuals;
-    public RoomThree(Player existingPlayer) {
+    
+    // Default spawn position
+    private static final int DEFAULT_SPAWN_X = 1000;
+    private static final int DEFAULT_SPAWN_Y = 1250;
+    
+    public RoomThree(String sourceRoom) {
         super(); // This creates the camera
         
         fullBackground = new GreenfootImage("roomthree.jpg");
@@ -18,18 +23,28 @@ public class RoomThree extends GameWorld {
         if(visuals){
             createPlatformVisuals();
         }
-        createInteractiveDoors(); //debug visual in contructor class
+        createInteractiveDoors();
         
         this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
         
-        if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 1000, 1250);
-        } else {
-            player = new Player(camera);
-            addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(1000, 1250);
+        // Determine spawn position
+        int spawnX = DEFAULT_SPAWN_X;
+        int spawnY = DEFAULT_SPAWN_Y;
+        
+        if (sourceRoom != null) {
+            RoomPositionTracker tracker = RoomPositionTracker.getInstance();
+            RoomPositionTracker.SpawnPosition spawn = tracker.getSpawnPosition(sourceRoom, "RoomThree");
+            
+            if (spawn != null) {
+                spawnX = spawn.x;
+                spawnY = spawn.y;
+            }
         }
         
+        // Create player at spawn position
+        player = new Player(camera);
+        addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        player.setWorldPosition(spawnX, spawnY);
         
         initalizeDisplays();
         
@@ -40,13 +55,12 @@ public class RoomThree extends GameWorld {
         }
         
         gridDebug = new MapGridDebugOverlay(this, mapGrid);
-        addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        addObject(gridDebug, 0, 0);
         gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-
     }
     
     public RoomThree() {
-        this(null);
+        this((String)null);
     }
     
     // Override act() to add null check
@@ -138,8 +152,6 @@ public class RoomThree extends GameWorld {
             {52, 52, 33},
             {53, 53, 34},
             {54, 54, 35}, 
-           
-            
         };
         
         // Convert platforms to tiles
@@ -165,13 +177,10 @@ public class RoomThree extends GameWorld {
                 platformX[index] = i;
                 platformY[index] = tileY;
                 index++;
-                
             }
         }
         
         // Wall data format: {tileXStart, tileXEnd, tileYStart, tileYEnd}
-        // For horizontal walls/ceilings: tileYStart == tileYEnd (single Y value, X varies)
-        // For vertical walls: tileXStart == tileXEnd (single X value, Y varies)
         int[][] wallData = {
             {0, 124, 70, 70},    // Bottom wall
             {0, 124, 0, 0},      // Top wall
@@ -225,9 +234,6 @@ public class RoomThree extends GameWorld {
             {111, 111, 8, 22},
             {29, 29, 43, 43},
             {72, 72, 44, 44}
-            
-            
-            
         };
         
         int totalWallTiles = 0;
@@ -261,7 +267,6 @@ public class RoomThree extends GameWorld {
                 }
             }
         }
-        
         
         //Doors {startX, endX, startY, endY}
         int[][] doorData = {
@@ -300,14 +305,12 @@ public class RoomThree extends GameWorld {
             }
         }
         
-        
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
-        //Interactive Doors
-        //Y should be 20 pixels above visuals so visuals show the door directly
-        //on platforms but the actual door tiles to not override the platform tiles
+        
+        // Interactive Doors in TILE coordinates
         int[][] interactiveData = {
-             
+             {59, 63, 65, 69}  // Tile ranges: X from 59-63, Y from 65-69
         };
         
         // Convert doors to tiles
@@ -329,7 +332,6 @@ public class RoomThree extends GameWorld {
         
         index = 0;
         
-        
         for(int[]door : interactiveData){
             int tileXStart = door[0];
             int tileXEnd = door[1];
@@ -344,6 +346,7 @@ public class RoomThree extends GameWorld {
                 }
             }
         }
+        
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
@@ -366,6 +369,7 @@ public class RoomThree extends GameWorld {
             interactiveY
         );
     }
+    
     private void createPlatformVisuals() {
         int[][] platformRegions = {
             
@@ -382,24 +386,37 @@ public class RoomThree extends GameWorld {
             platform.setWorldPosition(worldX, worldY);
         }
     }
+    
     private void createInteractiveDoors() {
-        int[][] doorRegions = {
-                  
+        // Interactive door tiles: X from 59-63, Y from 65-69
+        // Convert to world coordinates: center of tile range
+        int[][] doorTileRanges = {
+            {59, 63, 65, 69}  // Tile coordinates
         };
         
-        String[] doorIds = {"npcenter", "backtormone", "enterboss"};
-        
-        for (int i = 0; i < doorRegions.length; i++) {
-            int worldX = doorRegions[i][0];
-            int worldY = doorRegions[i][1];
-            int width = doorRegions[i][2];
-            int height = doorRegions[i][3];
+        for (int i = 0; i < doorTileRanges.length; i++) {
+            int tileXStart = doorTileRanges[i][0];
+            int tileXEnd = doorTileRanges[i][1];
+            int tileYStart = doorTileRanges[i][2];
+            int tileYEnd = doorTileRanges[i][3];
             
-            InteractiveDoor door = new InteractiveDoor(camera, width, height, doorIds[i]);
+            // Calculate center tile
+            int centerTileX = (tileXStart + tileXEnd) / 2;
+            int centerTileY = (tileYStart + tileYEnd) / 2;
+            
+            // Calculate size in tiles
+            int tilesWide = tileXEnd - tileXStart + 1;
+            int tilesHigh = tileYEnd - tileYStart + 1;
+            
+            // Convert to world coordinates
+            int worldX = (centerTileX * TILE_SIZE) + (TILE_SIZE / 2);
+            int worldY = (centerTileY * TILE_SIZE) + (TILE_SIZE / 2);
+            int width = tilesWide * TILE_SIZE;
+            int height = tilesHigh * TILE_SIZE;
+            
+            InteractiveDoor door = new InteractiveDoor(camera, width, height, "roomthree");
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
     }
-
 }
-

@@ -22,7 +22,8 @@ public class StartWorld extends World
         Button start = new Button ("Start", 65, 200, Color.WHITE, 4, Color.BLACK, 35, Color.BLACK, "startworld", false );
         addObject(start,getWidth()/2,(getHeight()/4) * 3); 
         GreenfootImage bg = getBackground();
-        bg.drawImage(title, 215, 100);
+        title.scale(500,250);
+        bg.drawImage(title, (getWidth()/4)-40,getHeight()/7);
         setBackground(bg);
     }
 }

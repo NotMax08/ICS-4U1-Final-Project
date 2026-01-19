@@ -151,9 +151,9 @@ public class Player extends ScrollingActor {
 
     private void endScreen(){
         // Reset stats for next game
+        maxHealth = STARTING_HEALTH_POINTS;
         currentHealth = STARTING_HEALTH_POINTS;
         currentMana = 0;
-        maxHealth = STARTING_HEALTH_POINTS;
         
         Greenfoot.setWorld(new DeathScreen());
     }
@@ -576,10 +576,10 @@ public class Player extends ScrollingActor {
         if (world == null) return;
         if (isDoorAtPosition(worldX, worldY)) {
             inDoor = true;
-            if( getWorld() instanceof RoomOne){
-                Greenfoot.setWorld(new RoomTwo("RoomTwo"));
+            if(getWorld() instanceof RoomOne){
+                Greenfoot.setWorld(new RoomTwo("RoomOne"));
             }else if(getWorld() instanceof RoomTwo){
-                Greenfoot.setWorld(new RoomThree(this));
+                Greenfoot.setWorld(new RoomThree("RoomTwo"));
             }
         } else {
             inDoor = false;
