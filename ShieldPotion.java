@@ -8,10 +8,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ShieldPotion extends Potions
 {
-    /**
-     * Act - do whatever the ShieldPotion wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    public ShieldPotion()
+    {
+        image = new GreenfootImage("pt2.png");
+        image.scale(image.getWidth()/4, image.getHeight()/4);
+        setImage(image);
+    }
     public void act()
     {
         // Add your action code here.

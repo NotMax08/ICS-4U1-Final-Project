@@ -4,7 +4,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * Write a description of class Potions here.
  * 
  * @author Julian
- * @version 2025
+ * @version 2026
  * 
  * Images all from Rafaelchm on OpenGameArt.org
  */

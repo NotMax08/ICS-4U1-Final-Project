@@ -4,6 +4,7 @@ import greenfoot.*;
  */
 public class Boss extends Actor
 {   
+    
     private boolean entering = false;
     private boolean teleporting = false;
     private boolean attackOne = false;
@@ -278,4 +279,5 @@ public class Boss extends Actor
             BossRoom.weapon1.removeSelf();
         }
     }
+    
 }

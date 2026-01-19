@@ -1,12 +1,18 @@
 import greenfoot.*;
+
 /**
  * @author Paul assisted by Claude
- * 
  */
 public class RoomOne extends GameWorld {
-    private boolean visuals; //debug to show platforms, doors, walls, etc 
+    private boolean visuals;
     private MapGridDebugOverlay gridDebug;
-    public RoomOne(Player existingPlayer) {
+    
+    // Default spawn position (used only for new game)
+    private static final int DEFAULT_SPAWN_X = 900;
+    private static final int DEFAULT_SPAWN_Y = 1200;
+    
+    // Constructor with source room info
+    public RoomOne(String sourceRoom) {
         super(); 
         
         fullBackground = new GreenfootImage("roomone.jpg");
@@ -14,25 +20,35 @@ public class RoomOne extends GameWorld {
         
         initializeMapGrid();
         
-        if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 900, 1200);
-        } else {
-            player = new Player(camera);
-            addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(900, 1200);
+        // Determine spawn position based on which room we came from
+        int spawnX = DEFAULT_SPAWN_X;
+        int spawnY = DEFAULT_SPAWN_Y;
+        
+        if (sourceRoom != null) {
+            RoomPositionTracker tracker = RoomPositionTracker.getInstance();
+            RoomPositionTracker.SpawnPosition spawn = tracker.getSpawnPosition(sourceRoom, "RoomOne");
+            
+            if (spawn != null) {
+                spawnX = spawn.x;
+                spawnY = spawn.y;
+            }
         }
+        
+        // Create player at determined position
+        player = new Player(camera);
+        addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        player.setWorldPosition(spawnX, spawnY);
         
         initalizeDisplays();
         
         visuals = false;
         if(visuals){
             createPlatformVisuals();
-            
         }
         
-        createInteractiveDoors();//debug visual in contructor class
+        createInteractiveDoors();
         
-        // Create different enemy types easily
+        // Create enemies
         Golem golem = new Golem(camera);
         addObject(golem, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         golem.setWorldPosition(500, 1100 - golem.getImage().getHeight()/2);
@@ -40,7 +56,6 @@ public class RoomOne extends GameWorld {
         Golem golem2 = new Golem(camera);
         addObject(golem2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         golem2.setWorldPosition(1800, 500);
-        
         
         BasicFly fly1 = new BasicFly(camera, 1200, 1800, 1100);
         addObject(fly1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
@@ -54,7 +69,6 @@ public class RoomOne extends GameWorld {
         addObject(fungi1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fungi1.setWorldPosition(888, 680 - 100);
         
-        // Null check
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());
             updateAllActors();
@@ -62,9 +76,9 @@ public class RoomOne extends GameWorld {
         }
         
         gridDebug = new MapGridDebugOverlay(this, mapGrid);
-        addObject(gridDebug, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        addObject(gridDebug, 0, 0);
+        // Position overlay at world origin (top-left corner)
         gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
-        
         
         drawPlatformOnBackground(910, 500, 420, 40, "platform1.png");
         drawPlatformOnBackground(610, 300, 220, 40, "platform1.png");
@@ -72,30 +86,23 @@ public class RoomOne extends GameWorld {
         drawPlatformOnBackground(1400, 200, 320, 40, "platform1.png");
     }
     
+    // Default constructor for new game
     public RoomOne() {
-         this(null);
-        
+        this((String)null);
     }
-    // Override act() to add null check
+    
     public void act() {
         if (camera != null && player != null) {
-            super.act(); // Call GameWorld's act()
+            super.act();
         }
         if (Greenfoot.isKeyDown("g")) {
             gridDebug.toggle();
-            Greenfoot.delay(10); // debounce
+            Greenfoot.delay(10);
         }
-        /*
-        if (existingPlayer == null) {
-            HighScoreManager.startRun();
-        }
-        */
     }
+    
     protected void initializeMapGrid() {
-        // Platforms in world coordinates
         int[][] platformData = {
-            //Pause and inspect and find world coord variables to figure 
-            //out which platform is which
             {35, 800, 70, 20},
             {600, 300, 200, 20},
             {900, 500, 400, 20},
@@ -132,14 +139,9 @@ public class RoomOne extends GameWorld {
             {2300, 210, 160, 20},
             {2200, 150, 100, 20},
             {1380, 30, 60, 20}
-            
-            
         };
         
-        // Convert platforms to tile coordinates
         int totalPlatformTiles = 0;
-        
-        // First pass: count tiles
         for (int[] platform : platformData) {
             int worldX = platform[0];
             int worldY = platform[1];
@@ -156,11 +158,9 @@ public class RoomOne extends GameWorld {
             totalPlatformTiles += tilesWide * tilesHigh;
         }
         
-        // Create arrays for platform tiles
         int[] platformX = new int[totalPlatformTiles];
         int[] platformY = new int[totalPlatformTiles];
         
-        // Second pass: fill arrays
         int index = 0;
         for (int[] platform : platformData) {
             int worldX = platform[0];
@@ -182,26 +182,23 @@ public class RoomOne extends GameWorld {
             }
         }
         
-        // Create border walls (leaving space for doors on top and right)
-        int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2 ); 
-        int[] wallsX = new int[wallTileCount/2 + 65]; //Plus additional wall barriers counted 
-        int[] wallsY = new int[wallTileCount/2 + 65]; //manually with the debug menu
+        int wallTileCount = (TILES_WIDE * 2) + (TILES_HIGH * 2);
+        int[] wallsX = new int[wallTileCount/2 + 65];
+        int[] wallsY = new int[wallTileCount/2 + 65];
         
         index = 0;
-        // Bottom walls only (no top wall for door)
         for (int x = 0; x < TILES_WIDE; x++) {
             wallsX[index] = x;
             wallsY[index] = TILES_HIGH - 1;
             index++;
         }
         
-        // Left wall only (no right wall for door)
         for (int y = 0; y < TILES_HIGH; y++) {
             wallsX[index] = 0;
             wallsY[index] = y;
             index++;
         }
-        //Additional wall barriers
+        
         for (int y = 0; y < 7; y++){
             wallsX[index] = 3;
             wallsY[index] = 41 + y;
@@ -243,7 +240,6 @@ public class RoomOne extends GameWorld {
             index++;
         }
         
-        
         int[] doorX = new int[11];
         int[] doorY = new int[11];
         index = 56;
@@ -252,16 +248,15 @@ public class RoomOne extends GameWorld {
             doorY[i] = 0;
             index++;
         }
+        
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
-        //Interactive Doors
+        
         int[][] interactiveData = {
             {2090, 650, 100, 150}  
         };
         
-        // Convert doors to tiles
         int totalInteractiveTiles = 0;
-        
         for (int[] door : interactiveData) {
             int worldX = door[0];
             int worldY = door[1];
@@ -303,107 +298,52 @@ public class RoomOne extends GameWorld {
                 }
             }
         }
+        
         mapGrid = new MapGrid(
-            TILE_SIZE,
-            TILE_SIZE,
-            WORLD_WIDTH,
-            WORLD_HEIGHT,
-            true,
-            true,
-            true,
-            false,
-            true,
-            wallsX,
-            platformX,
-            doorX,
-            breakableX,
-            wallsY,
-            platformY,
-            doorY,
-            breakableY,
-            interactiveX,
-            interactiveY
+            TILE_SIZE, TILE_SIZE, WORLD_WIDTH, WORLD_HEIGHT,
+            true, true, true, false, true,
+            wallsX, platformX, doorX, breakableX,
+            wallsY, platformY, doorY, breakableY,
+            interactiveX, interactiveY
         );
     }
     
     private void createPlatformVisuals() {
         int[][] platformRegions = {
-            //Pause and inspect and find world coord variables to figure 
-            //out which platform is which
-            {35, 800, 70, 20},
-            {600, 300, 200, 20},
-            {900, 500, 400, 20},
-            {1400, 200, 300, 20},
-            {550, 1100, 500, 20},
-            {890, 740, 360, 20},
-            {510, 740, 280, 20},
-            {1925, 1120, 175, 20},
-            {2200, 980, 380, 20},
-            {1000, 1350, 400, 20},
-            {1730, 1170, 200, 20},
-            {1610, 1220, 150, 20},
-            {1350, 1320, 370, 20},
-            {230, 1030, 150, 20},
-            {115,980,80,20},
-            {1750, 740, 520, 20},
-            {2180, 740, 120, 20},
-            {1110, 870, 80, 20},
-            {1200, 940, 100, 20},
-            {1450, 830, 100, 20},
-            {35, 530, 70, 20},
-            {140, 430, 140, 20},
-            {250, 290, 60, 20},
-            {310, 240, 60, 20},
-            {370, 190, 60, 20},
-            {480, 130, 170, 20},
-            {620, 60, 170, 20},
-            {760, 20, 120, 20},
-            {960, 60, 300, 20},
-            {1800, 70, 800, 20},
-            {2440, 740, 120, 20},
-            {2420, 540, 120, 20},
-            {1800, 440, 300, 20}, 
-            {2300, 210, 160, 20},
-            {2200, 150, 100, 20},
-            {1380, 30, 60, 20}
-            
-               
-            
+            {35, 800, 70, 20}, {600, 300, 200, 20}, {900, 500, 400, 20},
+            {1400, 200, 300, 20}, {550, 1100, 500, 20}, {890, 740, 360, 20},
+            {510, 740, 280, 20}, {1925, 1120, 175, 20}, {2200, 980, 380, 20},
+            {1000, 1350, 400, 20}, {1730, 1170, 200, 20}, {1610, 1220, 150, 20},
+            {1350, 1320, 370, 20}, {230, 1030, 150, 20}, {115,980,80,20},
+            {1750, 740, 520, 20}, {2180, 740, 120, 20}, {1110, 870, 80, 20},
+            {1200, 940, 100, 20}, {1450, 830, 100, 20}, {35, 530, 70, 20},
+            {140, 430, 140, 20}, {250, 290, 60, 20}, {310, 240, 60, 20},
+            {370, 190, 60, 20}, {480, 130, 170, 20}, {620, 60, 170, 20},
+            {760, 20, 120, 20}, {960, 60, 300, 20}, {1800, 70, 800, 20},
+            {2440, 740, 120, 20}, {2420, 540, 120, 20}, {1800, 440, 300, 20}, 
+            {2300, 210, 160, 20}, {2200, 150, 100, 20}, {1380, 30, 60, 20}
         };
         
         for (int[] region : platformRegions) {
-            int worldX = region[0];
-            int worldY = region[1];
-            int width = region[2];
-            int height = region[3];
-            
-            Platform platform = new Platform(camera, width, height);
+            Platform platform = new Platform(camera, region[2], region[3]);
             addObject(platform, 0, 0);
-            platform.setWorldPosition(worldX, worldY);
+            platform.setWorldPosition(region[0], region[1]);
         }
     }
+    
     private void createInteractiveDoors() {
-        int[][] doorRegions = {
-            {2090, 650, 100, 150}     
-        };
+        int[][] doorRegions = {{2090, 650, 100, 150}};
+        
         for(int[] region : doorRegions) {
-            int worldX = region[0];
-            int worldY = region[1];
-            int width = region[2];
-            int height = region[3];
-            
-            InteractiveDoor door = new InteractiveDoor(camera, width, height, "roomone");
+            InteractiveDoor door = new InteractiveDoor(camera, region[2], region[3], "roomone");
             addObject(door, 0, 0);
-            door.setWorldPosition(worldX, worldY);
+            door.setWorldPosition(region[0], region[1]);
         }
     }
+    
     private void drawPlatformOnBackground(int worldX, int worldY, int width, int height, String imageName) {
         GreenfootImage platformImg = new GreenfootImage(imageName);
         platformImg.scale(width, height);
-        
-        int x = worldX - width/2;
-        int y = worldY - height/2;
-        
-        fullBackground.drawImage(platformImg, x, y);
+        fullBackground.drawImage(platformImg, worldX - width/2, worldY - height/2);
     }
 }

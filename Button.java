@@ -192,6 +192,10 @@ public class Button extends Actor
             Greenfoot.setWorld(new RoomOne());
             return;
         }
+        if(buttonID.equals("backtostart")){
+            Greenfoot.setWorld(new StartWorld());
+            return;
+        }
         /*
         //The button on the end screen that returns to the start
         if(buttonID.equals("backtostart")){

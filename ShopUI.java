@@ -14,6 +14,7 @@ public abstract class ShopUI extends Actor
     protected int startYOffset = -97;
     protected int spacing = 10;
     
+    private ArrayList<ShopIcons> activeIcons = new ArrayList<>();
     public void act()
     {
         // Add your action code here.
@@ -21,10 +22,10 @@ public abstract class ShopUI extends Actor
     
     protected void iconManager(ArrayList<ShopIcons> shopIcons)
     {
-        System.out.println("nihao");
-        //if (getWorld() == null) return;
+        if (getWorld() == null) return;
         
-        System.out.println("hello");
+        removeIcons();
+        
         for (int i = 0; i < shopIcons.size(); i++)
         {
             ShopIcons icon = shopIcons.get(i);
@@ -43,6 +44,23 @@ public abstract class ShopUI extends Actor
             int yPos = getY() + startYOffset + (row * (iconH + spacing));
 
             getWorld().addObject(icon, xPos, yPos);
+            activeIcons.add(icon);
         }
+    }
+    
+    public void removeIcons()
+    {
+        if (getWorld() == null) return;
+
+        for (ShopIcons icon : activeIcons)
+        {
+            if (icon.getWorld() != null)
+            {
+                icon.removeText(); 
+                getWorld().removeObject(icon);
+            }
+        }
+        //clear references
+        activeIcons.clear();
     }
 }

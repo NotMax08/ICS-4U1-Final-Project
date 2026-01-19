@@ -10,7 +10,15 @@ public class BossRoomTwo extends GameWorld {
     private static final int BOSS_TILES_WIDE = BOSS_WORLD_WIDTH / TILE_SIZE;
     private static final int BOSS_TILES_HIGH = BOSS_WORLD_HEIGHT / TILE_SIZE;
     
-    public BossRoomTwo(Player existingPlayer) {
+    // Default spawn for new game (center of room)
+    private static final int DEFAULT_SPAWN_X = 500;
+    private static final int DEFAULT_SPAWN_Y = 500;
+    
+    // Safe spawn when entering from another room (away from doors, on platform)
+    private static final int ENTRY_SPAWN_X = 150;
+    private static final int ENTRY_SPAWN_Y = 500;
+    
+    public BossRoomTwo(String sourceRoom) {
         super(); // This creates the camera
         
         // Lock camera to center of static room
@@ -23,15 +31,28 @@ public class BossRoomTwo extends GameWorld {
         createPlatformVisuals();
         createInteractiveDoorVisuals();
         
+        // Determine spawn position
+        int spawnX = DEFAULT_SPAWN_X;
+        int spawnY = DEFAULT_SPAWN_Y;
         
-        if (existingPlayer != null) {
-            transferPlayer(existingPlayer, 500, 500); // Center player in static room
-        } else {
-            player = new Player(camera);
-            addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-            player.setWorldPosition(500, 500); // Center player in static room
+        if (sourceRoom != null) {
+            RoomPositionTracker tracker = RoomPositionTracker.getInstance();
+            RoomPositionTracker.SpawnPosition spawn = tracker.getSpawnPosition(sourceRoom, "BossRoomTwo");
+            
+            if (spawn != null) {
+                spawnX = spawn.x;
+                spawnY = spawn.y;
+            } else {
+                // If no specific mapping, use safe entry spawn
+                spawnX = ENTRY_SPAWN_X;
+                spawnY = ENTRY_SPAWN_Y;
+            }
         }
         
+        // Create player at spawn position
+        player = new Player(camera);
+        addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        player.setWorldPosition(spawnX, spawnY);
         
         initalizeDisplays();
         
@@ -40,10 +61,15 @@ public class BossRoomTwo extends GameWorld {
             updateAllActors();
             updateBackground();
         }
+        
+        // Add boss enemy here
+        // Example:
+        // Boss2 boss2 = new Boss2();
+        // addObject(boss2, BOSS_WORLD_WIDTH / 2, -150);
     }
     
     public BossRoomTwo() {
-        this(null);
+        this((String)null);
     }
     
     // Override act() to keep camera static (don't follow player)
@@ -56,7 +82,7 @@ public class BossRoomTwo extends GameWorld {
     }
     
     protected void initializeMapGrid() {
-        // Platforms in world coordinates (scaled for 800x600 room)
+        // Platforms in world coordinates (scaled for 822x600 room)
         int[][] platformData = {
             {400, 580, 780, 40}  // Floor platform - full width near bottom
         };
@@ -106,7 +132,7 @@ public class BossRoomTwo extends GameWorld {
             }
         }
         
-        // Walls - outer boundaries for 800x600 room (40 tiles wide x 30 tiles high)
+        // Walls - outer boundaries for 822x600 room
         java.util.ArrayList<Integer> wallXList = new java.util.ArrayList<>();
         java.util.ArrayList<Integer> wallYList = new java.util.ArrayList<>();
         
@@ -116,7 +142,7 @@ public class BossRoomTwo extends GameWorld {
             wallYList.add(y);
         }
         
-        // Right wall (x=39, all y)
+        // Right wall
         for (int y = 0; y < BOSS_TILES_HIGH; y++) {
             wallXList.add(BOSS_TILES_WIDE - 1);
             wallYList.add(y);
@@ -128,8 +154,7 @@ public class BossRoomTwo extends GameWorld {
             wallYList.add(0);
         }
         
-        // Bottom wall (y=29, all x) - removed to prevent glitching
-        // Add a floor platform instead if needed in platformData
+        // Bottom wall removed to prevent glitching
         
         int[] wallsX = new int[wallXList.size()];
         int[] wallsY = new int[wallYList.size()];
@@ -138,16 +163,16 @@ public class BossRoomTwo extends GameWorld {
             wallsY[i] = wallYList.get(i);
         }
         
-        // Doors at left side (scaled for smaller room)
+        // Regular door tiles at left side - AVOID spawning on these
         int[] doorX = new int[]{0};
-        int[] doorY = new int[]{15}; // Mid-height door for 30-tile-high room
+        int[] doorY = new int[]{15}; // Mid-height door
         
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
         
-        //Interactive Doors (scaled for 800x600 room)
+        // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
+            {50, 500, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -199,8 +224,8 @@ public class BossRoomTwo extends GameWorld {
         mapGrid = new MapGrid(
             TILE_SIZE,
             TILE_SIZE,
-            BOSS_WORLD_WIDTH,  // Use 800 instead of WORLD_WIDTH
-            BOSS_WORLD_HEIGHT, // Use 600 instead of WORLD_HEIGHT
+            BOSS_WORLD_WIDTH,
+            BOSS_WORLD_HEIGHT,
             true,
             true,
             true,
@@ -238,7 +263,7 @@ public class BossRoomTwo extends GameWorld {
     
     private void createInteractiveDoorVisuals() {
         int[][] doorRegions = {
-            {50, 500, 80, 140},   // Left door (adjusted for smaller room)
+            {50, 500, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {
@@ -253,4 +278,3 @@ public class BossRoomTwo extends GameWorld {
         }
     }
 }
-
