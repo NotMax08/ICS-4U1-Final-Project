@@ -19,6 +19,7 @@ public abstract class NPC extends Actor
     protected int offsetX = 0;
     protected int offsetY = -65;
     
+    private TextManager textManager = new TextManager();
     public void act()
     {
         interactWithPlayer();
@@ -59,12 +60,12 @@ public abstract class NPC extends Actor
     
     public void textWriter(String dialogue, boolean split)
     {
-        TextManager.textBoxWriter(getWorld(), getX(), getY(), offsetX, offsetY, dialogue, fontSize, split);
+         textManager.textBoxWriter(getWorld(), getX(), getY(), offsetX, offsetY, dialogue, fontSize, split);
     }
     
     public void removeText()
     {
-        TextManager.removeText(getWorld());
+        textManager.removeText(getWorld());
     }
     
     /**

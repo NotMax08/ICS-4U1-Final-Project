@@ -3,15 +3,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class HealthPotion here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Julian 
+ * @version 2026
  */
 public class HealthPotion extends Potions
 {
     public HealthPotion()
     {
         image = new GreenfootImage("pt1.png");
-        image.scale(image.getWidth()/5, image.getHeight()/5);
+        image.scale(image.getWidth()/4, image.getHeight()/4);
         setImage(image);
     }
     public void act()
