@@ -5,7 +5,7 @@ import java.util.*;
  * Write a description of class PotionShop here.
  * 
  * @author Julian
- * @version 2025
+ * @version 2026
  */
 public class PotionShop extends ShopUI
 {

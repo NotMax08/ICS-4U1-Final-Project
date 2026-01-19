@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Write a description of class ShopUI here.
  * 
  * @author Julian, Google Ai studio (helped style)
- * @version 2025
+ * @version 2026
  */
 public abstract class ShopUI extends Actor
 {

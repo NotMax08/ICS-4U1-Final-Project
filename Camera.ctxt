@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Camera
-comment0.text=\r\n\ @author\ Claude\ prompted\ by\ Paul\r\n
+comment0.text=\r\n\ @author\ Claude\r\n
 comment1.params=screenW\ screenH\ worldW\ worldH
 comment1.target=Camera(int,\ int,\ int,\ int)
 comment2.params=worldX\ worldY
