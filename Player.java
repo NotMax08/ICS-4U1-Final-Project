@@ -579,7 +579,7 @@ public class Player extends ScrollingActor {
             if(getWorld() instanceof RoomOne){
                 Greenfoot.setWorld(new RoomTwo("RoomOne"));
             }else if(getWorld() instanceof RoomTwo){
-                Greenfoot.setWorld(new RoomThree(this));
+                Greenfoot.setWorld(new RoomThree("RoomTwo"));
             }
         } else {
             inDoor = false;

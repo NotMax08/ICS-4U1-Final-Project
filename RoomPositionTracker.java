@@ -28,7 +28,7 @@ public class RoomPositionTracker {
     /**
      * Initialize all door positions for each room transition.
      * 
-     * For SCROLLING rooms (RoomOne, RoomTwo):
+     * For SCROLLING rooms (RoomOne, RoomTwo, RoomThree):
      * - Offsets carefully avoid walls, platforms, and door tiles
      * - Horizontal doors: ±200 horizontal offset
      * - Vertical doors: -200 vertical offset
@@ -53,7 +53,7 @@ public class RoomPositionTracker {
         
         // RoomTwo -> RoomOne (via "backtormone" door at 700, 1130)
         // Vertical door, spawn above it on platform
-        doorEntries.put("RoomTwo->RoomOne", new DoorEntry(1350, 130, 0, 0));
+        doorEntries.put("RoomTwo->RoomOne", new DoorEntry(700, 1130, 0, -200));
         
         // RoomOne -> RoomTwo (reverse)
         doorEntries.put("RoomOne->RoomTwo", new DoorEntry(700, 1130, 0, -200));
@@ -73,6 +73,20 @@ public class RoomPositionTracker {
         // BossRoomTwo -> RoomTwo (static to scrolling)
         // Return to RoomTwo at "enterboss" door (2330, 810) with offset
         doorEntries.put("BossRoomTwo->RoomTwo", new DoorEntry(2330, 810, -200, -100));
+        
+        // === ROOM THREE CONNECTIONS (Scrolling) ===
+        
+        // RoomThree -> RoomTwo (scrolling to scrolling)
+        // Interactive door in RoomThree at tiles (59-63, 65-69)
+        // Center: tile (61, 67) = world (1230, 1350)
+        // Spawn in RoomTwo away from door tiles - need to identify which door in RoomTwo leads here
+        // For now, spawn at safe default position in RoomTwo
+        doorEntries.put("RoomThree->RoomTwo", new DoorEntry(2200, 200, 0, 0));
+        
+        // RoomTwo -> RoomThree (reverse - need door position in RoomTwo that leads to RoomThree)
+        // Interactive door in RoomThree center: tile (61, 67) = world (1230, 1350)
+        // Spawn near this door with offset to avoid tiles
+        doorEntries.put("RoomTwo->RoomThree", new DoorEntry(1030, 1350, 0, -200));
     }
     
     /**
