@@ -49,7 +49,7 @@ public class SlashAnimation extends Actor
             // Load magic animation frames
             for (int i = 0 ; i < slashFrames.length; i++){
                 slashFrames[i] = new GreenfootImage("images/magic" + i + ".png");
-                slashFrames[i].scale(300,250);
+                slashFrames[i].scale(30,25);
             }
         }
 

@@ -24,15 +24,15 @@ public class Player extends ScrollingActor {
     private static final int BASIC_ATTACK_COOLDOWN = 25;
     private static final int BASIC_ATTACK_DAMAGE = 7;
     private static final int MAGIC_ATTACK_COOLDOWN = 80;
-    private static final int MAGIC_ATTACK_DAMAGE = 20;
-    private static final int MAGIC_ATTACK_RADIUS = 30;
-    private static final int STARTING_HEALTH_POINTS= 3;
-    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int MAGIC_ATTACK_DAMAGE = 15;
+    private static final int MAGIC_ATTACK_RADIUS = 70;
+    private static final int STARTING_HEALTH_POINTS= 5;
+    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 10;
     private static final int MAX_MANA = 8;
 
-    private static int maxHealth = STARTING_HEALTH_POINTS;
-    private static int currentHealth = maxHealth;
-    private static int currentMana = 0;
+    private int maxHealth = STARTING_HEALTH_POINTS;
+    private int currentHealth = maxHealth;
+    private int currentMana = 0;
 
     // Character states 
     private boolean onGround = false;
@@ -43,7 +43,7 @@ public class Player extends ScrollingActor {
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
     private boolean attackUpgraded = false;
-    private static boolean magicUnlocked = false;
+    private static boolean magicUnlocked = true;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -154,7 +154,7 @@ public class Player extends ScrollingActor {
         maxHealth = STARTING_HEALTH_POINTS;
         currentHealth = STARTING_HEALTH_POINTS;
         currentMana = 0;
-        
+
         Greenfoot.setWorld(new DeathScreen());
     }
 
@@ -317,7 +317,7 @@ public class Player extends ScrollingActor {
         }
 
         // changes depending on which direction the player is facing
-        int slashOffsetX = direction ? 30: -30; 
+        int slashOffsetX = direction ? 75: -75; 
         int slashOffsetY = 0; // same height as player
 
         // add to world
@@ -344,14 +344,30 @@ public class Player extends ScrollingActor {
     }
 
     private void magicAttack(){
+        if(currentMana <= 0) return; // need Mana to use ability
+
         isAttacking = true;
         abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
 
+        // Scale based on mana 
+        double manaScale = Math.max(1.0, Math.sqrt(currentMana));
+
         SlashAnimation magic = new SlashAnimation(3,4,true, false);
 
-        // changes direction based on where the player is facing
-        int magicOffsetX = direction ? 150 : -150;
+        // Scale the magic animation based on mana
+        GreenfootImage magicImg = magic.getImage();
+        int scaledWidth = (int)(300 * manaScale);
+        int scaledHeight = (int)(250 * manaScale);
+        magicImg.scale(scaledWidth, scaledHeight);
+        magic.setImage(magicImg);
+
+        // Scale offset and radius based on mana
+        int baseOffset = 150;
+        int magicOffsetX = direction ? (int)(baseOffset * manaScale) : -(int)(baseOffset * manaScale);
         int magicOffsetY = 0;
+
+        int scaledRadius = (int)(MAGIC_ATTACK_RADIUS * manaScale);
+        int scaledDamage = (int)(MAGIC_ATTACK_DAMAGE * manaScale);
 
         GameWorld world = (GameWorld) getWorld();
         if(world != null){
@@ -366,26 +382,55 @@ public class Player extends ScrollingActor {
 
             // Flip if facing left
             if(!direction){
-                GreenfootImage magicImg = magic.getImage();
+                magicImg = magic.getImage();
                 magicImg.mirrorHorizontally();
                 magic.setImage(magicImg);
             }
 
             // spawn projectile
-            checkRadiusHit(magicScreenX, magicScreenY, MAGIC_ATTACK_RADIUS, MAGIC_ATTACK_DAMAGE, world);
+            checkRadiusHit(magicScreenX, magicScreenY, scaledRadius, scaledDamage, world);
         }
+
+        currentMana = 0;
     }
 
-    //TODO!!!!
     private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
         if(world == null) return;
 
         int attackScreenX = attackX;
         int attackScreenY = attackY;
 
-        //ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsInRange(radius, BaseEnemy.class));
+        // Get all enemies within the radius
+        java.util.List<BaseEnemy> allEnemies = new ArrayList<BaseEnemy>(world.getObjects(BaseEnemy.class));
+        java.util.List<Boss> allBosses = new ArrayList<Boss>(world.getObjects(Boss.class));
+        
+        
+        // Check distance to each enemy and damage if within radius
+        for(BaseEnemy enemy : allEnemies){
+            int enemyX = enemy.getX();
+            int enemyY = enemy.getY();
+            
+            double distance = Math.sqrt(Math.pow(enemyX - attackX , 2 ) + Math.pow(enemyY - attackY, 2));
+            
+            if(distance <= radius){
+                enemy.takeDamage(damage);
+            }
+        }
+        
+        // Check distance to each boss and damage if within radius
+        for(Boss boss : allBosses){
+            int bossX = boss.getX();
+            int bossY = boss.getY();
+            
+            // Calculate distance from attack center
+            double distance = Math.sqrt(Math.pow(bossX - attackX, 2) + Math.pow(bossY - attackY, 2));
+            
+            if(distance <= radius){
+                boss.takeDamage(damage);
+            }
+        }
     }
-
+    
     private void checkSlashHit(int attackX, int attackY, int damage, World world){
         if(world == null) return;
 
@@ -694,12 +739,15 @@ public class Player extends ScrollingActor {
     public void setHealth(int health){
         currentHealth = health;
     }
+
     public void setMana(int mana){
         currentMana = mana;
     }
+
     public void upgradeBasicAttack(){
         attackUpgraded = true;
     }
+
     public void unlockMagicAttack(){
         magicUnlocked = true;
     }
@@ -708,9 +756,11 @@ public class Player extends ScrollingActor {
     public boolean isAttackUpgraded(){
         return attackUpgraded;
     }
+
     public static boolean isMagicUnlocked(){
         return magicUnlocked;
     }
+
     public boolean isOnGround() {
         return onGround;
     }
