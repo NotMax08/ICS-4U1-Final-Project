@@ -21,7 +21,7 @@ public abstract class ShopIcons extends Actor
 
     protected int potionX = - 147;
     protected int potionY = -30;
-
+    
     private TextManager textManager = new TextManager();
     public void act()
     {
@@ -33,7 +33,7 @@ public abstract class ShopIcons extends Actor
         }
         else
         {
-            cleanUp(getWorld());
+            cleanUp();
         }
     }
 
@@ -91,5 +91,5 @@ public abstract class ShopIcons extends Actor
 
     protected abstract void description();
 
-    protected abstract void cleanUp(World world);
+    protected abstract void cleanUp();
 }

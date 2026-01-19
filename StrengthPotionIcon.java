@@ -32,12 +32,12 @@ public class StrengthPotionIcon extends ShopIcons
         }
     }
     
-    protected void cleanUp(World world)
+    protected void cleanUp()
     {
         removeText();
         if(getWorld() != null && strengthPotion != null && strengthPotion.getWorld() != null)
         {
-            world.removeObject(strengthPotion);
+            getWorld().removeObject(strengthPotion);
         }
     }
 }
