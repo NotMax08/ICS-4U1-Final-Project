@@ -26,8 +26,8 @@ public class Player extends ScrollingActor {
     private static final int MAGIC_ATTACK_COOLDOWN = 80;
     private static final int MAGIC_ATTACK_DAMAGE = 20;
     private static final int MAGIC_ATTACK_RADIUS = 30;
-    private static final int STARTING_HEALTH_POINTS= 3;
-    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 6;
+    private static final int STARTING_HEALTH_POINTS= 5;
+    private static final int ABSOLUTE_MAX_HEALTH_POINTS = 10;
     private static final int MAX_MANA = 8;
 
     private static int maxHealth = STARTING_HEALTH_POINTS;
