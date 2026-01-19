@@ -118,7 +118,6 @@ public class Golem extends GroundEnemy {
                     }
                     
                     if (attackFrame == 3) {
-                        System.out.println("damage");// Choose appropriate frame for golem
                         dealAttackDamage();
                     }
                 }
