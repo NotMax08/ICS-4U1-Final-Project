@@ -85,7 +85,7 @@ public abstract class GameWorld extends World {
         addObject(abilityDisplay, 0, 0);
         
         // Create health icons
-        healthDisplay = new HealthDisplay(190, 40, camera, player);
+        healthDisplay = new HealthDisplay(310, 40, camera, player);
         addObject(healthDisplay, 0, 0);
         
         // Create mana bar
