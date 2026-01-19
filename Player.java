@@ -91,6 +91,10 @@ public class Player extends ScrollingActor {
     //Item data
     public int[] itemCount = new int[4];
 
+    /**
+     * Main constructor for player
+     * @param Camera tracks the player 
+     */
     public Player(Camera camera) {
         super(camera);
 
@@ -111,6 +115,10 @@ public class Player extends ScrollingActor {
         
     }
 
+    /**
+     * Main act method 
+     * 
+     */
     public void act() {
         //checkStunned();
         checkHealth();
@@ -341,7 +349,7 @@ public class Player extends ScrollingActor {
         SlashAnimation magic = new SlashAnimation(3,4);
         
         // changes direction based on where the player is facing
-        int magicOffsetX = direction ? 30 : -30;
+        int magicOffsetX = direction ? 50 : -50;
         int magicOffsetY = 0;
         
         GameWorld world = (GameWorld) getWorld();
