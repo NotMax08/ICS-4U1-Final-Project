@@ -32,7 +32,16 @@ public class Boss extends Actor
     
     private int attackNumber;
     
-    private int[] attackPattern = {1,2,3};
+    private static final int totalHealth = 100;
+    private int currentHealth;
+    
+    /**
+     * 1 & 2 (attackOne), 
+     * 3 (attackTwo), 
+     * 4 & 5 (attackThree w/ teleport), 
+     * 6 & 7 (attackThree no teleport)
+     */
+    private int[] attackPattern = {1,2,3,4,5,6,7};
     
     public Boss(int variant)
     {
@@ -42,6 +51,8 @@ public class Boss extends Actor
         isNew = true;
         
         attackNumber = 0;
+        
+        currentHealth = totalHealth;
         
         if (variant == 1){
             enterScreen();
@@ -96,7 +107,7 @@ public class Boss extends Actor
     }
     
     private void attackingThree(){
-        if (attackCounter==81){
+        if (attackCounter==66){
             attackThree = false;
         }
         attackCounter++;
@@ -233,10 +244,31 @@ public class Boss extends Actor
             attack1(false);
         }
         else if (attackType==2){
-            attack2();
+            attack1(true);
         }
         else if (attackType==3){
+            attack2();
+        }
+        else if (attackType==4){
             attack3(true,false);
+        }
+        else if (attackType==5){
+            attack3(true,true);
+        }
+        else if (attackType==6){
+            attack3(false,false);
+        }
+        else if (attackType==7){
+            attack3(false,true);
+        }
+    }
+    
+    public void takeDamage(int damage){
+        currentHealth -= damage;
+        System.out.println(currentHealth);
+        
+        if (currentHealth <= 0){
+            getWorld().removeObject(this);
         }
     }
     
