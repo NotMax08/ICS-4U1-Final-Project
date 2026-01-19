@@ -34,7 +34,6 @@ public class HealthPotionIcon extends ShopIcons
         }
     }
 
-    @Override
     protected void cleanUp()
     {
         removeText();
