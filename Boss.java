@@ -42,6 +42,10 @@ public class Boss extends Actor
     
     private int waitFrames;
     
+    public static boolean secondPhase = false;
+    
+    private int variant;
+    
     /**
      * 1 & 2 (attackOne), 
      * 3 (attackTwo), 
@@ -62,6 +66,8 @@ public class Boss extends Actor
         attackNumber = 0;
         
         currentHealth = totalHealth;
+        
+        this.variant = variant;
         
         if (variant == 1){
             enterScreen();
@@ -301,6 +307,9 @@ public class Boss extends Actor
         bossHealthBar.update(currentHealth);
         
         if (currentHealth <= 0){
+            if (variant == 1){
+                //getWorld().addObject
+            }
             getWorld().removeObject(this);
             BossRoom.weapon1.removeSelf();
         }
