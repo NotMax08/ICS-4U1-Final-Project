@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class WinScreen extends World
 {
 
-    GreenfootImage win = new GreenfootImage("winscreen.png");
+    GreenfootImage win = new GreenfootImage("winscreen.jpg");
     Button backToStart;
     public WinScreen()
     {    
@@ -17,7 +17,7 @@ public class WinScreen extends World
         setBackground(win);
         
         //Button back to start screen
-        backToStart = new Button("Back to Start", 80, 300, Color.BLUE, 10, Color.BLACK, 24, Color.BLACK, "backtostart", false);
+        backToStart = new Button("Back to Start", 60, 250, Color.BLUE, 5, Color.BLACK, 24, Color.BLACK, "backtostart", false);
         addObject(backToStart, getWidth()/2, (getHeight()/4) * 3);
     }
 }
