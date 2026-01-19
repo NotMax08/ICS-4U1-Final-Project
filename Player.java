@@ -19,10 +19,11 @@ public class Player extends ScrollingActor {
 
     // Character constants
     private static final int ANIMATION_SPEED = 4; 
-    private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
-    private static final int STUN_DURATION = 30; // Acts to remain stunned
+    //private static final int FALL_DAMAGE_THRESHOLD = 60; // Acts of falling before stun
+    //private static final int STUN_DURATION = 30; // Acts to remain stunned
     private static final int BASIC_ATTACK_COOLDOWN = 25;
     private static final int BASIC_ATTACK_DAMAGE = 7;
+    private static final int HITBOX_EXPANSION = 30; // Extra pixels to make hitting easier
     private static final int MAGIC_ATTACK_COOLDOWN = 80;
     private static final int MAGIC_ATTACK_DAMAGE = 15;
     private static final int MAGIC_ATTACK_RADIUS = 70;
@@ -102,8 +103,8 @@ public class Player extends ScrollingActor {
         super(camera);
 
         // Initialize Counters
-        fallCounter = new Counter();
-        stunCounter = new Counter(STUN_DURATION);
+        //fallCounter = new Counter();
+        //stunCounter = new Counter(STUN_DURATION);
         runningAnimCounter = new Counter(ANIMATION_SPEED);
         jumpingAnimCounter = new Counter(ANIMATION_SPEED * 2);
         fallingAnimCounter = new Counter(ANIMATION_SPEED * 2);
@@ -128,7 +129,7 @@ public class Player extends ScrollingActor {
         checkAbilityCooldown();
         handleInput();
         applyGravity();
-        checkFall();
+        //checkFall();
         checkDoor();
         moveHorizontal();
         moveVertical();
@@ -310,14 +311,19 @@ public class Player extends ScrollingActor {
 
         // slash animation
         SlashAnimation slash;
+        int slashWidth, slashHeight;
         if(!attackUpgraded){
             slash = new SlashAnimation(6, 2, false, false);
+            slashWidth = 160;
+            slashHeight = 80;
         }else{
             slash = new SlashAnimation(6, 2, false, true);
+            slashWidth = 200;
+            slashHeight = 100;
         }
 
         // changes depending on which direction the player is facing
-        int slashOffsetX = direction ? 75: -75; 
+        int slashOffsetX = direction ? 60: -60; 
         int slashOffsetY = 0; // same height as player
 
         // add to world
@@ -339,7 +345,7 @@ public class Player extends ScrollingActor {
                 slash.setImage(slashImg);
             }
 
-            checkSlashHit(slashScreenX, slashScreenY, BASIC_ATTACK_DAMAGE, world);
+            checkSlashHit(slashWorldX, slashWorldY, slashWidth, slashHeight, world);
         }
     }
 
@@ -350,19 +356,19 @@ public class Player extends ScrollingActor {
         abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
 
         // Scale based on mana 
-        double manaScale = Math.max(1.0, Math.sqrt(currentMana));
+        double manaScale = Math.max(1.0, currentMana / 2.0);
 
         SlashAnimation magic = new SlashAnimation(3,4,true, false);
 
         // Scale the magic animation based on mana
         GreenfootImage magicImg = magic.getImage();
-        int scaledWidth = (int)(300 * manaScale);
-        int scaledHeight = (int)(250 * manaScale);
+        int scaledWidth = (int)(120 * manaScale);
+        int scaledHeight = (int)(100 * manaScale);
         magicImg.scale(scaledWidth, scaledHeight);
         magic.setImage(magicImg);
 
         // Scale offset and radius based on mana
-        int baseOffset = 150;
+        int baseOffset = 70;
         int magicOffsetX = direction ? (int)(baseOffset * manaScale) : -(int)(baseOffset * manaScale);
         int magicOffsetY = 0;
 
@@ -388,133 +394,100 @@ public class Player extends ScrollingActor {
             }
 
             // spawn projectile
-            checkRadiusHit(magicScreenX, magicScreenY, scaledRadius, scaledDamage, world);
+            checkRadiusHit(magicWorldX, magicWorldY, scaledRadius, scaledDamage, world);
         }
 
         currentMana = 0;
     }
 
-    private void checkRadiusHit(int attackX, int attackY, int radius, int damage, World world){
+    private void checkRadiusHit(int attackWorldX, int attackWorldY, int radius, int damage, World world){
         if(world == null) return;
 
-        
-        GameWorld gameWorld = (GameWorld) world;
+        int EFFECTIVE_RADIUS = MAGIC_ATTACK_RADIUS + 15;
+        // Get all potential targets
+        ArrayList<Actor> targets = new ArrayList<>();
+        targets.addAll(world.getObjects(BaseEnemy.class));
+        targets.addAll(world.getObjects(Boss.class));
 
-        // Get all enemies within the radius
-        ArrayList<BaseEnemy> allEnemies = new ArrayList<BaseEnemy>(world.getObjects(BaseEnemy.class));
-        ArrayList<Boss> allBosses = new ArrayList<Boss>(world.getObjects(Boss.class));
-        
-        // Check distance to each enemy and damage if within radius
-        for(BaseEnemy enemy : allEnemies){
-            // Get enemy's WORLD position
-            int enemyWorldX = enemy.getWorldX();
-            int enemyWorldY = enemy.getWorldY();
-            
-            // Calculate distance in world coordinates
-            double distance = Math.sqrt(Math.pow(enemyWorldX - attackX, 2) + Math.pow(enemyWorldY - attackY, 2));
-            
-            if(distance <= radius){
-                enemy.takeDamage(damage);
+        for (Actor target : targets) {
+            int targetX, targetY;
+
+            // Handle ScrollingActor (Enemies) vs standard Actor (Boss)
+            if (target instanceof ScrollingActor) {
+                targetX = ((ScrollingActor) target).getWorldX();
+                targetY = ((ScrollingActor) target).getWorldY();
+            } else {
+                targetX = target.getX();
+                targetY = target.getY();
             }
-        }
-        
-        // Check distance to each boss and damage if within radius
-        for(Boss boss : allBosses){
-            // Get boss's WORLD position
-            int bossWorldX = boss.getWorldX();
-            int bossWorldY = boss.getWorldY();
-            
-            // Calculate distance in world coordinates
-            double distance = Math.sqrt(Math.pow(bossWorldX - attackX, 2) + Math.pow(bossWorldY - attackY, 2));
-            
-            if(distance <= radius){
-                boss.takeDamage(damage);
+
+            // Calculate distance between magic center and target center
+            // Using Pythagorean theorem: a^2 + b^2 = c^2
+            double dx = attackWorldX - targetX; 
+            double dy = attackWorldY - targetY;
+            double distance = Math.sqrt(dx * dx + dy * dy);
+
+            // Check if the target is within the expanded radius
+            if (distance <= EFFECTIVE_RADIUS) {
+                if (target instanceof BaseEnemy) {
+                    ((BaseEnemy) target).takeDamage(MAGIC_ATTACK_DAMAGE);
+                } else if (target instanceof Boss) {
+                    ((Boss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
+                }
             }
         }
     }
-    
-    private void checkSlashHit(int attackX, int attackY, int damage, World world){
+
+    private void checkSlashHit(int attackWorldX, int attackWorldY, int width, int height, World world){
         if(world == null) return;
 
-        GameWorld gameWorld = (GameWorld) world;
-        
-        // Define slash hitbox size (width x height)
-        int slashWidth = attackUpgraded ? 100 : 80;  // Upgraded slash is wider
-        int slashHeight = attackUpgraded ? 50 : 40;
-        
-        // Get all enemies and bosses
-        ArrayList<BaseEnemy> allEnemies = new ArrayList<BaseEnemy>(world.getObjects(BaseEnemy.class));
-        ArrayList<Boss> allBosses = new ArrayList<Boss>(world.getObjects(Boss.class));
+        // Define the boundaries of the slash hitbox
+        int slashLeft = attackWorldX - (width / 2) - HITBOX_EXPANSION;
+        int slashRight = attackWorldX + (width / 2) + HITBOX_EXPANSION;
+        int slashTop = attackWorldY - (height / 2) - HITBOX_EXPANSION;
+        int slashBottom = attackWorldY + (height / 2) + HITBOX_EXPANSION;
 
-        // Check if each enemy is within the slash hitbox
-        for(BaseEnemy enemy : allEnemies){
-            int enemyWorldX = enemy.getWorldX();
-            int enemyWorldY = enemy.getWorldY();
-            
-            // Check if enemy is within rectangular hitbox
-            if(Math.abs(enemyWorldX - attackX) <= slashWidth/2 && 
-               Math.abs(enemyWorldY - attackY) <= slashHeight/2){
-                if(!attackUpgraded){
-                    enemy.takeDamage(damage);
-                }else{
-                    enemy.takeDamage(damage * 2);
+        // Create a list of all potential targets
+        ArrayList<Actor> targets = new ArrayList<>();
+        targets.addAll(world.getObjects(BaseEnemy.class));
+        targets.addAll(world.getObjects(Boss.class));
+
+        for (Actor target : targets) {
+            int targetX, targetY;
+            // Use world coordinates if available, otherwise use screen coordinates
+            if (target instanceof ScrollingActor) {
+                targetX = ((ScrollingActor) target).getWorldX();
+                targetY = ((ScrollingActor) target).getWorldY();            
+            }else{
+                // Standard get X and Y for Boss
+                targetX = target.getX();
+                targetY = target.getY();
+            }
+
+            int tHalfW = target.getImage().getWidth() / 2;
+            int tHalfH = target.getImage().getHeight() / 2;
+            int targetLeft = targetX - tHalfW;
+            int targetRight = targetX + tHalfW;
+            int targetTop = targetY - tHalfH;
+            int targetBottom = targetY + tHalfH;
+
+            if (slashLeft < targetRight && slashRight > targetLeft &&
+            slashTop < targetBottom && slashBottom > targetTop) {
+
+                // Calculate damage based on player upgrades
+                int damage = attackUpgraded ? BASIC_ATTACK_DAMAGE * 2 : BASIC_ATTACK_DAMAGE;
+
+                // Apply damage using type-specific methods
+                if (target instanceof BaseEnemy) {
+                    ((BaseEnemy) target).takeDamage(damage);
+                } else if (target instanceof Boss) {
+                    ((Boss) target).takeDamage(damage);
                 }
+
+                // Increase mana
                 currentMana = Math.min(currentMana + 1, MAX_MANA);
             }
         }
-
-        // Check if each boss is within the slash hitbox
-        for(Boss boss : allBosses){
-            int bossWorldX = boss.getWorldX();
-            int bossWorldY = boss.getWorldY();
-            
-            // Check if boss is within rectangular hitbox
-            if(Math.abs(bossWorldX - attackX) <= slashWidth/2 && 
-               Math.abs(bossWorldY - attackY) <= slashHeight/2){
-                if(!attackUpgraded){
-                    boss.takeDamage(damage);
-                }else{
-                    boss.takeDamage(damage * 2);
-                }
-                currentMana = Math.min(currentMana + 1, MAX_MANA);
-            }
-        }
-        
-        
-        /*
-        ArrayList<BaseEnemy> enemies = new ArrayList<BaseEnemy>(world.getObjectsAt(
-                    attackScreenX,
-                    attackScreenY,
-                    BaseEnemy.class
-                ));
-
-        ArrayList<Boss> bosses = new ArrayList<Boss>(world.getObjectsAt(
-                    attackScreenX,
-                    attackScreenY,
-                    Boss.class
-                ));
-
-                
-               
-        for(BaseEnemy enemy : enemies){
-            if(!attackUpgraded){
-                enemy.takeDamage(damage);
-            }else{
-                enemy.takeDamage(damage*2);
-            }
-            currentMana++;
-        }
-
-        for(Boss boss : bosses){
-            if(!attackUpgraded){
-                boss.takeDamage(damage);
-            }else{
-                boss.takeDamage(damage*2);
-            }
-            currentMana++;
-        }
-        */
-
     }
 
     private void animateRunning(){
@@ -585,26 +558,6 @@ public class Player extends ScrollingActor {
         velocityY += GRAVITY;
         if (velocityY > MAX_FALL_SPEED) {
             velocityY = MAX_FALL_SPEED;
-        }
-    }
-
-    private void checkFall(){
-        if (!onGround && velocityY > 0) {
-            // Player is falling - increment fall counter
-            fallCounter.increment();
-        } else if (!fallCounter.isZero()) {
-            // Player just landed - check if fall was long enough to cause stun
-            if (fallCounter.greaterThan(FALL_DAMAGE_THRESHOLD)) {
-                isStunned = true;
-                stunCounter.set(STUN_DURATION);
-
-                // Visual feedback - flash the player red
-                GreenfootImage img = getImage();
-                img.setTransparency(150); // Make slightly transparent
-            }
-
-            // Reset fall counter
-            fallCounter.reset();
         }
     }
 
