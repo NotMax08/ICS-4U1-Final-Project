@@ -4,12 +4,12 @@ import greenfoot.*;
  * Abstract base class for all game worlds/levels
  * Handles common functionality like camera, displays and player tracking
  * 
- * Sound credit:
+ * Sound credits:
  * "sword"  by @freesound_community on pixabay
  * "magic"  by @yodguard on pixabay
  * "heal"   by @yodguard on pixabay
  * "jump"   by @Jofae on pixabay
- * "hit"    by @freesound_community on pixabay
+ * "hit"    by @mixkit
  * "damage" by @freesound_community on pixabay
  * 
  * @author Paul and Robin
@@ -81,7 +81,7 @@ public abstract class GameWorld extends World {
             soundManager.loadSound("run", "runSound.wav");
             soundManager.loadSound("sword", "swordSound.wav");
             soundManager.loadSound("magic", "magicSound.wav");
-            soundManager.loadSound("hit", "hitSound.wav");
+            soundManager.loadSound("hit", "Slash.mp3");
             soundManager.loadSound("damage", "damageSound.wav");
             soundManager.loadSound("heal", "healSound.wav");
         }
