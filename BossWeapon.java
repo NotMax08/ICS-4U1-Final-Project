@@ -76,10 +76,10 @@ public class BossWeapon extends Actor
             lethal=false;
             getWorld().addObject(new BossWeaponEffect(1), playerLocation, 500);
         }
-        else if (attackCounter == 93){
+        else if (attackCounter == 118){
             getWorld().addObject(new BossWeaponEffect(2), playerLocation, 531);
         }
-        else if (attackCounter == 133){
+        else if (attackCounter == 138){
             attack2 = false;
         }
         attackCounter++;

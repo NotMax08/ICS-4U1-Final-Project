@@ -32,7 +32,7 @@ public class Boss extends Actor
     
     private int attackNumber;
     
-    private static final int totalHealth = 20;
+    private static final int totalHealth = 46;
     private int currentHealth;
     
     private SuperStatBar bossHealthBar;
@@ -75,10 +75,10 @@ public class Boss extends Actor
             attackPattern = new int[]{1,2,3,3,8,4,5,4,5,9};
         }
         else if (variant==2){
-            attackPattern = new int[]{1,2,3,9,3,9,4,9,4,9,9};
+            attackPattern = new int[]{1,2,3,9,3,9,4,5,9,9,9,9,9};
         }
         else{
-            attackPattern = new int[]{9,1,2,3,9,3,9,9,5,9,5};
+            attackPattern = new int[]{9,1,2,3,9,9,9,3,9,9,5,4,9};
         }
         enterScreen();
     }
@@ -166,7 +166,7 @@ public class Boss extends Actor
         if(attackCounter==45){
             setI("DownDown");
         }
-        if(attackCounter==134){
+        if(attackCounter==139){
             attackTwo = false;
         }
         attackCounter++;
@@ -236,7 +236,12 @@ public class Boss extends Actor
         this.setLocation(this.getX(),this.getY()+enterSpeedMultiplier);
         if (this.getY() >= 300){
             bossHealthBar = new SuperStatBar(totalHealth, totalHealth, null, 400, 30, 0, green, black, false, black, 3);
-            getWorld().addObject(bossHealthBar,400,50);
+            if (variant == 3){
+                getWorld().addObject(bossHealthBar,400,50);
+            }
+            else{
+                getWorld().addObject(bossHealthBar,400,85);
+            }
             entering = false;
         }
     }
@@ -315,16 +320,18 @@ public class Boss extends Actor
     }
     
     public void takeDamage(int damage){
-        currentHealth -= damage;
-        bossHealthBar.update(currentHealth);
-        
-        if (currentHealth <= 0){
-            if (variant == 1){
-                getWorld().addObject(BossRoom.staBeePhaseTwo1,200,-150);
-                getWorld().addObject(BossRoom.staBeePhaseTwo2,600,-150);
+        if (!entering){
+            currentHealth -= damage;
+            bossHealthBar.update(currentHealth);
+            
+            if (currentHealth <= 0){
+                if (variant == 1){
+                    getWorld().addObject(BossRoom.staBeePhaseTwo1,200,-150);
+                    getWorld().addObject(BossRoom.staBeePhaseTwo2,600,-150);
+                }
+                getWorld().removeObject(this);
+                weapon.removeSelf();
             }
-            getWorld().removeObject(this);
-            weapon.removeSelf();
         }
     }
     
