@@ -376,7 +376,6 @@ public class Boss extends Actor
                 }
                 else{
                     bossesDefeated++;
-                    System.out.println(bossesDefeated);
                 }
                 getWorld().removeObject(this);
                 weapon.removeSelf();
