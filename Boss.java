@@ -4,6 +4,7 @@ import greenfoot.*;
  */
 public class Boss extends Actor
 {   
+    // Current Action Variables
     private boolean entering = false;
     private boolean teleporting = false;
     private boolean attackOne = false;
@@ -11,28 +12,34 @@ public class Boss extends Actor
     private boolean attackThree = false;
     private boolean waiting = false;
     
+    // Current State Variables
     private int currentX;
     private int currentY;
     private String currentImage;
     
+    // Variables relating to teleporting
     private boolean teleported = false;
     private int teleportX;
     private int teleportY;    
     private String teleportImage;
     
+    // Final variables (Do not change values)
     public static final double scale = 4;
     public static final int weaponYOffset = 115;
+    
     private boolean isNew;
+    
     private boolean attackDirectionLeft;
     
-    public static double teleportFrames = 25;
-    private int enterSpeedMultiplier = 8;
+    // Modifyable variables
+    public static double teleportFrames = 25; // Number of frames it takes to teleport
+    private int enterSpeedMultiplier = 4; // How fast the boss enters the screen
     
     private int attackCounter;
     
     private int attackNumber;
     
-    private static final int totalHealth = 46;
+    private static final int totalHealth = 60;
     private int currentHealth;
     
     private SuperStatBar bossHealthBar;
@@ -47,6 +54,8 @@ public class Boss extends Actor
     private int variant;
     
     private BossWeapon weapon;
+    
+    private static int bossesDefeated;
     
     /**
      * 1 & 2 (attackOne), 
@@ -73,12 +82,15 @@ public class Boss extends Actor
         
         if (variant==1){
             attackPattern = new int[]{1,2,3,3,8,4,5,4,5,9};
+            bossesDefeated = 0;
         }
         else if (variant==2){
             attackPattern = new int[]{1,2,3,9,3,9,4,5,9,9,9,9,9};
+            bossesDefeated = 1;
         }
         else{
             attackPattern = new int[]{9,1,2,3,9,9,9,3,9,9,5,4,9};
+            bossesDefeated = 1;
         }
         enterScreen();
     }
@@ -323,14 +335,20 @@ public class Boss extends Actor
         if (!entering){
             currentHealth -= damage;
             bossHealthBar.update(currentHealth);
-            
             if (currentHealth <= 0){
                 if (variant == 1){
                     getWorld().addObject(BossRoom.staBeePhaseTwo1,200,-150);
                     getWorld().addObject(BossRoom.staBeePhaseTwo2,600,-150);
                 }
+                else{
+                    bossesDefeated++;
+                    System.out.println(bossesDefeated);
+                }
                 getWorld().removeObject(this);
                 weapon.removeSelf();
+                if (bossesDefeated == 3) {
+                    Greenfoot.setWorld(new WinScreen());
+                }
             }
         }
     }
