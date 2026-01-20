@@ -1,23 +1,23 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class HealthPotionIcon here.
+ * Write a description of class ShrinkPotionIcon here.
  * 
  * @author Julian
  * @version 2025
  */
-public class HealthPotionIcon extends ShopIcons
+public class ShrinkPotionIcon extends ShopIcons
 {
     private String description = "Restores 25 HP.|Purchase for 25 gems?"; 
-    private HealthPotion healthPotion;
+    private ShrinkPotion shrinkPotion;
 
-    public HealthPotionIcon()
+    public ShrinkPotionIcon()
     {
-        image = new GreenfootImage("healthptIcon.jpg");
+        image = new GreenfootImage("shrinkptIcon.jpg");
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
 
-        healthPotion = new HealthPotion();
+        shrinkPotion = new ShrinkPotion();
     }
 
     public void act()
@@ -29,17 +29,17 @@ public class HealthPotionIcon extends ShopIcons
     protected void description()
     {
         textWriter(description, true);
-        if (healthPotion != null && healthPotion.getWorld() == null) {
-            getWorld().addObject(healthPotion, getWorld().getWidth()/2 + potionX, getWorld().getHeight()/2 + potionY);
+        if (shrinkPotion != null && shrinkPotion.getWorld() == null) {
+            getWorld().addObject(shrinkPotion, getWorld().getWidth()/2 + potionX, getWorld().getHeight()/2 + potionY);
         }
     }
 
     protected void cleanUp()
     {
         removeText();
-        if(getWorld() != null && healthPotion != null && healthPotion.getWorld() != null)
+        if(getWorld() != null && shrinkPotion != null && shrinkPotion.getWorld() != null)
         {
-            getWorld().removeObject(healthPotion);
+            getWorld().removeObject(shrinkPotion);
         }
     }
 

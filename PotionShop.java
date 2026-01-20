@@ -30,7 +30,7 @@ public class PotionShop extends ShopUI
     private void addItems()
     {
         items = new ArrayList<>();
-        items.add(new HealthPotionIcon());
+        items.add(new ShrinkPotionIcon());
         items.add(new ShieldPotionIcon());
         items.add(new StrengthPotionIcon());
         // Call the manager from the superclass
