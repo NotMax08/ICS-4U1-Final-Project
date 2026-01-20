@@ -41,7 +41,7 @@ public class BossWeaponEffect extends Actor
         if (type==1 && counter == 7){
             getWorld().removeObject(this);
         }
-        else if (type==2 && counter == 40){
+        else if (type==2 && counter == 20){
             getWorld().removeObject(this);
         }
         else if (type==3 || type==4){

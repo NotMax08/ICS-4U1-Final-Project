@@ -68,10 +68,11 @@ public class BossRoom extends GameWorld {
             updateBackground();
         }
         
+        // Add boss instances
         staBee = new Boss(1);
         staBeePhaseTwo1 = new Boss(2);
         staBeePhaseTwo2 = new Boss(3);
-        addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn off screen
+        addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn boss off screen
     }
     
     public BossRoom() {

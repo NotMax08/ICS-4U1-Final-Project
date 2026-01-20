@@ -30,6 +30,7 @@ public class Player extends ScrollingActor {
     private static final int STARTING_HEALTH_POINTS= 5;
     private static final int ABSOLUTE_MAX_HEALTH_POINTS = 10;
     private static final int MAX_MANA = 8;
+    private static final int HEALING_SPEED = 60;
 
     private int maxHealth = STARTING_HEALTH_POINTS;
     private int currentHealth = maxHealth;
@@ -45,6 +46,10 @@ public class Player extends ScrollingActor {
     private boolean isTakingDamage = false;
     private boolean attackUpgraded = false;
     private static boolean magicUnlocked = true;
+    private boolean isHealing = false;
+    
+    // Sound Manager
+    private SoundManager soundManager;
 
     // Counters - using Counter class
     private Counter fallCounter;
@@ -54,6 +59,7 @@ public class Player extends ScrollingActor {
     private Counter fallingAnimCounter;
     private Counter frameCounter;
     private Counter abilityCooldownCounter;
+    private Counter healCounter;
 
     // Player image constants
     private static int P_WIDTH = 50;
@@ -97,19 +103,21 @@ public class Player extends ScrollingActor {
     /**
      * Main constructor for player
      * 
-     * @param Camera tracks the player 
+     * @param Camera    tracks the player 
      */
     public Player(Camera camera) {
         super(camera);
+        
+        // Initialize Sound Manager
+        soundManager = SoundManager.getInstance();
 
         // Initialize Counters
-        //fallCounter = new Counter();
-        //stunCounter = new Counter(STUN_DURATION);
         runningAnimCounter = new Counter(ANIMATION_SPEED);
         jumpingAnimCounter = new Counter(ANIMATION_SPEED * 2);
         fallingAnimCounter = new Counter(ANIMATION_SPEED * 2);
         frameCounter = new Counter();
         abilityCooldownCounter = new Counter(BASIC_ATTACK_COOLDOWN);
+        healCounter = new Counter();
 
         // Initialize images
         scaleImages(); 
@@ -127,6 +135,7 @@ public class Player extends ScrollingActor {
         //checkStunned();
         checkHealth();
         checkAbilityCooldown();
+        checkHealing();
         handleInput();
         applyGravity();
         //checkFall();
@@ -165,6 +174,19 @@ public class Player extends ScrollingActor {
             abilityCooldownCounter.decrement();
             if(abilityCooldownCounter.isZero()){
                 isAttacking = false;
+            }
+        }
+    }
+    
+    private void checkHealing(){
+        if(isHealing){
+            healCounter.increment();
+            if(healCounter.getCount() >= HEALING_SPEED){
+                heal(1);
+                soundManager.playSound("heal");
+                currentMana -= 4;
+                isHealing = false;
+                healCounter.reset();
             }
         }
     }
@@ -253,7 +275,7 @@ public class Player extends ScrollingActor {
                 velocityX = 0;
             }
         }else{
-            // reset air counters when on ground
+            // Reset air counters when on ground
             jumpingAnimCounter.reset();
             fallingAnimCounter.reset();
             // Normal ground movement
@@ -261,12 +283,14 @@ public class Player extends ScrollingActor {
                 direction = false;
                 velocityX = -MOVE_SPEED;
                 animateRunning();
+                soundManager.playSound("run");
             } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
                 velocityX = MOVE_SPEED;
                 animateRunning();
+                soundManager.playSound("run");
             } else {
-                //standing still
+                // Standing still
                 velocityX = 0;
                 frameCounter.reset();
                 runningAnimCounter.reset();
@@ -287,6 +311,9 @@ public class Player extends ScrollingActor {
             // reset frames
             frameCounter.reset();
             jumpingAnimCounter.reset();
+            
+            // Play jump sound
+            soundManager.playSound("jump");
         }
 
         // Fall faster
@@ -297,6 +324,9 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
+            if(Greenfoot.isKeyDown("h") && currentMana >= 4 && currentHealth < maxHealth){
+                isHealing = true;
+            }
             if(Greenfoot.isKeyDown("j") || Greenfoot.isKeyDown("e")){
                 basicAttack();
             }else if(Greenfoot.isKeyDown("k") && magicUnlocked){
@@ -304,11 +334,14 @@ public class Player extends ScrollingActor {
             }
         }
     }
-
+    
     private void basicAttack(){
         isAttacking = true;
         abilityCooldownCounter.set(BASIC_ATTACK_COOLDOWN);
 
+        // Play sword sound
+        soundManager.playSound("sword");
+        
         // slash animation
         SlashAnimation slash;
         int slashWidth, slashHeight;
@@ -355,10 +388,13 @@ public class Player extends ScrollingActor {
         isAttacking = true;
         abilityCooldownCounter.set(MAGIC_ATTACK_COOLDOWN);
 
+        // Play magic sound
+        soundManager.playSound("magic");
+        
         // Scale based on mana 
         double manaScale = Math.max(1.0, currentMana / 2.0);
 
-        SlashAnimation magic = new SlashAnimation(3,4,true, false);
+        SlashAnimation magic = new SlashAnimation(3,5,true, false);
 
         // Scale the magic animation based on mana
         GreenfootImage magicImg = magic.getImage();
@@ -403,7 +439,7 @@ public class Player extends ScrollingActor {
     private void checkRadiusHit(int attackWorldX, int attackWorldY, int radius, int damage, World world){
         if(world == null) return;
 
-        int EFFECTIVE_RADIUS = MAGIC_ATTACK_RADIUS + 15;
+        int EFFECTIVE_RADIUS = MAGIC_ATTACK_RADIUS + HITBOX_EXPANSION;
         // Get all potential targets
         ArrayList<Actor> targets = new ArrayList<>();
         targets.addAll(world.getObjects(BaseEnemy.class));
@@ -471,8 +507,7 @@ public class Player extends ScrollingActor {
             int targetTop = targetY - tHalfH;
             int targetBottom = targetY + tHalfH;
 
-            if (slashLeft < targetRight && slashRight > targetLeft &&
-            slashTop < targetBottom && slashBottom > targetTop) {
+            if (slashLeft < targetRight && slashRight > targetLeft && slashTop < targetBottom && slashBottom > targetTop) {
 
                 // Calculate damage based on player upgrades
                 int damage = attackUpgraded ? BASIC_ATTACK_DAMAGE * 2 : BASIC_ATTACK_DAMAGE;
@@ -483,6 +518,8 @@ public class Player extends ScrollingActor {
                 } else if (target instanceof Boss) {
                     ((Boss) target).takeDamage(damage);
                 }
+                
+                soundManager.playSound("hit");
 
                 // Increase mana
                 currentMana = Math.min(currentMana + 1, MAX_MANA);
@@ -603,6 +640,7 @@ public class Player extends ScrollingActor {
 
     public void takeDamage(int dmg){
         currentHealth = Math.max(0, currentHealth - dmg);
+        soundManager.playSound("damage");
     }
 
     public void heal(int hp){

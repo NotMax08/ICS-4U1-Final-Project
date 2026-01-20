@@ -34,7 +34,7 @@ public class AbilityDisplay extends Display
     
     @Override
     protected void updateDisplay(){
-        boolean magicUnlocked = GameWorld.magicUnlocked;
+        boolean magicUnlocked = player.isMagicUnlocked();
         int cooldown = player.getAbilityCooldown();
         boolean onCooldown = cooldown > 0;
         
