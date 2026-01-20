@@ -10,6 +10,7 @@ public class HealthPotionIcon extends ShopIcons
 {
     private String description = "Restores 25 HP.|Purchase for 25 gems?"; 
     private HealthPotion healthPotion;
+    private World myWorld;
 
     public HealthPotionIcon()
     {
@@ -41,5 +42,10 @@ public class HealthPotionIcon extends ShopIcons
         {
             getWorld().removeObject(healthPotion);
         }
+    }
+
+    protected void addedToWorld(World world)
+    {
+        myWorld = world;
     }
 }

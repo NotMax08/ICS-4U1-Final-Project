@@ -6,7 +6,7 @@ import greenfoot.Actor;
  * and displays potion and description of it. 
  * 
  * @author Julian
- * @version 2025
+ * @version 2026
  */
 public abstract class ShopIcons extends Actor
 {
