@@ -109,7 +109,7 @@ public abstract class ShopIcons extends Actor
         {
             System.out.println(p.getCurrency());
             p.updateItemCount(itemIndex,1);
-            p.setCurrency(-price);
+            p.addToCurrency(-price);
             System.out.println(p.getCurrency());
         }
     }

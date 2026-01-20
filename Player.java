@@ -804,7 +804,7 @@ public class Player extends ScrollingActor {
         magicUnlocked = true;
     }
 
-    public void setCurrency(int num)
+    public void addToCurrency(int num)
     {
         currency += num;
     }
