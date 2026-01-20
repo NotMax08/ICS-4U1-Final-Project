@@ -8,16 +8,18 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ShrinkPotionIcon extends ShopIcons
 {
-    private String description = "Restores 25 HP.|Purchase for 25 gems?"; 
     private ShrinkPotion shrinkPotion;
-
     public ShrinkPotionIcon()
     {
         image = new GreenfootImage("shrinkptIcon.jpg");
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
-
+        
         shrinkPotion = new ShrinkPotion();
+        
+        this.price = 15;
+        this.itemIndex = 2;
+        this.description = "Shrinkers player| Purchase for 15 orbs?"; 
     }
 
     public void act()
@@ -47,10 +49,5 @@ public class ShrinkPotionIcon extends ShopIcons
     {
         cleanUp();
         getWorld().removeObject(this);
-    }
-    
-    protected void purchase()
-    {
-        
     }
 }

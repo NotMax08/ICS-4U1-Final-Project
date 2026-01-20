@@ -23,6 +23,9 @@ public abstract class ShopIcons extends Actor
     protected int potionX = - 147;
     protected int potionY = -30;
     
+    protected int price;
+    protected int itemIndex;
+    
     private TextManager textManager = new TextManager();
     public void act()
     {
@@ -99,5 +102,15 @@ public abstract class ShopIcons extends Actor
 
     protected abstract void cleanUp();
     
-    protected abstract void purchase();
+    protected void purchase()
+    {
+        Player p = (Player) getWorld().getObjects(Player.class).get(0);
+        if (p.getCurrency() >= price)
+        {
+            System.out.println(p.getCurrency());
+            p.updateItemCount(itemIndex,1);
+            p.setCurrency(-price);
+            System.out.println(p.getCurrency());
+        }
+    }
 }
