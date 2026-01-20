@@ -1,9 +1,9 @@
 #BlueJ class context
 comment0.target=Player
-comment0.text=\n\ The\ Player\ class\ manages\ controls\ related\ to\ the\ Player\ character\n\ Controls\ such\ as\ movement\ and\ abilities\n\ \n\ Images\ generated\ by\ Leonardo.ai\n\ swordSound.wav\ by\ @freesound_community\ on\ pixabay\n\ magicSound.wav\ by\ @yodguard\ on\ pixabay\n\ \n\ @author\ Robin\ and\ Paul,\ assisted\ by\ Claude\n
+comment0.text=\n\ The\ Player\ class\ manages\ controls\ related\ to\ the\ Player\ character\n\ Controls\ such\ as\ movement\ and\ abilities\n\ \n\ Images\ generated\ by\ Leonardo.ai\n\ \n\ @author\ Robin\ and\ Paul,\ assisted\ by\ Claude\n
 comment1.params=camera
 comment1.target=Player(Camera)
-comment1.text=\n\ Main\ constructor\ for\ player\n\ \n\ @param\ Camera\ tracks\ the\ player\ \n
+comment1.text=\n\ Main\ constructor\ for\ player\n\ \n\ @param\ Camera\ \ \ \ tracks\ the\ player\ \n
 comment10.params=
 comment10.target=void\ setupAnimationArrays()
 comment11.params=
