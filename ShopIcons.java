@@ -4,6 +4,7 @@ import greenfoot.Actor;
  * Class that creates the shop icons.
  * Creates outlines when mouse is hovering above icon
  * and displays potion and description of it. 
+ * Also manages puchasing logic
  * 
  * @author Julian
  * @version 2026
@@ -34,6 +35,11 @@ public abstract class ShopIcons extends Actor
         else
         {
             cleanUp();
+        }
+        
+        if (Greenfoot.mouseClicked(this))
+        {
+            purchase();
         }
     }
 
@@ -92,4 +98,6 @@ public abstract class ShopIcons extends Actor
     protected abstract void description();
 
     protected abstract void cleanUp();
+    
+    protected abstract void purchase();
 }

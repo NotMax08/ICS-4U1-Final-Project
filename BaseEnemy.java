@@ -27,6 +27,7 @@ public abstract class BaseEnemy extends ScrollingActor {
     protected boolean hasDealtDamageThisAttack = false; // NEW: Track if damage dealt this attack
     protected boolean shouldUpdateAnimation = true;
     
+    
     // Behaviour states
     protected enum ENEMY_BEHAVIOUR { 
         IDLE, PATROL, CHASE, ATTACK_ANIMATION, 
@@ -132,13 +133,12 @@ public abstract class BaseEnemy extends ScrollingActor {
                     if (verticalDistance < getImage().getHeight() + 20) {
                         player.takeDamage(damage);
                         hasDealtDamageThisAttack = true; // Mark damage as dealt
-                        System.out.println("damage bam");
+                        //System.out.println("damage bam");
                         break; // Only damage once per attack
                     }
                 } else {
                     player.takeDamage(damage);
                     hasDealtDamageThisAttack = true; // Mark damage as dealt
-                    System.out.println("damage bam");
                     break;
                 }
                 

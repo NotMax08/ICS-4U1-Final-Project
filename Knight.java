@@ -6,13 +6,12 @@ public class Knight extends GroundEnemy {
     public static final int KNIGHT_DAMAGE = 1;
     public static final int KNIGHT_DETECTION_RANGE = 400;
     public static final int KNIGHT_ATTACK_RANGE = 150;
-    public static final int PATROL_SPEED = 0; // No patrol movement
+    public static final int PATROL_SPEED = 0;
     public static final int CHASE_SPEED = 5;
     public static final int GRAVITY = 1;
     public static final int WALL_CHECK_DISTANCE = 10;
     
-    // Scale factor for all images
-    private static final double SCALE = 0.35;
+    private static final double SCALE = 0.4;
     
     // Animation images
     private GreenfootImage idleImage;
@@ -31,14 +30,16 @@ public class Knight extends GroundEnemy {
     private static final int RUN_FRAME_DELAY = 3;
     private static final int ATTACK_FRAME_DELAY = 7;
     private static final int RECOVER_FRAME_DELAY = 4;
-    private static final int ATTACK_COOLDOWN = 60; // Cooldown after recover sequence
+    private static final int ATTACK_COOLDOWN = 60;
     
     // Attack sequence tracking
     private boolean isAttackComplete = false;
     private boolean isRecovering = false;
     
-    // Initial facing direction (set in constructor)
     private int startingDirection;
+    
+    // Sound manager reference
+    private SoundManager soundManager;
     
     public Knight(Camera camera, int facingDirection) {
         super(camera, 
@@ -52,13 +53,19 @@ public class Knight extends GroundEnemy {
         this.isFacingRight = (facingDirection == 1);
         
         loadImages();
+        loadSounds();
         behaviour = ENEMY_BEHAVIOUR.IDLE;
         healthBarYOffset = -100;
     }
     
-    // Constructor with default right-facing
     public Knight(Camera camera) {
         this(camera, 1);
+    }
+    
+    private void loadSounds() {
+        soundManager = SoundManager.getInstance();
+        // Load 5 instances of the slash sound for overlapping playback
+        soundManager.loadSound("knight_slash", "KnightSlash.wav", 5);
     }
     
     private void loadImages() {
@@ -66,15 +73,14 @@ public class Knight extends GroundEnemy {
         idleImage = scaleImage(getUniformImage("KnightIdle.png", 620, 390), SCALE);
         
         // Run animation - all 620 by 490
-        //runImages.add(scaleImage(getUniformImage("KnightRun1.png", 620, 490), SCALE));
         runImages.add(scaleImage(getUniformImage("KnightRun2.png", 620, 490), SCALE));
         runImages.add(scaleImage(getUniformImage("KnightRun3.png", 620, 490), SCALE));
         
         // Attack animation - varying sizes
-        attackImages.add(scaleImage(getUniformImage("KnightA1.png", 580, 390), SCALE)); // 580 by 390
-        attackImages.add(scaleImage(getUniformImage("KnightA2.png", 700, 580), SCALE)); // 700 by 580
-        attackImages.add(scaleImage(getUniformImage("KnightA3.png", 700, 600), SCALE)); // 700 by 600
-        attackImages.add(scaleImage(getUniformImage("KnightA4.png", 700, 600), SCALE)); // 700 by 600
+        attackImages.add(scaleImage(getUniformImage("KnightA1.png", 580, 390), SCALE));
+        attackImages.add(scaleImage(getUniformImage("KnightA2.png", 700, 580), SCALE));
+        attackImages.add(scaleImage(getUniformImage("KnightA3.png", 700, 600), SCALE));
+        attackImages.add(scaleImage(getUniformImage("KnightA4.png", 700, 600), SCALE));
         
         // Recovery animation - all 650 by 570
         recoverImages.add(scaleImage(getUniformImage("KnightRecover1.png", 650, 570), SCALE));
@@ -86,14 +92,12 @@ public class Knight extends GroundEnemy {
     public void act() {
         super.act();
         
-        // Update animations
         updateAnimation();
         updateImage();
     }
     
     @Override
     protected void updateAnimation() {
-        // Update run animation timer
         if (behaviour == ENEMY_BEHAVIOUR.CHASE && isMoving) {
             runTimer++;
             if (runTimer >= RUN_FRAME_DELAY) {
@@ -105,30 +109,28 @@ public class Knight extends GroundEnemy {
             runTimer = 0;
         }
         
-        // Update attack animation
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION && !isRecovering) {
             attackTimer++;
             if (attackTimer >= ATTACK_FRAME_DELAY) {
                 attackTimer = 0;
                 attackFrame++;
                 
-                // Deal damage at frame 3 (the heavy swing frame)
+                // Play slash sound and deal damage at frame 3 (the heavy swing frame)
                 if (attackFrame == 3) {
+                    soundManager.playSound("knight_slash");
                     dealAttackDamage();
                 }
                 
                 if (attackFrame >= attackImages.size()) {
-                    // Attack animation complete - start recovery
                     isAttackComplete = true;
                     isRecovering = true;
-                    attackFrame = attackImages.size() - 1; // Hold on last attack frame
+                    attackFrame = attackImages.size() - 1;
                     recoverFrame = 0;
                     recoverTimer = 0;
                 }
             }
         }
         
-        // Update recovery animation
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION && isRecovering) {
             recoverTimer++;
             if (recoverTimer >= RECOVER_FRAME_DELAY) {
@@ -136,12 +138,10 @@ public class Knight extends GroundEnemy {
                 recoverFrame++;
                 
                 if (recoverFrame >= recoverImages.size()) {
-                    // Recovery complete - go to cooldown
                     behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
                     attackCooldownTimer = ATTACK_COOLDOWN;
                     isInAttackCooldown = true;
                     
-                    // Reset animation states
                     attackFrame = 0;
                     recoverFrame = 0;
                     isAttackComplete = false;
@@ -150,7 +150,6 @@ public class Knight extends GroundEnemy {
             }
         }
         
-        // Reset attack/recover states when not attacking
         if (behaviour != ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
             attackFrame = 0;
             attackTimer = 0;
@@ -165,26 +164,20 @@ public class Knight extends GroundEnemy {
     protected void updateImage() {
         GreenfootImage finalImage;
         
-        // Determine which image to use based on state
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
             if (isRecovering) {
-                // Show recovery animation
                 int frameIndex = Math.min(recoverFrame, recoverImages.size() - 1);
                 finalImage = new GreenfootImage(recoverImages.get(frameIndex));
             } else {
-                // Show attack animation
                 int frameIndex = Math.min(attackFrame, attackImages.size() - 1);
                 finalImage = new GreenfootImage(attackImages.get(frameIndex));
             }
         } else if (behaviour == ENEMY_BEHAVIOUR.CHASE && isMoving) {
-            // Running animation
             finalImage = new GreenfootImage(runImages.get(runFrame));
         } else {
-            // Idle animation (for IDLE and ATTACK_COOLDOWN states)
             finalImage = new GreenfootImage(idleImage);
         }
         
-        // Flip image if facing left
         if (!isFacingRight) {
             finalImage.mirrorHorizontally();
         }
@@ -194,15 +187,12 @@ public class Knight extends GroundEnemy {
     
     @Override
     protected void attackAnimation() {
-        // Animation is handled in updateAnimation()
-        // Knight stays in place during attack and recovery
-        fall(); // Apply gravity during attack
+        fall();
     }
     
     @Override
     protected void takeDamage(int dmg) {
         super.takeDamage(dmg);
-        // Reset all animation states when hurt
         attackFrame = 0;
         attackTimer = 0;
         recoverFrame = 0;
@@ -213,14 +203,12 @@ public class Knight extends GroundEnemy {
     
     @Override
     protected void idleBehavior() {
-        // Knight doesn't patrol - just stays idle until player detected
         fall();
         isMoving = false;
     }
     
     @Override
     protected void patrol() {
-        // Knight doesn't patrol - same as idle
         fall();
         isMoving = false;
     }
@@ -232,12 +220,10 @@ public class Knight extends GroundEnemy {
         ScrollingActor scrollTarget = (ScrollingActor) target;
         int targetX = scrollTarget.getWorldX();
         
-        // Face the target
         if (Math.abs(targetX - worldX) >= 5) {
             int desiredDirection = (targetX > worldX) ? 1 : -1;
             setDirection(desiredDirection);
             
-            // Move towards target if no obstacles
             if (!isWallAhead() && isGroundAhead() && !isAtEdge()) {
                 setWorldPosition(worldX + (desiredDirection * chaseSpeed), worldY);
                 isMoving = true;
@@ -253,7 +239,6 @@ public class Knight extends GroundEnemy {
     
     @Override
     protected void attackCooldown() {
-        // Stay idle during cooldown
         fall();
         isMoving = false;
     }

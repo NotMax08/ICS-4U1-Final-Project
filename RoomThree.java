@@ -25,7 +25,7 @@ public class RoomThree extends GameWorld {
         }
         createInteractiveDoors();
         
-        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class);
+        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class, Fog.class, BaseEnemy.class, Spawner.class);
         
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -46,6 +46,10 @@ public class RoomThree extends GameWorld {
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(spawnX, spawnY);
         
+        // Create fog world effect to reduce visibility
+        Fog fog = new Fog(player);
+        addObject(fog, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        
         initalizeDisplays();
         
         if (camera != null && player != null) {
@@ -57,6 +61,31 @@ public class RoomThree extends GameWorld {
         gridDebug = new MapGridDebugOverlay(this, mapGrid);
         addObject(gridDebug, 0, 0);
         gridDebug.setWorldPosition(WORLD_WIDTH / 2, WORLD_HEIGHT / 2);
+        
+        Fungi fungi1 = new Fungi(camera);
+        addObject(fungi1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi1.setWorldPosition(1550, 1200);
+        
+        Fungi fungi2 = new Fungi(camera);
+        addObject(fungi2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi2.setWorldPosition(1600, 1200);
+        
+        Fungi fungi3 = new Fungi(camera);
+        addObject(fungi3, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi3.setWorldPosition(240, 900);
+         
+        Fungi fungi4 = new Fungi(camera);
+        addObject(fungi4, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi4.setWorldPosition(456, 720);
+        
+        Fungi fungi5 = new Fungi(camera);
+        addObject(fungi5, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi5.setWorldPosition(2155, 800);
+        
+        Fungi fungi6 = new Fungi(camera);
+        addObject(fungi6, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fungi6.setWorldPosition(1323, 780);
+        
     }
     
     public RoomThree() {

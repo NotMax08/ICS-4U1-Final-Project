@@ -4,6 +4,14 @@ import greenfoot.*;
  * Abstract base class for all game worlds/levels
  * Handles common functionality like camera, displays and player tracking
  * 
+ * Sound credits:
+ * "sword"  by @freesound_community on pixabay
+ * "magic"  by @yodguard on pixabay
+ * "heal"   by @yodguard on pixabay
+ * "jump"   by @Jofae on pixabay
+ * "hit"    by @mixkit
+ * "damage" by @freesound_community on pixabay
+ * 
  * @author Paul and Robin
  */
 public abstract class GameWorld extends World {
@@ -18,9 +26,10 @@ public abstract class GameWorld extends World {
     protected HealthDisplay healthDisplay;
     protected ManaDisplay manaDisplay;
     
-    // Game state
-    protected static boolean magicUnlocked = true; // ability to be unlocked
-
+    // Sound Manager
+    protected static SoundManager soundManager;
+    protected static boolean soundsLoaded = false;
+    
     // World image constants
     protected static final int WORLD_WIDTH = 2500;
     protected static final int WORLD_HEIGHT = 1420;
@@ -37,6 +46,9 @@ public abstract class GameWorld extends World {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
 
+        // Initalize sound manager and load sounds 
+        initializeSounds();
+        
         setPaintOrder();
     }
     
@@ -45,7 +57,7 @@ public abstract class GameWorld extends World {
             Potions.class,
             TextBox.class,
             ShopIcons.class,
-            ShopUI.class,    
+            ShopUI.class,
             MapGridDebugOverlay.class,
             InventoryDisplay.class,
             AbilityDisplay.class,
@@ -54,6 +66,25 @@ public abstract class GameWorld extends World {
             SlashAnimation.class,
             Player.class
             );
+    }
+    
+    /**
+     * Initialize the sound manager and load all game sounds
+     * Only loads sounds once, even if called multiple times
+     */
+    protected void initializeSounds(){
+        if(!soundsLoaded){
+            soundManager = SoundManager.getInstance();
+            
+            // Load player sounds
+            soundManager.loadSound("jump", "jumpSound.wav");
+            soundManager.loadSound("run", "runSound.wav");
+            soundManager.loadSound("sword", "swordSound.wav");
+            soundManager.loadSound("magic", "magicSound.wav");
+            soundManager.loadSound("hit", "Slash.mp3");
+            soundManager.loadSound("damage", "damageSound.wav");
+            soundManager.loadSound("heal", "healSound.wav");
+        }
     }
 
     /**
@@ -85,7 +116,7 @@ public abstract class GameWorld extends World {
         addObject(abilityDisplay, 0, 0);
         
         // Create health icons
-        healthDisplay = new HealthDisplay(190, 40, camera, player);
+        healthDisplay = new HealthDisplay(310, 40, camera, player);
         addObject(healthDisplay, 0, 0);
         
         // Create mana bar

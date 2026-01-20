@@ -56,7 +56,7 @@ public abstract class ShopUI extends Actor
         {
             if (icon.getWorld() != null)
             {
-                icon.removeText(); 
+                icon.cleanUp();
                 getWorld().removeObject(icon);
             }
         }

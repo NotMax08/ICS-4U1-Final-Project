@@ -4,7 +4,6 @@ import greenfoot.*;
  */
 public class BossWeapon extends Actor
 {
-    
     private boolean teleporting = false;
     private boolean teleported = false;
     
@@ -28,9 +27,9 @@ public class BossWeapon extends Actor
     
     private boolean facingLeft;
     
-    
-    //Constructor for objects of class BossWeapon
-     
+    /**
+     * Constructor for objects of class BossWeapon
+     */
     public BossWeapon()
     {
         this.setRotation(0);
@@ -77,10 +76,10 @@ public class BossWeapon extends Actor
             lethal=false;
             getWorld().addObject(new BossWeaponEffect(1), playerLocation, 500);
         }
-        else if (attackCounter == 93){
+        else if (attackCounter == 118){
             getWorld().addObject(new BossWeaponEffect(2), playerLocation, 531);
         }
-        else if (attackCounter == 133){
+        else if (attackCounter == 138){
             attack2 = false;
         }
         attackCounter++;
@@ -166,7 +165,6 @@ public class BossWeapon extends Actor
             image = new GreenfootImage("StaBee/WeaponGlowingRight.PNG");
             facingLeft = false;
         }
-        image.scale((int)(image.getWidth()/Boss.scale),(int)(image.getHeight()/Boss.scale));
         this.setImage(image);
     }
     
@@ -184,15 +182,16 @@ public class BossWeapon extends Actor
         else{
             if (attack1){
                 p.takeDamage(1);
-                System.out.println("Hit 1");
             }
             else if (attack2){
                 p.takeDamage(1);
-                System.out.println("Hit 2");
             }
             lethal = false;
             return true;
         }
     }
     
+    public void removeSelf(){
+        getWorld().removeObject(this);
+    }
 }
