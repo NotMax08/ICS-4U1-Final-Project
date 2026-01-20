@@ -393,8 +393,7 @@ public class Boss extends Actor
      * @param imageName Name of desired pose
      */
     private void setI(String imageName){
-        GreenfootImage image = new GreenfootImage("StaBee/Character/" + imageName + ".PNG");
-        image.scale((int)(image.getWidth()/scale),(int)(image.getHeight()/scale));
+        GreenfootImage image = new GreenfootImage("StaBee/Character/" + imageName + ".png");
         this.setImage(image);
     }
     

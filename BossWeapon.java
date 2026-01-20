@@ -158,14 +158,13 @@ public class BossWeapon extends Actor
     private void setI(boolean left){
         GreenfootImage image;
         if (left){
-            image = new GreenfootImage("StaBee/WeaponGlowingLeft.PNG");
+            image = new GreenfootImage("StaBee/WeaponGlowingLeft.png");
             facingLeft = true;
         }
         else{
-            image = new GreenfootImage("StaBee/WeaponGlowingRight.PNG");
+            image = new GreenfootImage("StaBee/WeaponGlowingRight.png");
             facingLeft = false;
         }
-        image.scale((int)(image.getWidth()/Boss.scale),(int)(image.getHeight()/Boss.scale));
         this.setImage(image);
     }
     
