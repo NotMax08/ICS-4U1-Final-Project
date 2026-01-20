@@ -27,6 +27,7 @@ public abstract class BaseEnemy extends ScrollingActor {
     protected boolean hasDealtDamageThisAttack = false; // NEW: Track if damage dealt this attack
     protected boolean shouldUpdateAnimation = true;
     
+    
     // Behaviour states
     protected enum ENEMY_BEHAVIOUR { 
         IDLE, PATROL, CHASE, ATTACK_ANIMATION, 

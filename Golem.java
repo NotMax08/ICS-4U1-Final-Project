@@ -42,6 +42,10 @@ public class Golem extends GroundEnemy {
     public static final int MAX_IDLE_TIME = 120;
     public static final int MAX_PATROL_TIME = MAX_IDLE_TIME;
     
+    private GreenfootSound smash[] = new GreenfootSound[5];
+    private int smashSoundIndex = 0;
+    
+    
     public Golem(Camera camera) {
         super(camera, 
               getUniformImage("Golem.png", IMAGE_SIZE, IMAGE_SIZE),
@@ -52,6 +56,10 @@ public class Golem extends GroundEnemy {
         loadImages();
         behaviour = ENEMY_BEHAVIOUR.IDLE;
         healthBarYOffset = -120;
+        
+        for (int i = 0; i < smash.length; i++){
+            smash[i] = new GreenfootSound("Smash.wav");
+        }
     }
     
     private void loadImages() {
@@ -118,6 +126,8 @@ public class Golem extends GroundEnemy {
                     }
                     
                     if (attackFrame == 3) {
+                        smash[smashSoundIndex].play();
+                        smashSoundIndex++;
                         dealAttackDamage();
                     }
                 }
