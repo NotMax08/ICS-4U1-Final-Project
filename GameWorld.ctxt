@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=GameWorld
-comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ Sound\ credit\:\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\n\ "hit"\ \ \ \ by\ @freesound_community\ on\ pixabay\n\ "damage"\ by\ @freesound_community\ on\ pixabay\n\ \n\ @author\ Paul\ and\ Robin\n
+comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ Sound\ credits\:\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\n\ "hit"\ \ \ \ by\ @mixkit\n\ "damage"\ by\ @freesound_community\ on\ pixabay\n\ \n\ @author\ Paul\ and\ Robin\n
 comment1.params=
 comment1.target=GameWorld()
 comment10.params=
