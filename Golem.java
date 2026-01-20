@@ -27,9 +27,9 @@ public class Golem extends GroundEnemy {
     private int alphaTimer = 0;
     
     // Animation speeds
-    private static final int WALK_FRAME_DELAY = 10; // Walk animation speed
-    private static final int ATTACK_FRAME_DELAY = 8; // Attack animation speed
-    private static final int ALPHA_CHANGE_DELAY = 3; // Alpha fade speed
+    private static final int WALK_FRAME_DELAY = 10;
+    private static final int ATTACK_FRAME_DELAY = 8;
+    private static final int ALPHA_CHANGE_DELAY = 3;
     private static final int ATTACK_COOLDOWN = 1;
     
     private boolean isAttackComplete = false;
@@ -42,9 +42,8 @@ public class Golem extends GroundEnemy {
     public static final int MAX_IDLE_TIME = 120;
     public static final int MAX_PATROL_TIME = MAX_IDLE_TIME;
     
-    private GreenfootSound smash[] = new GreenfootSound[5];
-    private int smashSoundIndex = 0;
-    
+    // Sound manager reference
+    private SoundManager soundManager;
     
     public Golem(Camera camera) {
         super(camera, 
@@ -54,12 +53,15 @@ public class Golem extends GroundEnemy {
               PATROL_SPEED, CHASE_SPEED, GRAVITY, WALL_CHECK_DISTANCE);
         
         loadImages();
+        loadSounds();
         behaviour = ENEMY_BEHAVIOUR.IDLE;
         healthBarYOffset = -120;
-        
-        for (int i = 0; i < smash.length; i++){
-            smash[i] = new GreenfootSound("Smash.wav");
-        }
+    }
+    
+    private void loadSounds() {
+        soundManager = SoundManager.getInstance();
+        // Load 5 instances of the smash sound for overlapping playback
+        soundManager.loadSound("golem_smash", "Smash.wav", 5);
     }
     
     private void loadImages() {
@@ -81,18 +83,14 @@ public class Golem extends GroundEnemy {
     @Override
     public void act() {
         super.act();
-        
-        // Update animations
         updateAnimation();
         updateImage();
     }
     
     @Override
     protected void updateAnimation() {
-        // Update walk animation timer
         walkTimer++;
         
-        // Update walk frames when moving
         if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
             if (walkTimer >= WALK_FRAME_DELAY) {
                 walkTimer = 0;
@@ -103,58 +101,49 @@ public class Golem extends GroundEnemy {
             walkTimer = 0;
         }
         
-        // Update attack animation
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
             if (!isAttackComplete) {
-                // Still playing attack animation
                 attackTimer++;
                 if (attackTimer >= ATTACK_FRAME_DELAY) {
                     attackTimer = 0;
                     attackFrame++;
                     
                     if (attackFrame >= attackImages.size()) {
-                        // Reached last frame - start holding
-                        attackFrame = attackImages.size() - 1; // Stay on frame 4
+                        attackFrame = attackImages.size() - 1;
                         isAttackComplete = true;
                         attackHoldTimer = 0;
                         
-                        // Deal damage when we reach the last frame
                         Player player = (Player) getOneIntersectingWorldObject(Player.class);
                         if (player != null) {
                             // player.takeDamage(damage);
                         }
                     }
                     
+                    // Play smash sound on frame 3 (when attack lands)
                     if (attackFrame == 3) {
-                        smash[smashSoundIndex].play();
-                        smashSoundIndex++;
+                        soundManager.playSound("golem_smash");
                         dealAttackDamage();
                     }
                 }
             } else {
-                // Holding on last frame
                 attackHoldTimer++;
                 if (attackHoldTimer >= ATTACK_HOLD_FRAMES) {
-                    // Hold complete - transition to cooldown
                     behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
                     attackCooldownTimer = ATTACK_COOLDOWN;
                     isInAttackCooldown = true;
                     
-                    // Reset attack animation state
                     attackFrame = 0;
                     isAttackComplete = false;
                     attackHoldTimer = 0;
                 }
             }
         } else {
-            // Reset attack animation when not attacking
             attackFrame = 0;
             attackTimer = 0;
             isAttackComplete = false;
             attackHoldTimer = 0;
         }
         
-        // Update alpha fade
         alphaTimer++;
         if (alphaTimer >= ALPHA_CHANGE_DELAY) {
             alphaTimer = 0;
@@ -174,25 +163,20 @@ public class Golem extends GroundEnemy {
     protected void updateImage() {
         GreenfootImage finalImage;
         
-        // Determine which image to use based on state
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION || 
             behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
-            // Attack animation or holding attack pose
             int frameIndex = Math.min(attackFrame, attackImages.size() - 1);
             finalImage = new GreenfootImage(attackImages.get(frameIndex));
         } else if ((behaviour == ENEMY_BEHAVIOUR.PATROL || behaviour == ENEMY_BEHAVIOUR.CHASE) && isMoving) {
-            // Walking animation
-            if (currentAlpha > 127) { // Mostly alert
+            if (currentAlpha > 127) {
                 finalImage = new GreenfootImage(alertWalkImages.get(walkFrame));
             } else {
                 finalImage = new GreenfootImage(walkImages.get(walkFrame));
             }
         } else {
-            // Idle animation
             if (currentAlpha > 127) {
                 finalImage = new GreenfootImage(alertIdleImage);
             } else if (currentAlpha > 0) {
-                // Blend between normal and alert
                 GreenfootImage blended = new GreenfootImage(normalIdleImage);
                 GreenfootImage overlay = new GreenfootImage(alertIdleImage);
                 overlay.setTransparency(currentAlpha);
@@ -203,7 +187,6 @@ public class Golem extends GroundEnemy {
             }
         }
         
-        // Flip image if facing left
         if (!isFacingRight) {
             finalImage.mirrorHorizontally();
         }
@@ -213,21 +196,17 @@ public class Golem extends GroundEnemy {
     
     @Override
     protected void attackAnimation() {
-        // Animation is handled in updateAnimation()
-        fall(); // Apply gravity during attack
+        fall();
     }
     
     @Override
     protected void takeDamage(int dmg) {
         super.takeDamage(dmg);
-        // Reset attack animation when hurt
         attackFrame = 0;
         attackTimer = 0;
         isAttackComplete = false;
         attackHoldTimer = 0;
     }
-    
-    
     
     @Override
     protected void idleBehavior() {
@@ -286,7 +265,6 @@ public class Golem extends GroundEnemy {
     
     @Override
     protected void attackCooldown() {
-        fall(); // Apply gravity during cooldown
+        fall();
     }
-    
 }
