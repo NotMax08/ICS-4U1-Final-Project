@@ -83,6 +83,10 @@ public class Miniboss extends Actor {
     GreenfootImage[] attackThree = {aaa1, aaa2, aaa3};
     GreenfootImage[] mA3;
     
+    //to switch image frames
+    int alert;
+    int retreat;
+    int pacing;
     public Miniboss(Player player) {
         this.player = player;
     }
@@ -141,14 +145,18 @@ public class Miniboss extends Actor {
      * Updates movement based on current state
      */
     private void updateMovement() {
+        
         switch (state) {
             case PACING:
+                pacing = 0;
                 pacingMovement();
                 break;
             case ALERT:
+                alert = 0;
                 alertMovement();
                 break;
             case RETREATING:
+                retreat = 0;
                 retreatingMovement();
                 break;
         }
