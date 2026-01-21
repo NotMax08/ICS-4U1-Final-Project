@@ -2,7 +2,7 @@ import greenfoot.*;
 import java.util.*;
 /**
  * Ground based enemy that smashes at the ground, AOE effect
- * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
+ * - This enemy art is provided by gemini & NanaBananaPro
  * 
  * @author Max & Claude
  */
