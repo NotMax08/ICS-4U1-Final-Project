@@ -25,11 +25,12 @@ public abstract class GameWorld extends World {
     protected AbilityDisplay abilityDisplay;
     protected HealthDisplay healthDisplay;
     protected ManaDisplay manaDisplay;
-    
+    protected CurrencyDisplay currencyDisplay;
+
     // Sound Manager
     protected static SoundManager soundManager;
     protected static boolean soundsLoaded = false;
-    
+
     // World image constants
     protected static final int WORLD_WIDTH = 2500;
     protected static final int WORLD_HEIGHT = 1420;
@@ -48,26 +49,27 @@ public abstract class GameWorld extends World {
 
         // Initalize sound manager and load sounds 
         initializeSounds();
-        
+
         setPaintOrder();
     }
-    
+
     protected void setPaintOrder(){
         setPaintOrder(
-            Potions.class,
             TextBox.class,
+            Potions.class,
             ShopIcons.class,
             ShopUI.class,
             MapGridDebugOverlay.class,
             InventoryDisplay.class,
+            CurrencyDisplay.class,
             AbilityDisplay.class,
             HealthDisplay.class,
             ManaDisplay.class,
             SlashAnimation.class,
             Player.class
-            );
+        );
     }
-    
+
     /**
      * Initialize the sound manager and load all game sounds
      * Only loads sounds once, even if called multiple times
@@ -75,7 +77,7 @@ public abstract class GameWorld extends World {
     protected void initializeSounds(){
         if(!soundsLoaded){
             soundManager = SoundManager.getInstance();
-            
+
             // Load player sounds
             soundManager.loadSound("jump", "jumpSound.wav");
             soundManager.loadSound("run", "runSound.wav");
@@ -97,7 +99,7 @@ public abstract class GameWorld extends World {
             updateBackground();
         }
     }
-    
+
     /**
      * Initialize display elements
      * Can only be called after the player is created 
@@ -106,30 +108,34 @@ public abstract class GameWorld extends World {
         if(player == null){
             throw new IllegalStateException("Player must be created before initializing displays");
         }
-        
+
         // Create inventory icon
         inventory = new InventoryDisplay(60, SCREEN_HEIGHT - 60, camera, player);
         addObject(inventory, 0, 0);
-        
+
         // Create ability icons
         abilityDisplay = new AbilityDisplay(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 50, camera, player);
         addObject(abilityDisplay, 0, 0);
-        
+
         // Create health icons
         healthDisplay = new HealthDisplay(310, 40, camera, player);
         addObject(healthDisplay, 0, 0);
-        
+
         // Create mana bar
         manaDisplay = new ManaDisplay(150, 100, camera, player);
         addObject(manaDisplay, 0, 0);
+
+        //Creates currency display
+        currencyDisplay = new CurrencyDisplay(SCREEN_WIDTH - 150, -15, camera, player);
+        addObject(currencyDisplay, SCREEN_WIDTH - 150, 0);
     }
-    
+
     protected void updateBackground() {
         if (camera == null || fullBackground == null) return;
 
         GreenfootImage bg = getBackground();
         bg.clear();
-        
+
         GreenfootImage visiblePortion = new GreenfootImage(SCREEN_WIDTH, SCREEN_HEIGHT);
         visiblePortion.drawImage(fullBackground, -camera.getX(), -camera.getY());
         bg.drawImage(visiblePortion, 0, 0);
@@ -147,10 +153,9 @@ public abstract class GameWorld extends World {
         player.setCamera(this.camera);
         addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         player.setWorldPosition(startX, startY);
-        
+
         initalizeDisplays();
     }
-    
 
     public Camera getCamera() { return camera; }
 
