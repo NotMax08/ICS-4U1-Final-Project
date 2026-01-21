@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=GameWorld
-comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ Sound\ credits\:\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\n\ "hit"\ \ \ \ by\ @mixkit\n\ "damage"\ by\ @freesound_community\ on\ pixabay\n\ \n\ @author\ Paul\ and\ Robin\n
+comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ Sound\ credits\:\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\n\ "hit"\ \ \ \ by\ @mixkit\n\ "damage"\ by\ @freesound_community\ on\ pixabay\n\ "electricBolt"\ by\ @PNMCarrieRailfan\ on\ freesound.org\n\ "strike"\ by\ SoundFlakes\ on\ freesound.org\n\ "throw"\ by\ Anton\ on\ freesound.org\n\ BossMusic\ by\ @Komiku\ on\ chosic\n\ All\ other\ background\ music\ by\ @Teecup_Thief\ on\ itch.io\n\ \n\ Art\ credit\:\n\ Boss\ art\ by\ Angelina\n\ \n\ @author\ Paul\ and\ Robin\n
 comment1.params=
 comment1.target=GameWorld()
 comment10.params=
