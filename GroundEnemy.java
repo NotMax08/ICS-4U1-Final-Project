@@ -40,6 +40,7 @@ public abstract class GroundEnemy extends BaseEnemy {
     
     protected abstract void updateAnimation();
     
+    //apply fall for all grounded enemies
     protected void fall() {
         if (!onGround()) {
             velY += gravity;
@@ -102,38 +103,5 @@ public abstract class GroundEnemy extends BaseEnemy {
     protected void chase() {
         fall();
         // Default chase logic can be overridden
-    }
-    
-    protected void animateDeath(){
-        if (isDying) {
-            dieTimer++;
-            if (dieTimer >= DIE_FRAME_DELAY) {
-                dieTimer = 0;
-                dieFrame++;
-                
-                if (dieFrame >= dieImages.size()) {
-                    // Animation complete - remove from world
-                    if (getWorld() != null) {
-                        getWorld().removeObject(this);
-                    }
-                    return;
-                }
-            }
-            return; // Skip normal animation updates when dying
-        }
-    }
-    
-    protected void updateDeathImages(){
-        if (isDying) {
-            int frameIndex = Math.min(dieFrame, dieImages.size());
-            GreenfootImage deathImage = new GreenfootImage(dieImages.get(frameIndex));
-            
-            if (!isFacingRight) {
-                deathImage.mirrorHorizontally();
-            }
-            
-            setImage(deathImage);
-            return; // Skip normal image updates when dying
-        }
     }
 }

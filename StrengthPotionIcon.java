@@ -49,10 +49,4 @@ public class StrengthPotionIcon extends ShopIcons
         cleanUp();
         getWorld().removeObject(this);
     }
-    
-    protected void purchase()
-    {
-        Player p = (Player) getWorld().getObjects(Player.class).get(0);
-        p.updateItemCount(3,1);
-    }
 }

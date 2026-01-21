@@ -12,20 +12,25 @@ import greenfoot.Actor;
 public abstract class ShopIcons extends Actor
 {
     protected GreenfootImage image;
-    protected GreenfootImage outlinedImage;
-    protected String potionType; 
-    protected boolean isHovering = false; 
-    private int fontSize = 12;
+    protected GreenfootImage outlinedImage; //outlines version of the image (white)
+    protected boolean isHovering = false; // Boolean value to check if player is hovering over the icons
+    private int fontSize = 12; // font size for the descriptions
+    
+    //offsets for the description
     protected int offsetX;
     protected int offsetY = 175;
+    
+    //string that stores the description
     protected String description;
-
+    
+    //where to draw the potion image
     protected int potionX = - 147;
     protected int potionY = -30;
     
-    protected int price;
-    protected int itemIndex;
+    protected int price; // Price of the potion
+    protected int itemIndex; // which Index of potion is it
     
+    //declare and intialize text manager;
     private TextManager textManager = new TextManager();
     public void act()
     {
@@ -75,8 +80,8 @@ public abstract class ShopIcons extends Actor
         {
             if(!isHovering)
             {
-                setImage(outlinedImage);
-                isHovering = true; 
+                setImage(outlinedImage); //set image to outlined image
+                isHovering = true;  
             }
         }
 
@@ -88,11 +93,19 @@ public abstract class ShopIcons extends Actor
         }
     }
 
+    
+    /**
+     * Method for making writing text easier
+     * Tailored for description use
+     */
     protected void textWriter(String description, boolean split)
     {
         textManager.textBoxWriter(getWorld(), getWorld().getWidth()/2, getWorld().getHeight()/2, offsetX, offsetY, description, fontSize, split);
     }
 
+    /**
+     * removes all text from world
+     */
     protected void removeText()
     {
         textManager.removeText(getWorld());
@@ -102,15 +115,16 @@ public abstract class ShopIcons extends Actor
 
     protected abstract void cleanUp();
     
+    /**
+     * method that manages item purchasing logic
+     */
     protected void purchase()
     {
         Player p = (Player) getWorld().getObjects(Player.class).get(0);
         if (p.getCurrency() >= price)
         {
-            System.out.println(p.getCurrency());
-            p.updateItemCount(itemIndex,1);
-            p.addToCurrency(-price);
-            System.out.println(p.getCurrency());
+            p.updateItemCount(itemIndex,1); // adds 1 to item count in inventory
+            p.addToCurrency(-price); // removes money from player profile
         }
     }
 }

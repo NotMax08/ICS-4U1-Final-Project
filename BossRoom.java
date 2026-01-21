@@ -24,9 +24,6 @@ public class BossRoom extends GameWorld {
     private static final int ENTRY_SPAWN_X = 150;
     private static final int ENTRY_SPAWN_Y = 500;
     
-    private boolean debugVisuals;
-    
-    GreenfootImage door = new GreenfootImage ("doorway.png");
     public BossRoom(String sourceRoom) {
         super(); // This creates the camera
         
@@ -34,18 +31,12 @@ public class BossRoom extends GameWorld {
         camera.centerOn(BOSS_WORLD_WIDTH / 2, BOSS_WORLD_HEIGHT / 2);
         
         fullBackground = new GreenfootImage("bossroom.jpg");
-        door.scale(200,420);
-        fullBackground.drawImage(door, -30, 500);
         fullBackground.scale(BOSS_WORLD_WIDTH, BOSS_WORLD_HEIGHT);
         
         initializeMapGrid();
-        
-        debugVisuals = false;
-        if(debugVisuals){
-            createPlatformVisuals();
-        }
-        createInteractiveDoors();
-        
+        createPlatformVisuals();
+        createInteractiveDoorVisuals();
+ 
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
         int spawnY = DEFAULT_SPAWN_Y;
@@ -82,6 +73,8 @@ public class BossRoom extends GameWorld {
         staBeePhaseTwo1 = new Boss(2);
         staBeePhaseTwo2 = new Boss(3);
         addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn boss off screen
+        
+        SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
     }
     
     public BossRoom() {
@@ -179,17 +172,16 @@ public class BossRoom extends GameWorld {
             wallsY[i] = wallYList.get(i);
         }
         
-        // Regular door tiles at left side not used in this room
-        int[] doorX = new int[0];
-        int[] doorY = new int[0];
+        // Regular door tiles at left side - AVOID spawning on these
+        int[] doorX = new int[]{0};
+        int[] doorY = new int[]{15}; // Mid-height door
         
-        //Breakables not used here
         int[] breakableX = new int[0];
         int[] breakableY = new int[0];
         
-        // Interactive Doors 
+        // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 450, 80, 140},   // Left door
+            {50, 500, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -278,9 +270,9 @@ public class BossRoom extends GameWorld {
         }
     }
     
-    private void createInteractiveDoors() {
+    private void createInteractiveDoorVisuals() {
         int[][] doorRegions = {
-            {50, 450, 80, 140},   // Left door
+            {50, 500, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {
@@ -293,6 +285,13 @@ public class BossRoom extends GameWorld {
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
-        
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }

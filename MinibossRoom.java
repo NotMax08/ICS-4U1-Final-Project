@@ -73,6 +73,8 @@ public class MinibossRoom extends GameWorld {
         // Example:
         // Boss2 boss2 = new Boss2();
         // addObject(boss2, BOSS_WORLD_WIDTH / 2, -150);
+        
+        SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
     }
     
     public MinibossRoom() {
@@ -283,5 +285,13 @@ public class MinibossRoom extends GameWorld {
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }

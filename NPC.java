@@ -58,11 +58,14 @@ public abstract class NPC extends Actor
     //What the individual npcs do
     public abstract void dialogue();
     
+    
+    //Method to manage text writing 
     public void textWriter(String dialogue, boolean split)
     {
          textManager.textBoxWriter(getWorld(), getX(), getY(), offsetX, offsetY, dialogue, fontSize, split);
     }
     
+    //removes all text from world
     public void removeText()
     {
         textManager.removeText(getWorld());

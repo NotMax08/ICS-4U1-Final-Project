@@ -146,7 +146,7 @@ public class Boss extends Actor
     }
     
     /**
-     * To call action in attack sequence & set initial values
+     * To call teleport in attack sequence & set initial values
      *
      * @param x Teleport to location, x coordinate
      * @param y Teleport to location, y coordinate

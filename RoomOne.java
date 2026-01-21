@@ -84,6 +84,8 @@ public class RoomOne extends GameWorld {
         drawPlatformOnBackground(610, 300, 220, 40, "platform1.png");
         drawPlatformOnBackground(1800, 440, 320, 40, "platform1.png");
         drawPlatformOnBackground(1400, 200, 320, 40, "platform1.png");
+        
+        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
     
     // Default constructor for new game
@@ -345,5 +347,13 @@ public class RoomOne extends GameWorld {
         GreenfootImage platformImg = new GreenfootImage(imageName);
         platformImg.scale(width, height);
         fullBackground.drawImage(platformImg, worldX - width/2, worldY - height/2);
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }

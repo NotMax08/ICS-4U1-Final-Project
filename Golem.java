@@ -1,6 +1,11 @@
 import greenfoot.*;
 import java.util.*;
-
+/**
+ * Ground based enemy that smashes at the ground, AOE effect
+ * - This enemy art is provided by gemini & NanaBananaPro
+ * 
+ * @author Max & Claude
+ */
 public class Golem extends GroundEnemy {
     public static final int GOLEM_HEALTH = 50;
     public static final int GOLEM_DAMAGE = 1;

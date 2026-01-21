@@ -14,6 +14,7 @@ public class SoundManager {
     private HashMap<String, Integer> soundIndices;
     private GreenfootSound backgroundMusic;
     private int masterVolume = 100;
+    private int musicVolume = 70;
     private boolean soundEnabled = true;
     private boolean musicEnabled = true;
     
@@ -120,7 +121,7 @@ public class SoundManager {
         
         try {
             backgroundMusic = new GreenfootSound(filename);
-            backgroundMusic.setVolume(masterVolume - 20);
+            backgroundMusic.setVolume(musicVolume);
             backgroundMusic.playLoop();
         } catch (IllegalArgumentException e) {
             System.out.println("Error loading music: " + filename);
