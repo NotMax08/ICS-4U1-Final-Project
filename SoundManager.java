@@ -1,5 +1,6 @@
 import greenfoot.*;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * SoundManager handles all sound effects and background music for the game.
@@ -9,14 +10,17 @@ import java.util.HashMap;
  */
 public class SoundManager {
     private static SoundManager instance;
-    private HashMap<String, GreenfootSound> sounds;
+    private HashMap<String, ArrayList<GreenfootSound>> soundArrays;
+    private HashMap<String, Integer> soundIndices;
     private GreenfootSound backgroundMusic;
-    private int masterVolume = 70;
+    private int masterVolume = 100;
+    private int musicVolume = 70;
     private boolean soundEnabled = true;
     private boolean musicEnabled = true;
     
     private SoundManager() {
-        sounds = new HashMap<>();
+        soundArrays = new HashMap<>();
+        soundIndices = new HashMap<>();
     }
     
     /**
@@ -30,30 +34,49 @@ public class SoundManager {
     }
     
     /**
-     * Loads a sound file and stores it in the sound library.
+     * Loads multiple copies of a sound file for overlapping playback.
      * @param name The identifier for this sound
      * @param filename The sound file name (e.g., "explosion.wav")
+     * @param copies Number of sound instances to create
      */
-    public void loadSound(String name, String filename) {
+    public void loadSound(String name, String filename, int copies) {
         try {
-            GreenfootSound sound = new GreenfootSound(filename);
-            sounds.put(name, sound);
+            ArrayList<GreenfootSound> sounds = new ArrayList<>();
+            for (int i = 0; i < copies; i++) {
+                sounds.add(new GreenfootSound(filename));
+            }
+            soundArrays.put(name, sounds);
+            soundIndices.put(name, 0);
         } catch (IllegalArgumentException e) {
             System.out.println("Error loading sound: " + filename);
         }
     }
     
     /**
-     * Plays a sound effect once.
+     * Loads a single sound file.
+     * @param name The identifier for this sound
+     * @param filename The sound file name
+     */
+    public void loadSound(String name, String filename) {
+        loadSound(name, filename, 1);
+    }
+    
+    /**
+     * Plays a sound effect once, cycling through available instances.
      * @param name The identifier of the sound to play
      */
     public void playSound(String name) {
         if (!soundEnabled) return;
         
-        GreenfootSound sound = sounds.get(name);
-        if (sound != null) {
+        ArrayList<GreenfootSound> sounds = soundArrays.get(name);
+        if (sounds != null && !sounds.isEmpty()) {
+            int index = soundIndices.get(name);
+            GreenfootSound sound = sounds.get(index);
             sound.setVolume(masterVolume);
             sound.play();
+            
+            // Cycle to next sound instance
+            soundIndices.put(name, (index + 1) % sounds.size());
         }
     }
     
@@ -64,8 +87,9 @@ public class SoundManager {
     public void loopSound(String name) {
         if (!soundEnabled) return;
         
-        GreenfootSound sound = sounds.get(name);
-        if (sound != null) {
+        ArrayList<GreenfootSound> sounds = soundArrays.get(name);
+        if (sounds != null && !sounds.isEmpty()) {
+            GreenfootSound sound = sounds.get(0);
             sound.setVolume(masterVolume);
             sound.playLoop();
         }
@@ -76,9 +100,11 @@ public class SoundManager {
      * @param name The identifier of the sound to stop
      */
     public void stopSound(String name) {
-        GreenfootSound sound = sounds.get(name);
-        if (sound != null) {
-            sound.stop();
+        ArrayList<GreenfootSound> sounds = soundArrays.get(name);
+        if (sounds != null) {
+            for (GreenfootSound sound : sounds) {
+                sound.stop();
+            }
         }
     }
     
@@ -95,7 +121,7 @@ public class SoundManager {
         
         try {
             backgroundMusic = new GreenfootSound(filename);
-            backgroundMusic.setVolume(masterVolume - 20); // Music slightly quieter
+            backgroundMusic.setVolume(musicVolume);
             backgroundMusic.playLoop();
         } catch (IllegalArgumentException e) {
             System.out.println("Error loading music: " + filename);
@@ -127,7 +153,6 @@ public class SoundManager {
     public void setVolume(int volume) {
         masterVolume = Math.max(0, Math.min(100, volume));
         
-        // Update volume for background music if playing
         if (backgroundMusic != null) {
             backgroundMusic.setVolume(masterVolume - 20);
         }
@@ -167,8 +192,10 @@ public class SoundManager {
      * Stops all currently playing sounds (except background music).
      */
     public void stopAllSounds() {
-        for (GreenfootSound sound : sounds.values()) {
-            sound.stop();
+        for (ArrayList<GreenfootSound> sounds : soundArrays.values()) {
+            for (GreenfootSound sound : sounds) {
+                sound.stop();
+            }
         }
     }
     

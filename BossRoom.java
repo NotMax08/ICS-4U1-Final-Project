@@ -36,7 +36,7 @@ public class BossRoom extends GameWorld {
         initializeMapGrid();
         createPlatformVisuals();
         createInteractiveDoorVisuals();
-        
+ 
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
         int spawnY = DEFAULT_SPAWN_Y;
@@ -73,6 +73,8 @@ public class BossRoom extends GameWorld {
         staBeePhaseTwo1 = new Boss(2);
         staBeePhaseTwo2 = new Boss(3);
         addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn boss off screen
+        
+        SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
     }
     
     public BossRoom() {
@@ -283,5 +285,13 @@ public class BossRoom extends GameWorld {
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }

@@ -10,6 +10,7 @@ public class StartWorld extends World
 {
     GreenfootImage startworld = new GreenfootImage ("startworld.jpg");
     GreenfootImage title = new GreenfootImage ("title.png");
+
     /**
      * Constructor for objects of class StartWorld.
      * 
@@ -25,5 +26,15 @@ public class StartWorld extends World
         title.scale(500,250);
         bg.drawImage(title, (getWidth()/4)-40,getHeight()/7);
         setBackground(bg);
+        
+        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }

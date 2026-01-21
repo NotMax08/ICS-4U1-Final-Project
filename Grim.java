@@ -2,7 +2,8 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * Grim - A stationary enemy that teleports near players when detected and attacks
+ * A stationary enemy that teleports near players when detected and attacks
+ * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
  * 
  * @author Max & Claude
  */
@@ -17,15 +18,15 @@ public class Grim extends GroundEnemy {
     public static final int WALL_CHECK_DISTANCE = 20;
     
     // Teleport settings
-    public static final int TELEPORT_OFFSET = 80; // How close to teleport to player
-    private int originX; // Original spawn position
+    public static final int TELEPORT_OFFSET = 80;
+    private int originX;
     private int originY;
     
     // Animation speeds
     public static final int IDLE_ANIMATION_SPEED = 3;
     public static final int ATTACK_ANIMATION_SPEED = 4;
     public static final int TELEPORT_ANIMATION_SPEED = 7;
-    public static final int ATTACK_COOLDOWN = 60; // Cooldown after attack before returning to idle
+    public static final int ATTACK_COOLDOWN = 60;
     
     // Images with different sizes
     private GreenfootImage idleImage;
@@ -42,10 +43,13 @@ public class Grim extends GroundEnemy {
     // Teleport state
     private boolean isTeleporting = false;
     private int teleportAnimationCounter = 0;
-    private boolean hasTeleportedToPlayer = false; // Track if we've teleported this aggro cycle
-    private int lockedTargetX = 0; // Locked target X position only
+    private boolean hasTeleportedToPlayer = false;
+    private int lockedTargetX = 0;
     
     private static double SCALE = 0.35;
+    
+    // Sound manager reference
+    private SoundManager soundManager;
     
     /**
      * Constructor
@@ -57,11 +61,12 @@ public class Grim extends GroundEnemy {
               scaleImage(getUniformImage("GrimIdle.png", 330, 470), SCALE),
               GRIM_HEALTH, GRIM_DAMAGE,
               GRIM_DETECTION_RANGE, GRIM_ATTACK_RANGE,
-              0, CHARGE_SPEED, // No patrol speed, only charge speed
+              0, CHARGE_SPEED,
               GRAVITY, WALL_CHECK_DISTANCE);
         
         this.isFacingRight = startFacingRight;
         loadImages();
+        loadSounds();
         behaviour = ENEMY_BEHAVIOUR.IDLE;
         healthBarYOffset = -80;
     }
@@ -76,9 +81,14 @@ public class Grim extends GroundEnemy {
     @Override
     protected void addedToWorld(World world) {
         super.addedToWorld(world);
-        // Remember starting position
         originX = worldX;
         originY = worldY;
+    }
+    
+    private void loadSounds() {
+        soundManager = SoundManager.getInstance();
+        // Load 5 instances of the slash sound for overlapping playback
+        soundManager.loadSound("grim_slash", "GrimSlash2.wav", 5);
     }
     
     private void loadImages() {
@@ -109,7 +119,6 @@ public class Grim extends GroundEnemy {
     private void startTeleportToPlayer() {
         if (target == null) return;
         
-        // Lock onto the player's current X position only
         lockedTargetX = ((ScrollingActor)target).getWorldX();
         
         isTeleporting = true;
@@ -118,28 +127,22 @@ public class Grim extends GroundEnemy {
     }
     
     private void completeTeleportToPlayer() {
-        // Use the LOCKED X position, keep current Y (ground level)
         int targetX = lockedTargetX;
-        int currentY = worldY; // Stay at current ground level
+        int currentY = worldY;
         
-        // Determine which side of locked position to teleport to
-        int side = (targetX > worldX) ? -1 : 1; // Teleport to opposite side
+        int side = (targetX > worldX) ? -1 : 1;
         int teleportX = targetX + (side * TELEPORT_OFFSET);
         
-        // Teleport to the X position at current ground level
         setWorldPosition(teleportX, currentY);
         velY = 0;
         
-        // Face toward the locked target position
         isFacingRight = (targetX > worldX);
         chargeDirection = isFacingRight ? 1 : -1;
         
-        // Complete teleport and start attack
         isTeleporting = false;
         teleportFrame = 0;
         hasTeleportedToPlayer = true;
         
-        // Start attack animation immediately
         behaviour = ENEMY_BEHAVIOUR.ATTACK_ANIMATION;
         attackFrame = 0;
         animationCounter = 0;
@@ -147,7 +150,6 @@ public class Grim extends GroundEnemy {
     
     @Override
     protected void updateAnimation() {
-        // Handle teleport animation first (highest priority)
         if (isTeleporting) {
             teleportAnimationCounter++;
             if (teleportAnimationCounter >= TELEPORT_ANIMATION_SPEED) {
@@ -155,44 +157,43 @@ public class Grim extends GroundEnemy {
                 teleportFrame++;
                 
                 if (teleportFrame >= teleportImages.size()) {
-                    // Teleport animation complete - now teleport and start attack
                     completeTeleportToPlayer();
                 }
             }
-            return; // Don't update other animations while teleporting
+            return;
         }
         
-        // Handle attack animation
         if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
             animationCounter++;
             if (animationCounter >= ATTACK_ANIMATION_SPEED) {
                 animationCounter = 0;
                 attackFrame++;
                 
-                // Deal damage at frame 2 (when the big swing happens)
+                // Play slash sound on frame 2 (when the big swing happens)
+                if (attackFrame == 2) {
+                    soundManager.playSound("grim_slash");
+                }
+                
+                // Deal damage at frames 2-5
                 if (attackFrame == 2 || attackFrame == 3 || attackFrame == 4 || attackFrame == 5) {
                     dealAttackDamage();
                 }
                 
-                // Check if attack animation is complete
                 if (attackFrame >= attackImages.size()) {
-                    // Attack complete - transition to cooldown
                     behaviour = ENEMY_BEHAVIOUR.ATTACK_COOLDOWN;
                     attackCooldownTimer = ATTACK_COOLDOWN;
                     isInAttackCooldown = true;
-                    attackFrame = 0; // Reset to show idle during cooldown
+                    attackFrame = 0;
                 }
             }
             return;
         }
         
-        // Reset attack animation when NOT attacking
         if (behaviour != ENEMY_BEHAVIOUR.ATTACK_ANIMATION && behaviour != ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
             attackFrame = 0;
             animationCounter = 0;
         }
         
-        // Idle animation (just use single frame)
         if (behaviour == ENEMY_BEHAVIOUR.IDLE || behaviour == ENEMY_BEHAVIOUR.ATTACK_COOLDOWN) {
             idleFrame = 0;
         }
@@ -202,20 +203,16 @@ public class Grim extends GroundEnemy {
     protected void updateImage() {
         GreenfootImage finalImage;
         
-        // Use teleport animation when teleporting
         if (isTeleporting) {
             finalImage = new GreenfootImage(teleportImages.get(teleportFrame));
         }
-        // Use attack animation when attacking
         else if (behaviour == ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
             finalImage = new GreenfootImage(attackImages.get(attackFrame));
         }
-        // Use idle image for cooldown and idle
         else {
             finalImage = new GreenfootImage(idleImage);
         }
         
-        // Flip based on direction
         if (!isFacingRight) {
             finalImage.mirrorHorizontally();
         }
@@ -225,20 +222,17 @@ public class Grim extends GroundEnemy {
     
     @Override
     protected void attackAnimation() {
-        // Grim stays still during attack animation
         fall();
     }
     
     @Override
     protected void attackCooldown() {
-        // Stay still during cooldown, show idle image
         isMoving = false;
         fall();
         
-        // After cooldown, reset and go back to idle
         if (attackCooldownTimer <= 0) {
             behaviour = ENEMY_BEHAVIOUR.IDLE;
-            hasTeleportedToPlayer = false; // Reset so it can teleport again
+            hasTeleportedToPlayer = false;
             isInAttackCooldown = false;
         }
     }
@@ -247,17 +241,14 @@ public class Grim extends GroundEnemy {
     protected void chase() {
         if (target == null) return;
         
-        // If we haven't teleported to player yet and not in cooldown, start teleport
         if (!hasTeleportedToPlayer && !isInAttackCooldown && !isTeleporting) {
             startTeleportToPlayer();
             return;
         }
         
-        // Otherwise just stay still and face player
         int targetX = ((ScrollingActor)target).getWorldX();
         isMoving = false;
         
-        // Face the player
         int desiredDirection = (targetX > worldX) ? 1 : -1;
         isFacingRight = (desiredDirection == 1);
         
@@ -271,16 +262,14 @@ public class Grim extends GroundEnemy {
             target = players.get(0);
             isAggro = true;
         } else {
-            // Player left range - reset state
             target = null;
             isAggro = false;
-            hasTeleportedToPlayer = false; // Allow teleport again when player returns
+            hasTeleportedToPlayer = false;
         }
     }
     
     @Override
     protected void patrol() {
-        // Grim doesn't patrol - just stays at origin
         fall();
         isMoving = false;
     }
@@ -289,6 +278,5 @@ public class Grim extends GroundEnemy {
     protected void idleBehavior() {
         isMoving = false;
         fall();
-        // Grim stays idle until player detected
     }
 }

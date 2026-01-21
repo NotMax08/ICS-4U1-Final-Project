@@ -86,7 +86,7 @@ class InteractiveDoor extends ScrollingActor {
         switch(doorId) {
             case "roomone": return "BossRoom";
             case "backtormone": return "RoomOne";
-            case "enterboss": return "BossRoomTwo";
+            case "enterboss": return "MinibossRoom";
             case "npcenter": return "NPCRoom";
             case "bossroom": return "RoomOne";
             case "npcroom": return "RoomTwo";
@@ -108,7 +108,7 @@ class InteractiveDoor extends ScrollingActor {
                 Greenfoot.setWorld(new RoomOne(sourceRoom));
                 break;
             case "enterboss":
-                Greenfoot.setWorld(new BossRoomTwo(sourceRoom));
+                Greenfoot.setWorld(new MinibossRoom(sourceRoom));
                 break;
             case "npcenter":
                 Greenfoot.setWorld(new NPCRoom(sourceRoom));

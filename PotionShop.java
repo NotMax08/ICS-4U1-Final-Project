@@ -5,7 +5,7 @@ import java.util.*;
  * Write a description of class PotionShop here.
  * 
  * @author Julian
- * @version 2025
+ * @version 2026
  */
 public class PotionShop extends ShopUI
 {
@@ -30,9 +30,10 @@ public class PotionShop extends ShopUI
     private void addItems()
     {
         items = new ArrayList<>();
-        items.add(new HealthPotionIcon());
+        items.add(new ShrinkPotionIcon());
         items.add(new ShieldPotionIcon());
         items.add(new StrengthPotionIcon());
+        items.add(new KeyIcon());
         // Call the manager from the superclass
         iconManager(items);
     }

@@ -86,6 +86,8 @@ public class RoomTwo extends GameWorld {
         Knight knight2 = new Knight(camera);
         //addObject(knight2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         //knight2.setWorldPosition(1700, 250);
+        
+        SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
     }
     
     // Default constructor for new game
@@ -314,5 +316,13 @@ public class RoomTwo extends GameWorld {
         GreenfootImage platformImg = new GreenfootImage(imageName);
         platformImg.scale(width, height);
         fullBackground.drawImage(platformImg, worldX - width/2, worldY - height/2);
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }

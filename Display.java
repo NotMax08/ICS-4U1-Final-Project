@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Superclass for objects that need to be displayed on the screen during the game.
  * Handles common functionality for icons that scroll with the screen
  * 
- * @author Robin
+ * @author Robin and Claude
  */
 public abstract class Display extends ScrollingActor
 {
@@ -79,4 +79,5 @@ public abstract class Display extends ScrollingActor
         this.screenX = x;
         this.screenY = y;
     }
+
 }

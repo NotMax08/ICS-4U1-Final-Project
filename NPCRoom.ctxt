@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=NPCRoom
-comment0.text=\r\n\ \r\n\ @author\ Paul\ assisted\ by\ Claude\r\n
+comment0.text=\n\ \n\ @author\ Paul\ assisted\ by\ Claude\n
 comment1.params=sourceRoom
 comment1.target=NPCRoom(java.lang.String)
 comment2.params=
@@ -13,4 +13,8 @@ comment5.params=
 comment5.target=void\ createPlatformVisuals()
 comment6.params=
 comment6.target=void\ createInteractiveDoorVisuals()
-numComments=7
+comment7.params=
+comment7.target=void\ started()
+comment8.params=
+comment8.target=void\ stopped()
+numComments=9

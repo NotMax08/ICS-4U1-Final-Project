@@ -8,6 +8,12 @@ public class BossWeaponEffect extends Actor
     private int counter;
     private int type;
     private boolean lethal;
+    
+    /**
+     * Boss weapon effect constructor
+     *
+     * @param type Type of effect being spawned
+     */
     public BossWeaponEffect(int type){
         this.type = type;
         counter = 0;
@@ -30,38 +36,12 @@ public class BossWeaponEffect extends Actor
         }
     }
     
-    public void act(){
-        if (type==2){
-            checkCollision2();
-        }
-        else if (type==3 || type==4){
-            checkCollision3();
-        }
-        
-        if (type==1 && counter == 7){
-            getWorld().removeObject(this);
-        }
-        else if (type==2 && counter == 20){
-            getWorld().removeObject(this);
-        }
-        else if (type==3 || type==4){
-            if (counter==60){
-                this.getImage().setTransparency(255);
-                lethal = true;
-            }
-            else if (counter==65){
-                lethal = false;
-                getWorld().removeObject(this);
-            }
-        }
-        counter++;
-    }
-    
-    private void setI(String imageName){
-        GreenfootImage image = new GreenfootImage("StaBee/Attack/" + imageName + ".PNG");
-        this.setImage(image);
-    }
-    
+    /**
+     * Checks if player has collided with the effect, and does damage to player if so
+     * For attack2
+     *
+     * @return If player collides with weapon
+     */
     private boolean checkCollision2(){
         if (lethal){
             Player p;
@@ -80,6 +60,12 @@ public class BossWeaponEffect extends Actor
         }
     }
     
+    /**
+     * Checks if player has collided with the effect, and does damage to player if so
+     * For attack3
+     *
+     * @return If player collides with weapon
+     */
     public boolean checkCollision3(){
         if (lethal==true){
             int[] points = {395, -265,
@@ -145,5 +131,42 @@ public class BossWeaponEffect extends Actor
         else{
             return false;
         }
+    }
+    
+    public void act(){
+        if (type==2){
+            checkCollision2();
+        }
+        else if (type==3 || type==4){
+            checkCollision3();
+        }
+        
+        if (type==1 && counter == 7){
+            getWorld().removeObject(this);
+        }
+        else if (type==2 && counter == 20){
+            getWorld().removeObject(this);
+        }
+        else if (type==3 || type==4){
+            if (counter==60){
+                this.getImage().setTransparency(255);
+                lethal = true;
+            }
+            else if (counter==65){
+                lethal = false;
+                getWorld().removeObject(this);
+            }
+        }
+        counter++;
+    }
+    
+    /**
+     * Sets the effect's image
+     *
+     * @param imageName Name of desired effect image
+     */
+    private void setI(String imageName){
+        GreenfootImage image = new GreenfootImage("StaBee/Attack/" + imageName + ".PNG");
+        this.setImage(image);
     }
 }

@@ -27,7 +27,7 @@ public class NPCRoom extends GameWorld {
         fullBackground.scale(NPC_WORLD_WIDTH, NPC_WORLD_HEIGHT);
         
         initializeMapGrid();
-        createPlatformVisuals();
+        //createPlatformVisuals();
         createInteractiveDoorVisuals();
         
         // Determine spawn position
@@ -62,6 +62,8 @@ public class NPCRoom extends GameWorld {
         
         PotionMerchant potionMerchant = new PotionMerchant();
         addObject(potionMerchant, getWidth()/2, getHeight()/2 + 200);
+        
+        SoundManager.getInstance().playBackgroundMusic("NPCRoomMusic.mp3");
     }
     
     public NPCRoom() {
@@ -273,5 +275,13 @@ public class NPCRoom extends GameWorld {
             addObject(door, 0, 0);
             door.setWorldPosition(worldX, worldY);
         }
+    }
+    
+    public void started() {
+        SoundManager.getInstance().playBackgroundMusic("NPCRoomMusic.mp3");
+    }
+    
+    public void stopped() {
+        SoundManager.getInstance().pauseBackgroundMusic();
     }
 }
