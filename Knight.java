@@ -1,6 +1,11 @@
 import greenfoot.*;
 import java.util.*;
-
+/**
+ * Enemy that runs towards a player, similar to golem but is faster and swings a mace around
+ * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
+ * 
+ * @author Max & Claude
+ */
 public class Knight extends GroundEnemy {
     public static final int KNIGHT_HEALTH = 40;
     public static final int KNIGHT_DAMAGE = 1;

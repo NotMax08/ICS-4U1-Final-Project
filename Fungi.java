@@ -1,9 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 /**
- * Write a description of class Fungi3 here.
+ * Rolling ground based mini enemy that targets a player and attacks by "rolling" towards it
+ * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
  * 
- * @author Max
+ * @author Max & Claude
  */
 public class Fungi extends GroundEnemy
 {

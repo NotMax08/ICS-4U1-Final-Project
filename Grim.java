@@ -2,7 +2,8 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * Grim - A stationary enemy that teleports near players when detected and attacks
+ * A stationary enemy that teleports near players when detected and attacks
+ * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
  * 
  * @author Max & Claude
  */

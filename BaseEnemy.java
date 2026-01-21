@@ -4,8 +4,9 @@ import java.util.*;
 /**
  * BaseEnemy - Contains common enemy functionality and methods
  * Creates basic states and transitions between states and the conditions for it
+ * Credits:
+ *  - All sprite images come from the website https://www.spriters-resource.com/pc_computer/hollowknight/ there is no specific author stated
  * @Author: Max & Claude
- * 
  */
 public abstract class BaseEnemy extends ScrollingActor {
     // Core enemy stats
@@ -39,12 +40,7 @@ public abstract class BaseEnemy extends ScrollingActor {
     protected ScrollingStatBar healthBar;
     protected int healthBarYOffset = -50;
     
-    protected GreenfootImage currentImage;
-    
-    protected boolean isDying = false;
-    protected int dieFrame = 0;
-    protected int dieTimer = 0;
-    protected static final int DIE_FRAME_DELAY = 15; // Death animation speed
+    protected GreenfootImage currentImage; 
     
     /**
      * Takes in camera object for world position
@@ -81,6 +77,7 @@ public abstract class BaseEnemy extends ScrollingActor {
             return;
         }
         
+        //every enemy runs these methods
         detectPlayer();
         updateState();
         executeBehavior();
@@ -166,12 +163,14 @@ public abstract class BaseEnemy extends ScrollingActor {
             case IDLE:
             case PATROL:
                 if (isAggro) {
+                    //if within range then set to chase
                     behaviour = ENEMY_BEHAVIOUR.CHASE;
                 }
                 break;
                 
             case CHASE:
                 if (!isAggro) {
+                    //if no longer in range go patrol
                     behaviour = ENEMY_BEHAVIOUR.PATROL;
                 } else if (distance <= attackRange && !isInAttackCooldown) {
                     behaviour = ENEMY_BEHAVIOUR.ATTACK_ANIMATION;
@@ -193,6 +192,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         }
     }
     
+    //state machine for states
     protected void executeBehavior() {
         switch(behaviour) {
             case IDLE: idleBehavior(); break;
@@ -204,6 +204,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         }
     }
     
+    //call cooldown after attacking
     protected void updateAttackCooldown() {
         if (attackCooldownTimer > 0) {
             attackCooldownTimer--;
@@ -235,6 +236,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         isFacingRight = !isFacingRight;
     }
     
+    //manaully set direction
     protected void setDirection(int newDirection) {
         direction = newDirection;
         if (direction == 1 && !isFacingRight) {
@@ -244,6 +246,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         }
     }
     
+    //faces direction to target
     protected void faceTarget() {
         if (target instanceof ScrollingActor) {
             ScrollingActor scrollTarget = (ScrollingActor) target;
@@ -275,25 +278,28 @@ public abstract class BaseEnemy extends ScrollingActor {
         }
     }
     
+    //die method when called upon dying
     protected void die() {
+        //removes healthbar
         if (healthBar != null && getWorld() != null) {
             getWorld().removeObject(healthBar);
         }
         
+        //finds player
         Player p = (Player) getWorld().getObjects(Player.class).get(0);
         
+        //based on what object this is, add to points
         BaseEnemy thisEnemy = this;
         if (thisEnemy instanceof Golem){
-            System.out.println("10");
             p.addToCurrency(10);
         } else if (thisEnemy instanceof Fungi || thisEnemy instanceof BasicFly){
-            System.out.println("5");
             p.addToCurrency(5);
         } else if (thisEnemy instanceof Knight || thisEnemy instanceof Grim){
-            System.out.println("15");
             p.addToCurrency(15);
         }
         
+        
+        //finaly delete this instance
         if (getWorld() != null) {
             getWorld().removeObject(this);
         }
@@ -307,6 +313,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         return img;
     }
     
+    //scale image based on params
     protected static GreenfootImage scaleImage(GreenfootImage img, double scaleFactor){
         int currentWidth = img.getWidth();
         int currentHeight = img.getHeight();
@@ -315,6 +322,7 @@ public abstract class BaseEnemy extends ScrollingActor {
         return img;
     }
     
+    //stole from player class, just cehcks if there is a platform underneath
     protected boolean isSolidAtPosition(int worldX, int worldY) {
         GameWorld world = (GameWorld) getWorld();
         if (world == null || world.mapGrid == null) return false;
