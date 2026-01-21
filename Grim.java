@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * A stationary enemy that teleports near players when detected and attacks
  * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
- * 
+ * - Sounds are all from mixkit https://mixkit.co/free-sound-effects/
  * @author Max & Claude
  */
 public class Grim extends GroundEnemy {

@@ -2,8 +2,9 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * StunAnimation - Shows a quick sequential animation of stun images
- * 
+ * StunAnimation - Shows a quick sequential animation of stun images and also is based on varying sizes
+ * - All stun animation art also comes form https://www.spriters-resource.com/pc_computer/hollowknight/
+ * - Sounds are all from mixkit https://mixkit.co/free-sound-effects/
  * @author Max & Claude
  * @version 1.0
  */
