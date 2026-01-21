@@ -156,7 +156,7 @@ public abstract class GameWorld extends World {
 
         initalizeDisplays();
     }
-
+    
     public Camera getCamera() { return camera; }
 
     public MapGrid getMapGrid() { return mapGrid; }

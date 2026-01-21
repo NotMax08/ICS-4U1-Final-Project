@@ -39,7 +39,7 @@ public class Boss extends Actor
     // Modifyable variables
     public static double teleportFrames = 25; // Number of frames it takes to teleport
     private int enterSpeedMultiplier = 4; // How fast the boss enters the screen
-    private static final int totalHealth = 60; // Boss total starting health
+    private static final int totalHealth = 10; // Boss total starting health
     
     // Other variables
     private static int bossesDefeated; // When counter reaches 3, win screen is triggered
@@ -146,7 +146,7 @@ public class Boss extends Actor
     }
     
     /**
-     * To call action in attack sequence & set initial values
+     * To call teleport in attack sequence & set initial values
      *
      * @param x Teleport to location, x coordinate
      * @param y Teleport to location, y coordinate

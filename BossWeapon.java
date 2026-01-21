@@ -4,31 +4,29 @@ import greenfoot.*;
  */
 public class BossWeapon extends Actor
 {
+    // State variables
     private boolean teleporting = false;
-    private boolean teleported = false;
-    
-    private int teleportX;
-    private int teleportY;   
-    private int teleportRotation;
-    
-    private boolean left = true;
-    
-    private double teleportFrames = Boss.teleportFrames;
-    
     private boolean attack1 = false;
     private boolean attack2 = false;
     
-    private int weaponSpeed = 45;
-    private int attackCounter;
-    
-    private int playerLocation;
-    
+    private boolean left = true;
     private boolean lethal = false;
     
-    private boolean facingLeft;
+    // Variables relating to teleporting
+    private boolean teleported = false;
+    private int teleportX;
+    private int teleportY;   
+    private int teleportRotation;
+    private double teleportFrames = Boss.teleportFrames;
+    
+    private int weaponSpeed = 45;
+    private int attackCounter;
+    private int playerLocation;
     
     /**
-     * Constructor for objects of class BossWeapon
+     * Boss weapon constructor
+     *
+     * @param damage Number of damage points to take
      */
     public BossWeapon()
     {
@@ -48,6 +46,14 @@ public class BossWeapon extends Actor
         checkCollision();
     }
     
+    /**
+     * To call teleport in attack sequence & set initial values
+     *
+     * @param x Teleport to location, x coordinate
+     * @param y Teleport to location, y coordinate
+     * @param left Direction to teleport to
+     * @param rotation Rotation to teleport to
+     */
     public void teleport(int x, int y, boolean left, int rotation){
         setI(!left);
         teleportX = x;
@@ -59,38 +65,50 @@ public class BossWeapon extends Actor
         teleported = false;
     }
     
-    public void attackFly2(){
-        attack2=true;
-        attackCounter = 0;
-        playerLocation = BossRoom.player.getX();
+    /**
+     * Action method for teleporting
+     *
+     * @param x Teleport to location, x coordinate
+     * @param y Teleport to location, y coordinate
+     * @param left Direction to teleport to
+     */
+    private void teleporting(int x, int y, boolean left){
+        int newTransparency;
+        if (!teleported){
+           newTransparency = this.getImage().getTransparency() - (int)(255/(teleportFrames/2));
+        }
+        else{
+           newTransparency = this.getImage().getTransparency() + (int)(255/(teleportFrames/2));
+        }
+        if (newTransparency <= 0){
+            newTransparency = 0;
+            this.setLocation(teleportX,teleportY);
+            this.setRotation(teleportRotation);
+            teleported = true;
+        }
+        else if(newTransparency >= 255){
+            newTransparency = 255;
+            teleporting = false;
+        }
+        this.getImage().setTransparency(newTransparency);
     }
     
-    private void attackFlying2(){
-        if (attackCounter == 45){
-            lethal = true;
-        }
-        if (attackCounter >= 45 && attackCounter<=52){
-            this.setLocation(this.getX(), this.getY() + weaponSpeed + 2);
-        }
-        else if (attackCounter == 53){
-            lethal=false;
-            getWorld().addObject(new BossWeaponEffect(1), playerLocation, 500);
-        }
-        else if (attackCounter == 118){
-            getWorld().addObject(new BossWeaponEffect(2), playerLocation, 531);
-        }
-        else if (attackCounter == 138){
-            attack2 = false;
-        }
-        attackCounter++;
-    }
-    
+    /**
+     * To call action in attack sequence & set initial values
+     *
+     * @param left Whether the attack begins from the left or right
+     */
     public void attackFly1(boolean left){
         this.left = left;
         attack1=true;
         attackCounter = 0;
     }
     
+    /**
+     * Action method for attack1
+     * 
+     * @param left Whether the attack begins from the left or right
+     */
     private void attackFlying1(boolean left){
         if (attackCounter == 0){
             lethal = true;
@@ -134,40 +152,43 @@ public class BossWeapon extends Actor
         attackCounter++;
     }
     
-    private void teleporting(int x, int y, boolean left){
-        int newTransparency;
-        if (!teleported){
-           newTransparency = this.getImage().getTransparency() - (int)(255/(teleportFrames/2));
-        }
-        else{
-           newTransparency = this.getImage().getTransparency() + (int)(255/(teleportFrames/2));
-        }
-        if (newTransparency <= 0){
-            newTransparency = 0;
-            this.setLocation(teleportX,teleportY);
-            this.setRotation(teleportRotation);
-            teleported = true;
-        }
-        else if(newTransparency >= 255){
-            newTransparency = 255;
-            teleporting = false;
-        }
-        this.getImage().setTransparency(newTransparency);
+    /**
+     * To call action in attack sequence & set initial values
+     */
+    public void attackFly2(){
+        attack2=true;
+        attackCounter = 0;
+        playerLocation = BossRoom.player.getX();
     }
     
-    private void setI(boolean left){
-        GreenfootImage image;
-        if (left){
-            image = new GreenfootImage("StaBee/WeaponGlowingLeft.PNG");
-            facingLeft = true;
+    /**
+     * Action method for attack2
+     */
+    private void attackFlying2(){
+        if (attackCounter == 45){
+            lethal = true;
         }
-        else{
-            image = new GreenfootImage("StaBee/WeaponGlowingRight.PNG");
-            facingLeft = false;
+        if (attackCounter >= 45 && attackCounter<=52){
+            this.setLocation(this.getX(), this.getY() + weaponSpeed + 2);
         }
-        this.setImage(image);
+        else if (attackCounter == 53){
+            lethal=false;
+            getWorld().addObject(new BossWeaponEffect(1), playerLocation, 500);
+        }
+        else if (attackCounter == 118){
+            getWorld().addObject(new BossWeaponEffect(2), playerLocation, 531);
+        }
+        else if (attackCounter == 138){
+            attack2 = false;
+        }
+        attackCounter++;
     }
     
+    /**
+     * Checks if player has collided with the weapon, and does damage to player if so
+     *
+     * @return If player collides with weapon
+     */
     private boolean checkCollision(){
         Player p;
         if (lethal){
@@ -191,6 +212,25 @@ public class BossWeapon extends Actor
         }
     }
     
+    /**
+     * Sets boss weapon's image
+     *
+     * @param left Weapon direction
+     */
+    private void setI(boolean left){
+        GreenfootImage image;
+        if (left){
+            image = new GreenfootImage("StaBee/WeaponGlowingLeft.PNG");
+        }
+        else{
+            image = new GreenfootImage("StaBee/WeaponGlowingRight.PNG");
+        }
+        this.setImage(image);
+    }
+    
+    /**
+     * Removes this weapon from the world
+     */
     public void removeSelf(){
         getWorld().removeObject(this);
     }
