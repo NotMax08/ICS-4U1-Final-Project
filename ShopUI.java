@@ -19,6 +19,11 @@ public abstract class ShopUI extends Actor
         // Add your action code here.
     }
     
+    
+    /**
+     * Manages the creation of shop icons into the grid for my shop
+     * @param ArrayList of shopIcon objects
+     */
     protected void iconManager(ArrayList<ShopIcons> shopIcons)
     {
         if (getWorld() == null) return;
@@ -32,7 +37,7 @@ public abstract class ShopUI extends Actor
             int col = i % 3; // 0, 1, 2, 0, 1, 2...
             int row = i / 3; // 0, 0, 0, 1, 1, 1...
 
-            // Get dimensions of the icon's image
+            // get the diemensions of the icons
             int iconW = icon.getImage().getWidth();
             int iconH = icon.getImage().getHeight();
             
@@ -47,6 +52,10 @@ public abstract class ShopUI extends Actor
         }
     }
     
+    
+    /**
+     * removes all Icon objects 
+     */
     public void removeIcons()
     {
         if (getWorld() == null) return;

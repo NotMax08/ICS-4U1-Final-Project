@@ -33,6 +33,9 @@ public class PotionMerchant extends NPC
         }
     }
 
+    /**
+     * Creates a PotionShop actor that contains icons, potions, and descritptions
+     */
     private void openShop()
     {
         isShopOpen = true; 

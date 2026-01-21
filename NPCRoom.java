@@ -27,7 +27,7 @@ public class NPCRoom extends GameWorld {
         fullBackground.scale(NPC_WORLD_WIDTH, NPC_WORLD_HEIGHT);
         
         initializeMapGrid();
-        createPlatformVisuals();
+        //createPlatformVisuals();
         createInteractiveDoorVisuals();
         
         // Determine spawn position
