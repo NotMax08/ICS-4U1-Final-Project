@@ -1,6 +1,10 @@
 import greenfoot.*;
 import java.util.*;
 
+/**
+ * Flying enemy that has similar traits to BaseEnemy but instead of being grounded, it flies and patrols area
+ * @Author: max & claude
+ */
 public abstract class FlyingEnemy extends BaseEnemy {
     // Movement constants
     protected int patrolSpeed;

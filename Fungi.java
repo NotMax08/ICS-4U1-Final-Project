@@ -20,10 +20,10 @@ public class Fungi extends GroundEnemy
     public static final int IMAGE_WIDTH = 62;
     public static final int IMAGE_HEIGHT = 71;
     
-    // Animation constants - MAKE THESE HIGHER (slower animation)
-    public static final int ANIMATION_SPEED = 10; // Increased from 10
-    public static final int ATTACK_ANIMATION_SPEED = 10; // Increased from 4 (slower attack)
-    public static final int ATTACK_COOLDOWN = 60; // Increased from 30
+    // Animation constants
+    public static final int ANIMATION_SPEED = 10;
+    public static final int ATTACK_ANIMATION_SPEED = 10; 
+    public static final int ATTACK_COOLDOWN = 60; 
     
     // Images
     private ArrayList<GreenfootImage> idleImages = new ArrayList<>();
@@ -73,15 +73,6 @@ public class Fungi extends GroundEnemy
     
     public void act() {
         super.act();
-        
-        // Only update animation every FRAME_DELAY frames to prevent lag
-        /*
-        frameDelayCounter++;
-        if (frameDelayCounter >= FRAME_DELAY) {
-            frameDelayCounter = 0;
-            updateAnimation();
-        }
-        */
         updateAnimation();
         updateImage();
     }
