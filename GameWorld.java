@@ -96,6 +96,10 @@ public abstract class GameWorld extends World {
             updateAllActors();
             updateBackground();
         }
+        if (HighScoreManager.isRunInProgress()) {
+            int currentTime = HighScoreManager.getCurrentRunTime();
+            showText("Time: " + HighScoreManager.formatTime(currentTime), 700, 30);
+        }
     }
     
     /**

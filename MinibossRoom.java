@@ -3,7 +3,7 @@ import greenfoot.*;
  * 
  * @author Paul assisted by Claude
  */
-public class BossRoomTwo extends GameWorld {
+public class MinibossRoom extends GameWorld {
     // Override world dimensions to be same as screen - makes room static
     private static final int BOSS_WORLD_WIDTH = 822;
     private static final int BOSS_WORLD_HEIGHT = 600;
@@ -18,18 +18,25 @@ public class BossRoomTwo extends GameWorld {
     private static final int ENTRY_SPAWN_X = 150;
     private static final int ENTRY_SPAWN_Y = 500;
     
-    public BossRoomTwo(String sourceRoom) {
+    private boolean debugVisuals;
+    
+    GreenfootImage door = new GreenfootImage ("doorway.png");
+    public MinibossRoom(String sourceRoom) {
         super(); // This creates the camera
         
         // Lock camera to center of static room
         camera.centerOn(BOSS_WORLD_WIDTH / 2, BOSS_WORLD_HEIGHT / 2);
         
         fullBackground = new GreenfootImage("bossroomtwo.jpg");
+        door.scale(200,350);
+        fullBackground.drawImage(door, -40, 300);
         fullBackground.scale(BOSS_WORLD_WIDTH, BOSS_WORLD_HEIGHT);
         
         initializeMapGrid();
-        createPlatformVisuals();
-        createInteractiveDoorVisuals();
+        if(debugVisuals){
+            createPlatformVisuals();
+        }
+        createInteractiveDoors();
         
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -68,7 +75,7 @@ public class BossRoomTwo extends GameWorld {
         // addObject(boss2, BOSS_WORLD_WIDTH / 2, -150);
     }
     
-    public BossRoomTwo() {
+    public MinibossRoom() {
         this((String)null);
     }
     
@@ -172,7 +179,7 @@ public class BossRoomTwo extends GameWorld {
         
         // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 500, 80, 140},   // Left door
+            {50, 450, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -261,9 +268,9 @@ public class BossRoomTwo extends GameWorld {
         }
     }
     
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
         int[][] doorRegions = {
-            {50, 500, 80, 140},   // Left door
+            {50, 450, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {

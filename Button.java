@@ -190,6 +190,7 @@ public class Button extends Actor
            
             System.gc(); // Force garbage collection
             Greenfoot.setWorld(new RoomOne());
+            HighScoreManager.startRun();
             return;
         }
         if(buttonID.equals("backtostart")){

@@ -32,56 +32,45 @@ public class Miniboss extends Actor {
     private static final int RETREAT_COOLDOWN_TIME = 60;
     
     // References
-    BossRoomTwo room;
+    MinibossRoom room;
     Player player;
     SuperStatBar healthBar;
     private int healthBarYOffset = 100;
     
     //Walking frames
-    GreenfootImage trob1 = new GreenfootImage("trob1");
-    GreenfootImage trob2 = new GreenfootImage("trob2");
-    GreenfootImage trob3 = new GreenfootImage("trob3");
-    GreenfootImage trob4 = new GreenfootImage("trob4");
-    GreenfootImage[] walking = {trob1,trob2,trob3,trob4};
+    GreenfootImage m1 = new GreenfootImage("m1.png");
+    GreenfootImage m2 = new GreenfootImage("m2.png");
+    GreenfootImage[] walking = {m1,m2};
     GreenfootImage[] mWalk;
     
     //Jumping frames
-    GreenfootImage trob5 = new GreenfootImage("trob5");
-    GreenfootImage trob6 = new GreenfootImage("trob6");
-    GreenfootImage trob7 = new GreenfootImage("trob7");
-    GreenfootImage trob8 = new GreenfootImage("trob8");
-    GreenfootImage[] jumping = {trob5,trob6,trob7,trob8};
+    GreenfootImage m3 = new GreenfootImage("m3.png");
+    GreenfootImage m4 = new GreenfootImage("m4.png");
+    GreenfootImage[] jumping = {m3,m4};
     GreenfootImage[] mJump;
     
     // Explosion frames
-    GreenfootImage ex1 = new GreenfootImage("ex1");
-    GreenfootImage ex2 = new GreenfootImage("ex2");
-    GreenfootImage ex3 = new GreenfootImage("ex3");
-    GreenfootImage ex4 = new GreenfootImage("ex4");
+    GreenfootImage ex1 = new GreenfootImage("stun1.png");
+    GreenfootImage ex2 = new GreenfootImage("stun2.png");
+    GreenfootImage ex3 = new GreenfootImage("stun3.png");
+    GreenfootImage ex4 = new GreenfootImage("stun4.png");
     GreenfootImage[] exFrames = {ex1, ex2, ex3, ex4};
     
     // Attack One Frames
-    GreenfootImage a1 = new GreenfootImage("a1");
-    GreenfootImage a2 = new GreenfootImage("a2");
-    GreenfootImage a3 = new GreenfootImage("a3");
-    GreenfootImage a4 = new GreenfootImage("a4");
-    GreenfootImage a5 = new GreenfootImage("a5");
+    GreenfootImage a1 = new GreenfootImage("a1.png");
+    GreenfootImage a2 = new GreenfootImage("a2.png");
+    GreenfootImage a3 = new GreenfootImage("a3.png");
+    GreenfootImage a4 = new GreenfootImage("a4.png");
+    GreenfootImage a5 = new GreenfootImage("a5.png");
     GreenfootImage[] attackOne = {a1, a2, a3};
     GreenfootImage[] mA1;
     
     // Attack Two Frames 
     GreenfootImage aa1 = new GreenfootImage("aa1");
     GreenfootImage aa2 = new GreenfootImage("aa2");
-    GreenfootImage aa3 = new GreenfootImage("aa3");
-    GreenfootImage[] attackTwo = {aa1, aa2, aa3};
-    GreenfootImage[] mA2;
+    GreenfootImage summonbg = new GreenfootImage("summonbg.png");
+    GreenfootImage[] attackTwo = {aa1, aa2};
     
-    // Attack Three Frames 
-    GreenfootImage aaa1 = new GreenfootImage("aaa1");
-    GreenfootImage aaa2 = new GreenfootImage("aaa2");
-    GreenfootImage aaa3 = new GreenfootImage("aaa3");
-    GreenfootImage[] attackThree = {aaa1, aaa2, aaa3};
-    GreenfootImage[] mA3;
     
     public Miniboss(Player player) {
         this.player = player;
@@ -235,7 +224,7 @@ public class Miniboss extends Actor {
         if (attackTimer == 0) {
             // Only attack if player is in range
             if (state == BossState.ALERT) {
-                attackNum = Greenfoot.getRandomNumber(3) + 1;
+                attackNum = Greenfoot.getRandomNumber(2) + 1;
                 
                 switch (attackNum) {
                     case 1:
@@ -244,9 +233,7 @@ public class Miniboss extends Actor {
                     case 2:
                         attackTwo();
                         break;
-                    case 3:
-                        attackThree();
-                        break;
+                    
                 }
             }
             
@@ -263,11 +250,7 @@ public class Miniboss extends Actor {
         // TODO: Implement attack 2
         // Example: Area of effect attack
     }
-    
-    private void attackThree() {
-        // TODO: Implement attack 3
-        // Example: Summon minions
-    }
+
     
     public void takeDamage(int dmg) {
         health -= dmg;

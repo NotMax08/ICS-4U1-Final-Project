@@ -19,7 +19,7 @@ public class ShrinkPotionIcon extends ShopIcons
         
         this.price = 15;
         this.itemIndex = 2;
-        this.description = "Shrinkers player| Purchase for 15 orbs?"; 
+        this.description = "Shrinks player| Purchase for 15 orbs?"; 
     }
 
     public void act()

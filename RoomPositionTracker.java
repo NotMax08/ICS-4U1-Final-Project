@@ -68,11 +68,11 @@ public class RoomPositionTracker {
         
         // RoomTwo -> BossRoomTwo (scrolling to static)
         // Spawn at safe position in BossRoomTwo, away from regular door tile
-        doorEntries.put("RoomTwo->BossRoomTwo", new DoorEntry(150, 500, 0, 0));
+        doorEntries.put("RoomTwo->MinibossRoom", new DoorEntry(150, 500, 0, 0));
         
         // BossRoomTwo -> RoomTwo (static to scrolling)
         // Return to RoomTwo at "enterboss" door (2330, 810) with offset
-        doorEntries.put("BossRoomTwo->RoomTwo", new DoorEntry(2330, 810, -200, -100));
+        doorEntries.put("MinibossRoom->RoomTwo", new DoorEntry(2330, 810, -200, -100));
         
         // === ROOM THREE CONNECTIONS (Scrolling) ===
         
