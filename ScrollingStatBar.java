@@ -1,5 +1,9 @@
 import greenfoot.*;
-
+/**
+ * Scrolling stat bar similar to Mr.Cohen's but it works with our scrolling game
+ * Credits: uses Mr cohen's super stat bar but just adds on a little
+ * Author: Max & Claude
+ */
 public class ScrollingStatBar extends ScrollingActor {
     private SuperStatBar statBar;
     private Actor target;

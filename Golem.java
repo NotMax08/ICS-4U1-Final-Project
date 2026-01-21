@@ -3,7 +3,8 @@ import java.util.*;
 /**
  * Ground based enemy that smashes at the ground, AOE effect
  * - This enemy art is provided by gemini & NanaBananaPro
- * 
+ * - Sounds are all from mixkit https://mixkit.co/free-sound-effects/
+ * - Sounds are all from mixkit https://mixkit.co/free-sound-effects/
  * @author Max & Claude
  */
 public class Golem extends GroundEnemy {

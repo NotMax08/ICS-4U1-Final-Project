@@ -6,6 +6,7 @@ import java.util.*;
  * Creates basic states and transitions between states and the conditions for it
  * Credits:
  *  - All sprite images come from the website https://www.spriters-resource.com/pc_computer/hollowknight/ there is no specific author stated
+ *  - Sounds are all from mixkit https://mixkit.co/free-sound-effects/
  * @Author: Max & Claude
  */
 public abstract class BaseEnemy extends ScrollingActor {

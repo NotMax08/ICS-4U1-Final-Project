@@ -3,7 +3,7 @@ import java.util.*;
 /**
  * Enemy that runs towards a player, similar to golem but is faster and swings a mace around
  * - All enemy art come form https://www.spriters-resource.com/pc_computer/hollowknight/
- * 
+ * - Sounds are all from mixkit https://mixkit.co/free-sound-effects/
  * @author Max & Claude
  */
 public class Knight extends GroundEnemy {
@@ -156,6 +156,7 @@ public class Knight extends GroundEnemy {
         }
         
         if (behaviour != ENEMY_BEHAVIOUR.ATTACK_ANIMATION) {
+            //reset all animation frames and timers!
             attackFrame = 0;
             attackTimer = 0;
             recoverFrame = 0;
