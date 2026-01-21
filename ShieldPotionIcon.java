@@ -8,7 +8,6 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ShieldPotionIcon extends ShopIcons
 {
-    private String description = "Gives player shield|Purchase for 25?";
     private ShieldPotion shieldPotion; 
     
     public ShieldPotionIcon()
@@ -18,6 +17,10 @@ public class ShieldPotionIcon extends ShopIcons
         imageSetup(image);
         
         shieldPotion = new ShieldPotion();
+        
+        this.price = 10;
+        this.itemIndex = 1;
+        this.description = "Gives player shield|Purchase for 25 orbs?";
     }
     
     public void act()
@@ -46,10 +49,5 @@ public class ShieldPotionIcon extends ShopIcons
     {
         cleanUp();
         getWorld().removeObject(this);
-    }
-    
-    protected void purchase()
-    {
-        
     }
 }

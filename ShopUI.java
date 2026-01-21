@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Write a description of class ShopUI here.
  * 
  * @author Julian, Google Ai studio (helped style)
- * @version 2025
+ * @version 2026
  */
 public abstract class ShopUI extends Actor
 {
@@ -13,7 +13,6 @@ public abstract class ShopUI extends Actor
     protected int startXOffset = 60; 
     protected int startYOffset = -97;
     protected int spacing = 10;
-    
     private ArrayList<ShopIcons> activeIcons = new ArrayList<>();
     public void act()
     {

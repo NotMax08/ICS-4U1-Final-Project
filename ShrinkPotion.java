@@ -6,11 +6,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Julian 
  * @version 2026
  */
-public class HealthPotion extends Potions
+public class ShrinkPotion extends Potions
 {
-    public HealthPotion()
+    public ShrinkPotion()
     {
-        image = new GreenfootImage("pt1.png");
+        image = new GreenfootImage("pt3.png");
         image.scale(image.getWidth()/4, image.getHeight()/4);
         setImage(image);
     }

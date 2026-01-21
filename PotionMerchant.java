@@ -1,4 +1,10 @@
 import greenfoot.*;  
+/**
+ * The potion merchant in the game
+ * 
+ * @author Julian
+ * @version 2026
+ */
 
 public class PotionMerchant extends NPC
 {   

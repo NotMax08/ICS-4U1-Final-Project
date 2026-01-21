@@ -27,6 +27,7 @@ public abstract class BaseEnemy extends ScrollingActor {
     protected boolean hasDealtDamageThisAttack = false; // NEW: Track if damage dealt this attack
     protected boolean shouldUpdateAnimation = true;
     
+    
     // Behaviour states
     protected enum ENEMY_BEHAVIOUR { 
         IDLE, PATROL, CHASE, ATTACK_ANIMATION, 
@@ -132,13 +133,12 @@ public abstract class BaseEnemy extends ScrollingActor {
                     if (verticalDistance < getImage().getHeight() + 20) {
                         player.takeDamage(damage);
                         hasDealtDamageThisAttack = true; // Mark damage as dealt
-                        System.out.println("damage bam");
+                        //System.out.println("damage bam");
                         break; // Only damage once per attack
                     }
                 } else {
                     player.takeDamage(damage);
                     hasDealtDamageThisAttack = true; // Mark damage as dealt
-                    System.out.println("damage bam");
                     break;
                 }
                 
@@ -279,9 +279,25 @@ public abstract class BaseEnemy extends ScrollingActor {
         if (healthBar != null && getWorld() != null) {
             getWorld().removeObject(healthBar);
         }
+        
+        Player p = (Player) getWorld().getObjects(Player.class).get(0);
+        
+        BaseEnemy thisEnemy = this;
+        if (thisEnemy instanceof Golem){
+            System.out.println("10");
+            p.addToCurrency(10);
+        } else if (thisEnemy instanceof Fungi || thisEnemy instanceof BasicFly){
+            System.out.println("5");
+            p.addToCurrency(5);
+        } else if (thisEnemy instanceof Knight || thisEnemy instanceof Grim){
+            System.out.println("15");
+            p.addToCurrency(15);
+        }
+        
         if (getWorld() != null) {
             getWorld().removeObject(this);
         }
+        
     }
     
     // Static helper

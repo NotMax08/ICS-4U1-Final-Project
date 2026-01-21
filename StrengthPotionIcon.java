@@ -3,12 +3,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class StrengthPotionIcon here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Julian 
+ * @version 2026
  */
 public class StrengthPotionIcon extends ShopIcons
 {
-    private String description = "Increases damage to enemies|Purchase for 25?";
     private StrengthPotion strengthPotion;
     public StrengthPotionIcon()
     {
@@ -17,6 +16,10 @@ public class StrengthPotionIcon extends ShopIcons
         imageSetup(image);
         
         strengthPotion = new StrengthPotion();
+        
+        this.price = 25;
+        this.itemIndex = 3;
+        this.description = "Increases damage to enemies|Purchase for 25?";
     }
     
     public void act()
@@ -49,6 +52,7 @@ public class StrengthPotionIcon extends ShopIcons
     
     protected void purchase()
     {
-        
+        Player p = (Player) getWorld().getObjects(Player.class).get(0);
+        p.updateItemCount(3,1);
     }
 }
