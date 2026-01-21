@@ -72,7 +72,7 @@ public class MinibossRoom extends GameWorld {
         // Add boss enemy here
         Miniboss mini = new Miniboss(player);
         addObject(mini, getWidth()/2, 500);
-        //SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
+        SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
     }
     
     public MinibossRoom() {

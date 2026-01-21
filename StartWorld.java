@@ -27,7 +27,7 @@ public class StartWorld extends World
         bg.drawImage(title, (getWidth()/4)-40,getHeight()/7);
         setBackground(bg);
         
-        //SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
+        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
     
     public void started() {
