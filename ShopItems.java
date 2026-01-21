@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * 
  * Images all from Rafaelchm on OpenGameArt.org
  */
-public abstract class Potions extends Actor
+public abstract class ShopItems extends Actor
 {
     public int price;
     public boolean inInventory = false; 

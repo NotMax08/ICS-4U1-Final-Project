@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Julian 
  * @version 2026
  */
-public class ShrinkPotion extends Potions
+public class ShrinkPotion extends ShopItems
 {
     public ShrinkPotion()
     {

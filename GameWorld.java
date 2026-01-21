@@ -56,7 +56,7 @@ public abstract class GameWorld extends World {
     protected void setPaintOrder(){
         setPaintOrder(
             TextBox.class,
-            Potions.class,
+            ShopItems.class,
             ShopIcons.class,
             ShopUI.class,
             MapGridDebugOverlay.class,

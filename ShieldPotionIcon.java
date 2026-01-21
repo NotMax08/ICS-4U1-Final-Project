@@ -20,7 +20,7 @@ public class ShieldPotionIcon extends ShopIcons
         
         this.price = 10;
         this.itemIndex = 1;
-        this.description = "Gives player shield|Purchase for 25 orbs?";
+        this.description = "Gives player shield|Purchase for $10?";
     }
     
     public void act()
