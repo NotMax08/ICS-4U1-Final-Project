@@ -482,6 +482,8 @@ public class Player extends ScrollingActor {
                     ((BaseEnemy) target).takeDamage(MAGIC_ATTACK_DAMAGE);
                 } else if (target instanceof Boss) {
                     ((Boss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
+                } else if(target instanceof Miniboss){
+                    ((Miniboss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
                 }
             }
         }

@@ -57,8 +57,7 @@ public class LeaderboardScreen extends World {
     
     public void act() {
         if (Greenfoot.isKeyDown("escape")) {
-            // Replace with your actual title screen class
-            // Greenfoot.setWorld(new TitleScreen());
+            Greenfoot.setWorld(new StartWorld());
         }
     }
 }

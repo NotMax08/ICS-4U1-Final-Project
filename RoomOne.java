@@ -85,7 +85,7 @@ public class RoomOne extends GameWorld {
         drawPlatformOnBackground(1800, 440, 320, 40, "platform1.png");
         drawPlatformOnBackground(1400, 200, 320, 40, "platform1.png");
         
-        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
+        //SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
     
     // Default constructor for new game

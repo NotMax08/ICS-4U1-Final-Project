@@ -15,6 +15,16 @@ public class Miniboss extends Actor {
     // Attack system
     private int attackTimer = 300;
     private int attackNum;
+    private boolean attackHitRegistered = false;
+    
+    // Animation
+    private int animationFrame = 0;
+    private int animationSpeed = 8;
+    private int animationCounter = 0;
+    private boolean isAttacking = false;
+    private int attackAnimationFrame = 0;
+    private boolean isDying = false;
+    private int deathFrame = 0;
     
     // Movement constants
     private static final int PACE_SPEED = 2;
@@ -36,17 +46,18 @@ public class Miniboss extends Actor {
     Player player;
     SuperStatBar healthBar;
     private int healthBarYOffset = 100;
+    private SummonBackground currentSummonBg = null;
     
-    //Walking frames
+    // Walking frames
     GreenfootImage m1 = new GreenfootImage("m1.png");
     GreenfootImage m2 = new GreenfootImage("m2.png");
-    GreenfootImage[] walking = {m1,m2};
+    GreenfootImage[] walking = {m1, m2};
     GreenfootImage[] mWalk;
     
-    //Jumping frames
+    // Jumping frames
     GreenfootImage m3 = new GreenfootImage("m3.png");
     GreenfootImage m4 = new GreenfootImage("m4.png");
-    GreenfootImage[] jumping = {m3,m4};
+    GreenfootImage[] jumping = {m3, m4};
     GreenfootImage[] mJump;
     
     // Explosion frames
@@ -62,18 +73,77 @@ public class Miniboss extends Actor {
     GreenfootImage a3 = new GreenfootImage("a3.png");
     GreenfootImage a4 = new GreenfootImage("a4.png");
     GreenfootImage a5 = new GreenfootImage("a5.png");
-    GreenfootImage[] attackOne = {a1, a2, a3};
+    GreenfootImage[] attackOne = {a1, a2, a3, a4, a5};
     GreenfootImage[] mA1;
     
-    // Attack Two Frames 
-    GreenfootImage aa1 = new GreenfootImage("aa1");
-    GreenfootImage aa2 = new GreenfootImage("aa2");
-    GreenfootImage summonbg = new GreenfootImage("summonbg.png");
+    // Attack Two Frames (no mirrored needed - facing camera)
+    GreenfootImage aa1 = new GreenfootImage("aa1.png");
+    GreenfootImage aa2 = new GreenfootImage("aa2.png");
     GreenfootImage[] attackTwo = {aa1, aa2};
-    
     
     public Miniboss(Player player) {
         this.player = player;
+        scaleAllImages();
+        initializeMirroredImages();
+    }
+    
+    /**
+     * Scales all images to 100x100
+     */
+    private void scaleAllImages() {
+        // Scale walking frames
+        for (GreenfootImage img : walking) {
+            img.scale(100, 100);
+        }
+        
+        // Scale jumping frames
+        for (GreenfootImage img : jumping) {
+            img.scale(100, 100);
+        }
+        
+        // Scale explosion frames
+        for (GreenfootImage img : exFrames) {
+            img.scale(100, 100);
+        }
+        
+        // Scale attack one frames
+        for (GreenfootImage img : attackOne) {
+            img.scale(100, 100);
+        }
+        
+        // Scale attack two frames
+        for (GreenfootImage img : attackTwo) {
+            img.scale(100, 100);
+        }
+    }
+    
+    /**
+     * Creates mirrored versions of all directional images
+     */
+    private void initializeMirroredImages() {
+        // Mirror walking frames
+        mWalk = new GreenfootImage[walking.length];
+        for (int i = 0; i < walking.length; i++) {
+            mWalk[i] = new GreenfootImage(walking[i]);
+            mWalk[i].mirrorHorizontally();
+        }
+        
+        // Mirror jumping frames
+        mJump = new GreenfootImage[jumping.length];
+        for (int i = 0; i < jumping.length; i++) {
+            mJump[i] = new GreenfootImage(jumping[i]);
+            mJump[i].mirrorHorizontally();
+        }
+        
+        // Mirror attack one frames
+        mA1 = new GreenfootImage[attackOne.length];
+        for (int i = 0; i < attackOne.length; i++) {
+            mA1[i] = new GreenfootImage(attackOne[i]);
+            mA1[i].mirrorHorizontally();
+        }
+        
+        // Set initial image
+        setImage(walking[0]);
     }
     
     @Override
@@ -91,12 +161,21 @@ public class Miniboss extends Actor {
     }
     
     public void act() {
+        if (isDying) {
+            playDeathAnimation();
+            return;
+        }
+        
         if (retreatCooldown > 0) {
             retreatCooldown--;
         }
         
-        checkPlayerProximity();
-        updateMovement();
+        if (!isAttacking) {
+            checkPlayerProximity();
+            updateMovement();
+            animateMovement();
+        }
+        
         attack();
         updateHealthBar();
     }
@@ -113,15 +192,11 @@ public class Miniboss extends Actor {
         int distanceToPlayer = Math.abs(player.getX() - getX());
         
         if (distanceToPlayer < RETREAT_DISTANCE && retreatCooldown == 0) {
-            // Player too close - retreat!
             state = BossState.RETREATING;
         } else if (distanceToPlayer < DETECTION_RANGE) {
-            // Player in range - alert/attacking
             state = BossState.ALERT;
-            // Face the player
             facingRight = player.getX() > getX();
         } else {
-            // Player far away - resume pacing
             state = BossState.PACING;
         }
     }
@@ -147,38 +222,30 @@ public class Miniboss extends Actor {
      * Paces back and forth within boundaries
      */
     private void pacingMovement() {
-        // Check boundaries
         if (getX() <= leftBound) {
             facingRight = true;
         } else if (getX() >= rightBound) {
             facingRight = false;
         }
         
-        // Check for walls
         if (isAtEdge()) {
             facingRight = !facingRight;
         }
         
-        // Move in current direction
         if (facingRight) {
             setLocation(getX() + PACE_SPEED, getY());
         } else {
             setLocation(getX() - PACE_SPEED, getY());
         }
-        
-        // Update image direction
-        updateImageDirection();
     }
     
     /**
      * Stops and faces player when alert
      */
     private void alertMovement() {
-        // Stay still but track player
         if (player != null) {
             facingRight = player.getX() > getX();
         }
-        updateImageDirection();
     }
     
     /**
@@ -187,44 +254,48 @@ public class Miniboss extends Actor {
     private void retreatingMovement() {
         if (player == null) return;
         
-        // Move away from player
         if (player.getX() < getX()) {
-            // Player on left, move right
             setLocation(getX() + PACE_SPEED * 2, getY());
-            facingRight = false; // Face the player while backing away
+            facingRight = false;
         } else {
-            // Player on right, move left
             setLocation(getX() - PACE_SPEED * 2, getY());
-            facingRight = true; // Face the player while backing away
+            facingRight = true;
         }
         
-        // Set cooldown
         retreatCooldown = RETREAT_COOLDOWN_TIME;
-        
-        updateImageDirection();
     }
     
     /**
-     * Flips image based on direction
+     * Animates walking movement
      */
-    private void updateImageDirection() {
-        GreenfootImage img = getImage();
+    private void animateMovement() {
+        animationCounter++;
         
-        // Mirror image based on direction
-        if (facingRight && img.toString().contains("mirrored")) {
-            img.mirrorHorizontally();
-        } else if (!facingRight && !img.toString().contains("mirrored")) {
-            img.mirrorHorizontally();
+        if (animationCounter >= animationSpeed) {
+            animationCounter = 0;
+            animationFrame = (animationFrame + 1) % walking.length;
+            
+            if (facingRight) {
+                setImage(walking[animationFrame]);
+            } else {
+                setImage(mWalk[animationFrame]);
+            }
         }
     }
     
     public void attack() {
+        if (isAttacking) {
+            return;
+        }
+        
         attackTimer--;
         
-        if (attackTimer == 0) {
-            // Only attack if player is in range
+        if (attackTimer <= 0) {
             if (state == BossState.ALERT) {
                 attackNum = Greenfoot.getRandomNumber(2) + 1;
+                isAttacking = true;
+                attackAnimationFrame = 0;
+                attackHitRegistered = false;
                 
                 switch (attackNum) {
                     case 1:
@@ -233,7 +304,6 @@ public class Miniboss extends Actor {
                     case 2:
                         attackTwo();
                         break;
-                    
                 }
             }
             
@@ -241,25 +311,113 @@ public class Miniboss extends Actor {
         }
     }
     
+    /**
+     * Melee attack that damages player on contact
+     */
     private void attackOne() {
-        // TODO: Implement attack 1
-        // Example: Shoot projectile
+        if (attackAnimationFrame < attackOne.length * 12) {
+            int frameIndex = attackAnimationFrame / 12;
+            
+            if (frameIndex < attackOne.length) {
+                if (facingRight) {
+                    setImage(attackOne[frameIndex]);
+                } else {
+                    setImage(mA1[frameIndex]);
+                }
+                
+                // Check for hit on the damage frame (frame 2 - the swing)
+                if (frameIndex == 2 && !attackHitRegistered) {
+                    Player hitPlayer = (Player) getOneIntersectingObject(Player.class);
+                    if (hitPlayer != null) {
+                        hitPlayer.takeDamage(1);
+                        attackHitRegistered = true;
+                    }
+                }
+            }
+            
+            attackAnimationFrame++;
+        } else {
+            isAttacking = false;
+            attackAnimationFrame = 0;
+            animationCounter = 0;
+            animationFrame = 0;
+        }
     }
     
+    /**
+     * Summoning attack with background effect
+     */
     private void attackTwo() {
-        // TODO: Implement attack 2
-        // Example: Area of effect attack
+        if (attackAnimationFrame < attackTwo.length * 20) {
+            int frameIndex = attackAnimationFrame / 20;
+            
+            if (frameIndex < attackTwo.length) {
+                setImage(attackTwo[frameIndex]);
+                
+                // Spawn or update summon background
+                if (currentSummonBg == null) {
+                    currentSummonBg = new SummonBackground();
+                    getWorld().addObject(currentSummonBg, getX(), getY());
+                }
+                
+                // Update background frame (mirrored on second frame)
+                currentSummonBg.setFrame(frameIndex);
+            }
+            
+            attackAnimationFrame++;
+        } else {
+            // Clean up summon background
+            if (currentSummonBg != null && currentSummonBg.getWorld() != null) {
+                getWorld().removeObject(currentSummonBg);
+                currentSummonBg = null;
+            }
+            
+            isAttacking = false;
+            attackAnimationFrame = 0;
+            animationCounter = 0;
+            animationFrame = 0;
+            
+            // Spawn summoned enemies or projectiles here
+            spawnSummonedAttack();
+        }
     }
-
+    
+    /**
+     * Spawns the actual summoned attack after animation
+     */
+    private void spawnSummonedAttack() {
+        // TODO: Spawn projectiles, enemies, or area effect
+        // Example: getWorld().addObject(new SummonedEnemy(), getX(), getY());
+    }
     
     public void takeDamage(int dmg) {
         health -= dmg;
         
-        // Flash red when hit
+        // Flash effect
         GreenfootImage img = getImage();
         img.setTransparency(150);
+        Greenfoot.delay(2);
+        img.setTransparency(255);
         
         if (health <= 0) {
+            isDying = true;
+            deathFrame = 0;
+        }
+    }
+    
+    /**
+     * Plays death explosion animation
+     */
+    private void playDeathAnimation() {
+        if (deathFrame < exFrames.length * 8) {
+            int frameIndex = deathFrame / 8;
+            
+            if (frameIndex < exFrames.length) {
+                setImage(exFrames[frameIndex]);
+            }
+            
+            deathFrame++;
+        } else {
             die();
         }
     }
@@ -271,18 +429,15 @@ public class Miniboss extends Actor {
     }
     
     private void die() {
-        explode();
-        
         if (healthBar != null) {
             getWorld().removeObject(healthBar);
         }
         
+        if (currentSummonBg != null && currentSummonBg.getWorld() != null) {
+            getWorld().removeObject(currentSummonBg);
+        }
+        
         getWorld().removeObject(this);
-    }
-    
-    private void explode() {
-        // TODO: Add explosion animation
-        // Could spawn explosion effects at boss position
     }
 }
 
@@ -290,7 +445,30 @@ public class Miniboss extends Actor {
  * Enum for boss states
  */
 enum BossState {
-    PACING,     // Normal patrol
-    ALERT,      // Player detected, ready to attack
-    RETREATING  // Player too close, backing away
+    PACING,
+    ALERT,
+    RETREATING
+}
+
+/**
+ * Background effect for summoning attack
+ */
+class SummonBackground extends Actor {
+    private GreenfootImage summonbg = new GreenfootImage("summonbg.png");
+    private GreenfootImage summonbgMirrored;
+    
+    public SummonBackground() {
+        summonbgMirrored = new GreenfootImage(summonbg);
+        summonbgMirrored.mirrorHorizontally();
+        setImage(summonbg);
+    }
+    
+    public void setFrame(int frame) {
+        summonbg.scale(300,100);
+        if (frame == 0) {
+            setImage(summonbg);
+        } else {
+            setImage(summonbgMirrored);
+        }
+    }
 }

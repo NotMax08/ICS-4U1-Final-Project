@@ -86,7 +86,7 @@ public class RoomThree extends GameWorld {
         addObject(fungi6, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fungi6.setWorldPosition(1323, 780);
         
-        SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
+        //SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
     }
     
     public RoomThree() {
