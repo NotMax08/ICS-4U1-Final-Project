@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=GameWorld
-comment0.text=\r\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\r\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\r\n\ \r\n\ Sound\ credits\:\r\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\r\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\r\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\r\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\r\n\ "hit"\ \ \ \ by\ @mixkit\r\n\ "damage"\ by\ @freesound_community\ on\ pixabay\r\n\ \r\n\ @author\ Paul\ and\ Robin\r\n
+comment0.text=\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\n\ \n\ Sound\ credits\:\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\n\ "hit"\ \ \ \ by\ @mixkit\n\ "damage"\ by\ @freesound_community\ on\ pixabay\n\ \n\ @author\ Paul\ and\ Robin\n
 comment1.params=
 comment1.target=GameWorld()
 comment10.params=
@@ -21,13 +21,13 @@ comment2.params=
 comment2.target=void\ setPaintOrder()
 comment3.params=
 comment3.target=void\ initializeSounds()
-comment3.text=\r\n\ Initialize\ the\ sound\ manager\ and\ load\ all\ game\ sounds\r\n\ Only\ loads\ sounds\ once,\ even\ if\ called\ multiple\ times\r\n
+comment3.text=\n\ Initialize\ the\ sound\ manager\ and\ load\ all\ game\ sounds\n\ Only\ loads\ sounds\ once,\ even\ if\ called\ multiple\ times\n
 comment4.params=
 comment4.target=void\ act()
-comment4.text=\r\n\ Main\ act\ loop\ -\ update\ camera,\ actors\ and\ background\ \r\n
+comment4.text=\n\ Main\ act\ loop\ -\ update\ camera,\ actors\ and\ background\ \n
 comment5.params=
 comment5.target=void\ initalizeDisplays()
-comment5.text=\r\n\ Initialize\ display\ elements\r\n\ Can\ only\ be\ called\ after\ the\ player\ is\ created\ \r\n
+comment5.text=\n\ Initialize\ display\ elements\n\ Can\ only\ be\ called\ after\ the\ player\ is\ created\ \n
 comment6.params=
 comment6.target=void\ updateBackground()
 comment7.params=

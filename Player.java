@@ -125,6 +125,8 @@ public class Player extends ScrollingActor {
         createMirroredImages();
         setupAnimationArrays();
         setImage(standingRight);
+        
+        soundManager.loadSound("slash_enemy", "Slash.mp3", 10);
 
     }
 
@@ -534,7 +536,7 @@ public class Player extends ScrollingActor {
                     ((Boss) target).takeDamage(damage);
                 }
 
-                soundManager.playSound("hit");
+                soundManager.playSound("slash_enemy");
 
                 // Increase mana
                 currentMana = Math.min(currentMana + 1, MAX_MANA);
