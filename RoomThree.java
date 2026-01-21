@@ -25,7 +25,7 @@ public class RoomThree extends GameWorld {
         }
         createInteractiveDoors();
         
-        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class, Fog.class, BaseEnemy.class, Spawner.class);
+        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class, DeepnestFog.class,Fog.class, BaseEnemy.class, Spawner.class);
         
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -47,8 +47,9 @@ public class RoomThree extends GameWorld {
         player.setWorldPosition(spawnX, spawnY);
         
         // Create fog world effect to reduce visibility
-        Fog fog = new Fog(player);
-        addObject(fog, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+        //Fog fog = new Fog();
+        //addObject(fog, 400, 300);
+        spawnFog();
         
         initalizeDisplays();
         
@@ -88,7 +89,14 @@ public class RoomThree extends GameWorld {
         
         //SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
     }
-    
+    public void spawnFog() {
+        // Spawn fog at different depths
+        if (Greenfoot.getRandomNumber(100) < 15) { // 15% chance per act cycle
+            double depth = Greenfoot.getRandomNumber(100) / 100.0;
+            DeepnestFog fog = new DeepnestFog(depth);
+            addObject(fog, -40, Greenfoot.getRandomNumber(getHeight()));
+        }
+    }
     public RoomThree() {
         this((String)null);
     }
