@@ -4,6 +4,8 @@ import java.util.*;
 /**
  * BaseEnemy - Contains common enemy functionality and methods
  * Creates basic states and transitions between states and the conditions for it
+ * Credits:
+ *  - All sprite images come from the website https://www.spriters-resource.com/pc_computer/hollowknight/ there is no specific author stated
  * @Author: Max & Claude
  * 
  */
