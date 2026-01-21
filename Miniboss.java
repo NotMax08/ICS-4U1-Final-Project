@@ -66,8 +66,8 @@ public class Miniboss extends Actor {
     GreenfootImage[] mA1;
     
     // Attack Two Frames 
-    GreenfootImage aa1 = new GreenfootImage("aa1");
-    GreenfootImage aa2 = new GreenfootImage("aa2");
+    GreenfootImage aa1 = new GreenfootImage("aa1.png");
+    GreenfootImage aa2 = new GreenfootImage("aa2.png");
     GreenfootImage summonbg = new GreenfootImage("summonbg.png");
     GreenfootImage[] attackTwo = {aa1, aa2};
     
