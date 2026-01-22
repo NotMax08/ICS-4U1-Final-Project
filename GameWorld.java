@@ -76,6 +76,7 @@ public abstract class GameWorld extends World {
             ShopIcons.class,
             ShopUI.class,
             MapGridDebugOverlay.class,
+            MapDisplay.class,
             InventoryDisplay.class,
             CurrencyDisplay.class,
             AbilityDisplay.class,
@@ -145,7 +146,10 @@ public abstract class GameWorld extends World {
         // Create mana bar
         manaDisplay = new ManaDisplay(150, 100, camera, player);
         addObject(manaDisplay, 0, 0);
-
+        
+        MapDisplay mapDisplay = new MapDisplay(120, 60, camera);
+        addObject(mapDisplay, 120, 60);
+        
         //Creates currency display
         currencyDisplay = new CurrencyDisplay(SCREEN_WIDTH - 150, -15, camera, player);
         addObject(currencyDisplay, SCREEN_WIDTH - 150, 0);
