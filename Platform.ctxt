@@ -1,15 +1,12 @@
 #BlueJ class context
 comment0.target=Platform
-comment0.text=\r\n\ Debug\ visuals\ for\ platforms\r\n\ @author\ Paul\r\n
+comment0.text=\n\ @author\ Paul\n
 comment1.params=camera\ width\ height
 comment1.target=Platform(Camera,\ int,\ int)
-comment1.text=\r\n\ platform\ debug\ visuals\ constructor\r\n\ \r\n\ @param\ camera\ camera\ for\ reference\r\n\ @param\ width\ width\ of\ platform\r\n\ @param\ height\ height\ of\ platform\r\n
 comment2.params=worldX\ worldY
 comment2.target=boolean\ containsWorldPoint(int,\ int)
-comment2.text=\r\n\ checks\ which\ tiles\ are\ set\ to\ platform\r\n\ \r\n\ @param\ worldX\ world\ x\ coord\r\n\ @param\ worldY\ world\ y\ coord\r\n
 comment3.params=
 comment3.target=int\ getWidth()
-comment3.text=\r\n\ getters\r\n
 comment4.params=
 comment4.target=int\ getHeight()
 numComments=5

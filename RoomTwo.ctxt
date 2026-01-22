@@ -1,15 +1,12 @@
 #BlueJ class context
 comment0.target=RoomTwo
-comment0.text=\r\n\ @author\ Paul\ assisted\ by\ Claude\r\n
+comment0.text=\n\ @author\ Paul\ assisted\ by\ Claude\n
 comment1.params=sourceRoom
 comment1.target=RoomTwo(java.lang.String)
-comment1.text=\r\n\ Roomtwo\ constructor\r\n\ \r\n\ @param\ sourceroom\ tracks\ room\ you\ entered\ from\ to\ keep\ coordinates\ for\ returning\r\n
 comment2.params=
 comment2.target=RoomTwo()
-comment2.text=\r\n\ default\ constructor\r\n
 comment3.params=
 comment3.target=void\ act()
-comment3.text=\r\n\ follows\ player\ and\ updates\ camera\r\n
 comment4.params=
 comment4.target=void\ initializeMapGrid()
 comment5.params=
@@ -20,8 +17,6 @@ comment7.params=worldX\ worldY\ width\ height\ imageName
 comment7.target=void\ drawPlatformOnBackground(int,\ int,\ int,\ int,\ java.lang.String)
 comment8.params=
 comment8.target=void\ started()
-comment8.text=\r\n\ starts\ sound\ when\ entering\r\n
 comment9.params=
 comment9.target=void\ stopped()
-comment9.text=\r\n\ stops\ sound\ when\ instance\ paused\r\n
 numComments=10
