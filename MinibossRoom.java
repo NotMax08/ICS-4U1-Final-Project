@@ -72,6 +72,10 @@ public class MinibossRoom extends GameWorld {
         // Add boss enemy here
         Miniboss mini = new Miniboss(player);
         addObject(mini, getWidth()/2, 500);
+        //adds reference to this room for hp bar
+        mini.room = this;
+        MapGridDebugOverlay debug = new MapGridDebugOverlay(this, mapGrid);
+        addObject(player, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
         //SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
     }
     
@@ -91,7 +95,7 @@ public class MinibossRoom extends GameWorld {
     protected void initializeMapGrid() {
         // Platforms in world coordinates (scaled for 822x600 room)
         int[][] platformData = {
-            {400, 580, 780, 40}  // Floor platform - full width near bottom
+            {400, 580, 780, 60}  // Floor platform - full width near bottom
         };
         
         // Convert platforms to tiles
@@ -291,5 +295,8 @@ public class MinibossRoom extends GameWorld {
     
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
+    }
+    public Camera getCamera() {
+        return camera;
     }
 }

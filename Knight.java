@@ -66,6 +66,24 @@ public class Knight extends GroundEnemy {
     public Knight(Camera camera) {
         this(camera, 1);
     }
+    /**
+     * Constructor for static worlds (no camera)
+     */
+    public Knight(int facingDirection) {
+        super(scaleImage(getUniformImage("KnightIdle.png", 620, 390), SCALE),
+              KNIGHT_HEALTH, KNIGHT_DAMAGE,
+              KNIGHT_DETECTION_RANGE, KNIGHT_ATTACK_RANGE,
+              PATROL_SPEED, CHASE_SPEED, GRAVITY, WALL_CHECK_DISTANCE);
+        
+        this.startingDirection = facingDirection;
+        this.direction = facingDirection;
+        this.isFacingRight = (facingDirection == 1);
+        
+        loadImages();
+        loadSounds();
+        behaviour = ENEMY_BEHAVIOUR.IDLE;
+        healthBarYOffset = -100;
+    }
     
     private void loadSounds() {
         soundManager = SoundManager.getInstance();
@@ -99,6 +117,7 @@ public class Knight extends GroundEnemy {
         
         updateAnimation();
         updateImage();
+        System.out.println(behaviour);
     }
     
     @Override
