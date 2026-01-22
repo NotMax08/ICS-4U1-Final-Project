@@ -21,6 +21,11 @@ public class NPCRoom extends GameWorld {
     private boolean debugVisuals;
     
     GreenfootImage door = new GreenfootImage("doorway.png");
+    /**
+     * NPC Room constructor
+     * 
+     * @param sourceroom tracks room you entered from to keep coordinates for returning
+     */
     public NPCRoom(String sourceRoom) {
         super(); // This creates the camera
         
@@ -77,12 +82,15 @@ public class NPCRoom extends GameWorld {
         SoundManager.getInstance().playBackgroundMusic("NPCRoomMusic.mp3");
         setPaintOrder(); 
     }
-    
+    /**
+     * default constructor
+     */
     public NPCRoom() {
         this((String)null);
     }
-    
-    // Override act() to keep camera static (don't follow player)
+    /**
+     * act that doesnt follow player
+     */
     public void act() {
         if (camera != null && player != null) {
             // Don't call super.act() which would follow the player
@@ -288,11 +296,15 @@ public class NPCRoom extends GameWorld {
             door.setWorldPosition(worldX, worldY);
         }
     }
-    
+    /**
+     * starts music when enter room
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("NPCRoomMusic.mp3");
     }
-    
+    /**
+     * stops music when instance is paused
+     */
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }

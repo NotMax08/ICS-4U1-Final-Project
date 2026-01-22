@@ -1,12 +1,15 @@
 #BlueJ class context
 comment0.target=BossRoom
-comment0.text=\n\ \n\ @author\ Paul\ assisted\ by\ Claude\ adjusted\ for\ boss\ by\ Angelina\n
+comment0.text=\r\n\ Main\ boss\ room.\ Defeat\ the\ boss\ to\ win\r\n\ \r\n\ @author\ Paul\ assisted\ by\ Claude\ adjusted\ for\ boss\ by\ Angelina\r\n
 comment1.params=sourceRoom
 comment1.target=BossRoom(java.lang.String)
+comment1.text=\r\n\ Boss\ Room\ constructor\r\n\ \r\n\ @param\ sourceroom\ tracks\ room\ you\ entered\ from\ to\ keep\ coordinates\ for\ returning\r\n
 comment2.params=
 comment2.target=BossRoom()
+comment2.text=\r\n\ default\ constructor\r\n
 comment3.params=
 comment3.target=void\ act()
+comment3.text=\r\n\ act\ that\ doesnt\ follow\ player\r\n
 comment4.params=
 comment4.target=void\ initializeMapGrid()
 comment5.params=
@@ -15,6 +18,8 @@ comment6.params=
 comment6.target=void\ createInteractiveDoors()
 comment7.params=
 comment7.target=void\ started()
+comment7.text=\r\n\ starts\ sound\ with\ instance\r\n
 comment8.params=
 comment8.target=void\ stopped()
+comment8.text=\r\n\ stops\ sound\ when\ instance\ is\ stopped\r\n
 numComments=9

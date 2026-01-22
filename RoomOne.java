@@ -11,7 +11,11 @@ public class RoomOne extends GameWorld {
     private static final int DEFAULT_SPAWN_X = 900;
     private static final int DEFAULT_SPAWN_Y = 1200;
     
-    // Constructor with source room info
+    /**
+     * Room One constructor
+     * 
+     * @param sourceroom tracks room you entered from to keep coordinates for returning
+     */
     public RoomOne(String sourceRoom) {
         super(); 
         
@@ -88,12 +92,15 @@ public class RoomOne extends GameWorld {
         SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
         setPaintOrder(); 
     }
-    
-    // Default constructor for new game
+    /**
+     * default constructor
+     */
     public RoomOne() {
         this((String)null);
     }
-    
+    /**
+     * Act that follows player and updates camera
+     */
     public void act() {
         if (camera != null && player != null) {
             super.act();
@@ -349,11 +356,15 @@ public class RoomOne extends GameWorld {
         platformImg.scale(width, height);
         fullBackground.drawImage(platformImg, worldX - width/2, worldY - height/2);
     }
-    
+    /**
+     * starts music when enters room
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
-    
+    /**
+     * stops music when instance stops
+     */
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }

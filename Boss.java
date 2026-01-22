@@ -396,6 +396,7 @@ public class Boss extends Actor
                 if (bossesDefeated == 3) {
                     // Transition to win screen if phase two is defeated
                     Greenfoot.setWorld(new WinScreen());
+                    HighScoreManager.completeRun();
                 }
             }
         }

@@ -1,5 +1,6 @@
 import greenfoot.*;
 /**
+ * Main boss room. Defeat the boss to win
  * 
  * @author Paul assisted by Claude adjusted for boss by Angelina
  */
@@ -26,6 +27,11 @@ public class BossRoom extends GameWorld {
     
     private boolean debugVisuals;
     GreenfootImage door = new GreenfootImage("doorway.png");
+    /**
+     * Boss Room constructor
+     * 
+     * @param sourceroom tracks room you entered from to keep coordinates for returning
+     */
     public BossRoom(String sourceRoom) {
         super(); // This creates the camera
         
@@ -85,12 +91,16 @@ public class BossRoom extends GameWorld {
         SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
         setPaintOrder(); 
     }
-    
+    /**
+     * default constructor
+     */
     public BossRoom() {
         this((String)null);
     }
     
-    // Override act() to keep camera static (don't follow player)
+    /**
+     * act that doesnt follow player
+     */
     public void act() {
         if (camera != null && player != null) {
             // Don't call super.act() which would follow the player
@@ -295,11 +305,15 @@ public class BossRoom extends GameWorld {
             door.setWorldPosition(worldX, worldY);
         }
     }
-    
+    /**
+     * starts sound with instance
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
     }
-    
+    /**
+     * stops sound when instance is stopped
+     */
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }

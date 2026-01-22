@@ -1,9 +1,11 @@
 import greenfoot.*;
 
 /**
- * Optimized fog of war overlay
+ * Optimized fog overlay for room three meant to obscure vision
  * Uses pre-rendered gradient with simple concentric circles
  * Much faster than pixel-by-pixel rendering
+ * 
+ * UNFINISHED and not called
  * 
  * @author Paul and Claude
  */
@@ -22,7 +24,9 @@ public class Fog extends Actor {
     
     // Pre-rendered fog (created once and reused)
     private static GreenfootImage fogImage = null;
-    
+    /**
+     * constructor for fog
+     */
     public Fog() {
         // Create fog gradient only once
         if (fogImage == null) {
@@ -86,7 +90,9 @@ public class Fog extends Actor {
         
         System.out.println("Fog created!");
     }
-    
+    /**
+     * keeps fog centered around player
+     */
     public void act() {
         // Keep fog centered on screen (player is always at screen center)
         setLocation(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);

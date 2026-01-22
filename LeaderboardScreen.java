@@ -6,6 +6,9 @@ import java.util.List;
  */
 public class LeaderboardScreen extends World {
     GreenfootImage lbscreen = new GreenfootImage("lbscreen.png");
+    /**
+     * leaderboard screen constructor
+     */
     public LeaderboardScreen() {
         super(800, 600, 1);
         lbscreen.scale(800,600);
@@ -54,7 +57,9 @@ public class LeaderboardScreen extends World {
         // Instructions
         showText("Press ESC to return", 400, 580);
     }
-    
+    /**
+     * detects escape key to go back to startworld
+     */
     public void act() {
         if (Greenfoot.isKeyDown("escape")) {
             Greenfoot.setWorld(new StartWorld());

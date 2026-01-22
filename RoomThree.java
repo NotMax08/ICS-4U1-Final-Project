@@ -10,7 +10,11 @@ public class RoomThree extends GameWorld {
     // Default spawn position
     private static final int DEFAULT_SPAWN_X = 1000;
     private static final int DEFAULT_SPAWN_Y = 1250;
-    
+    /**
+     * Room three constructor
+     * 
+     * @param sourceroom tracks room you entered from to keep coordinates for returning
+     */
     public RoomThree(String sourceRoom) {
         super(); // This creates the camera
         
@@ -25,7 +29,7 @@ public class RoomThree extends GameWorld {
         }
         createInteractiveDoors();
         
-        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class, DeepnestFog.class,Fog.class, BaseEnemy.class, Spawner.class);
+        this.setPaintOrder(Message.class, InventoryDisplay.class, AbilityDisplay.class, Player.class, Platform.class, InteractiveDoor.class,Fog.class, BaseEnemy.class, Spawner.class);
         
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -90,19 +94,26 @@ public class RoomThree extends GameWorld {
         SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
         setPaintOrder(); 
     }
+    /**
+     * unfinished class not called in constructor
+     */
     public void spawnFog() {
         // Spawn fog at different depths
         if (Greenfoot.getRandomNumber(100) < 15) { // 15% chance per act cycle
             double depth = Greenfoot.getRandomNumber(100) / 100.0;
-            DeepnestFog fog = new DeepnestFog(depth);
+            Fog fog = new Fog();
             addObject(fog, -40, Greenfoot.getRandomNumber(getHeight()));
         }
     }
+    /**
+     * default constructor
+     */
     public RoomThree() {
         this((String)null);
     }
-    
-    // Override act() to add null check
+    /**
+     * follows player and updates camera
+     */
     public void act() {
         if (camera != null && player != null) {
             super.act(); // Call GameWorld's act()
@@ -458,11 +469,15 @@ public class RoomThree extends GameWorld {
             door.setWorldPosition(worldX, worldY);
         }
     }
-    
+    /**
+     * starts music when entering
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
     }
-    
+    /**
+     * stops music when instance paused
+     */
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }

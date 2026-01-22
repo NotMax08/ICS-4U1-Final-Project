@@ -189,8 +189,7 @@ public class Button extends Actor
         if(buttonID.equals("startworld")){
            
             System.gc(); // Force garbage collection
-            Greenfoot.setWorld(new RoomOne());
-            HighScoreManager.startRun();
+            Greenfoot.setWorld(new UsernameScreen());
             return;
         }
         if(buttonID.equals("backtostart")){

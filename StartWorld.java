@@ -29,11 +29,15 @@ public class StartWorld extends World
         bg.drawImage(title, (getWidth()/4)-40,getHeight()/7);
         setBackground(bg);
     }
-    
+    /**
+     * starts sound when instance starts
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
-    
+    /**
+     * stops sound when instance paused
+     */
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }

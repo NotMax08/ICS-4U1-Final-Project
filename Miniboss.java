@@ -83,6 +83,11 @@ public class Miniboss extends Actor {
     GreenfootImage[] attackTwo = {aa1, aa2};
     
     private int knightCounter = 0;
+    /**
+     * constructor for miniboss
+     * 
+     * @param player calls for reference to track 
+     */
     public Miniboss(Player player) {
         this.player = player;
         scaleAllImages();
@@ -168,7 +173,9 @@ public class Miniboss extends Actor {
             setImage(mWalk[0]);
         }
     }
-    
+    /**
+     * checks for miniboss status and determines whether to die, attack update health and check for player
+     */    
     public void act() {
         if (isDying) {
             playDeathAnimation();
@@ -298,7 +305,9 @@ public class Miniboss extends Actor {
             }
         }
     }
-    
+    /**
+     * attack method determining which attack to call and tracking hits to not hit multiple times
+     */
     public void attack() {
         if (isAttacking) {
             return;
@@ -511,14 +520,18 @@ enum BossState {
 class SummonBackground extends Actor {
     private GreenfootImage summonbg = new GreenfootImage("summonbg.png");
     private GreenfootImage summonbgMirrored;
-    
+    /**
+     * contructor for frames
+     */
     public SummonBackground() {
         summonbg.scale(300, 100);
         summonbgMirrored = new GreenfootImage(summonbg);
         summonbgMirrored.mirrorHorizontally();
         setImage(summonbg);
     }
-    
+    /**
+     * changes frames
+     */
     public void setFrame(int frame) {
         if (frame == 0) {
             setImage(summonbg);

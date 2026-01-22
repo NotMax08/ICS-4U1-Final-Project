@@ -21,6 +21,11 @@ public class MinibossRoom extends GameWorld {
     private boolean debugVisuals;
     
     GreenfootImage door = new GreenfootImage ("doorway.png");
+    /**
+     * Miniboss Room constructor
+     * 
+     * @param sourceroom tracks room you entered from to keep coordinates for returning
+     */
     public MinibossRoom(String sourceRoom) {
         super(); // This creates the camera
         
@@ -75,12 +80,15 @@ public class MinibossRoom extends GameWorld {
         SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
         setPaintOrder(); 
     }
-    
+    /**
+     * default constructor
+     */
     public MinibossRoom() {
         this((String)null);
     }
-    
-    // Override act() to keep camera static (don't follow player)
+    /**
+     * act that doesnt follow player
+     */
     public void act() {
         if (camera != null && player != null) {
             // Don't call super.act() which would follow the player

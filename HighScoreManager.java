@@ -10,13 +10,17 @@ public class HighScoreManager {
     private static boolean runInProgress = false;
     private static String currentPlayerName = "Player";
     
-    // Start timing a run
+    /**
+     * starts timer for run
+     */
     public static void startRun() {
         runStartTime = System.currentTimeMillis();
         runInProgress = true;
     }
     
-    // Complete a run successfully and save the score
+    /**
+     * ends timer and tracks run
+     */
     public static void completeRun() {
         if (!runInProgress) return;
         
@@ -28,8 +32,9 @@ public class HighScoreManager {
         // Save to local file
         saveScore(currentPlayerName, timeInSeconds);
     }
-    
-    // Cancel/reset a run without saving (for deaths/failures)
+    /**
+     * cancels run. called if you die
+     */
     public static void cancelRun() {
         if (!runInProgress) return;
         
@@ -37,27 +42,32 @@ public class HighScoreManager {
         System.out.println("Run cancelled - no score saved");
     }
     
-    // Check if a run is currently in progress
+    /**
+     * checks for in progress run
+     */
     public static boolean isRunInProgress() {
         return runInProgress;
     }
-    
-    // Get current run time in seconds (for display during gameplay)
+    /**
+     * getter for current timer time
+     */
     public static int getCurrentRunTime() {
         if (!runInProgress) return 0;
         
         long currentTime = System.currentTimeMillis();
         return (int)((currentTime - runStartTime) / 1000);
     }
-    
-    // Set the current player's name
+    /**
+     * sets username called after username screen saves input
+     */
     public static void setPlayerName(String name) {
         if (name != null && !name.trim().isEmpty()) {
             currentPlayerName = name.trim();
         }
     }
-    
-    // Get the current player's name
+    /**
+     * getter for username saved
+     */
     public static String getPlayerName() {
         return currentPlayerName;
     }
@@ -87,8 +97,9 @@ public class HighScoreManager {
             System.err.println("Error saving score: " + e.getMessage());
         }
     }
-    
-    // Load scores from file
+    /**
+     * loads saved scores
+     */
     public static List<ScoreEntry> loadScores() {
         List<ScoreEntry> scores = new ArrayList<>();
         
@@ -120,8 +131,9 @@ public class HighScoreManager {
             }
         }
     }
-    
-    // Get player's rank (1-based, or -1 if not on leaderboard)
+    /**
+     * getter for top scores
+     */
     public static int getPlayerRank(String playerName) {
         List<ScoreEntry> scores = loadScores();
         
@@ -133,8 +145,9 @@ public class HighScoreManager {
         
         return -1; // Not on leaderboard
     }
-    
-    // Get player's best time
+    /**
+     * getter for top time
+     */
     public static int getPlayerBestTime(String playerName) {
         List<ScoreEntry> scores = loadScores();
         
@@ -146,15 +159,17 @@ public class HighScoreManager {
         
         return 0; // No score found
     }
-    
-    // Format time as MM:SS
+    /**
+     * formats the time text
+     */
     public static String formatTime(int seconds) {
         int minutes = seconds / 60;
         int secs = seconds % 60;
         return String.format("%d:%02d", minutes, secs);
     }
-    
-    // Clear all scores
+    /**
+     * clears all scores saved
+     */
     public static void clearScores() {
         try {
             new File(SCORES_FILE).delete();
@@ -164,16 +179,24 @@ public class HighScoreManager {
         }
     }
     
-    // Inner class to represent a score entry
+    /**
+     * class for each score item
+     * 
+     * @author Paul and Claude
+     */
     public static class ScoreEntry implements Comparable<ScoreEntry> {
         public String name;
         public int time;
-        
+        /**
+         * constructor for score item to be saved
+         */
         public ScoreEntry(String name, int time) {
             this.name = name;
             this.time = time;
         }
-        
+        /**
+         * compares to other saved scores
+         */
         @Override
         public int compareTo(ScoreEntry other) {
             // Sort by time ascending (lower is better)
