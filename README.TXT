@@ -8,7 +8,7 @@ Keybinds:
 -> Attack: j or e for basic attack, k for magic attack.
 -> Abilities:  q or h to heal, hold for 2 seconds and shift or k for magic ability
 -? Inventory: tab (empty by default, does not count your weapon)
--> Map: ctrl (updates to show rooms that you have explored)
+-> Map: m to open
 ->Debug: g for map grid and y for room position entry testing, platform and interactive door debug visuals are booleans set in constructors
 Recommended Keybinds:
 The keybinds are made to support both arrow key movement and a/d movement so double keybinds are used to make either easy to use.
@@ -43,7 +43,7 @@ Features:
 - Player and all enemies are animated with image frames for all movement and attacks
 - Inventory system keeps track of items player has like potion, key to unlcok boss room and displays items in inventory ui
 - NPC shopkeeper that sells three types of potions, has custom dialogue class and shop ui to interact with
-- Map that updates based on rooms you have visited
+- Map that show all rooms
 
 Credits:
 Sound credits:
@@ -65,3 +65,4 @@ Art credit:
  * Other art, Leonardo Ai and ChatGPT
 
 Author Paul
+
