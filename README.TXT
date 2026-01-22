@@ -22,6 +22,7 @@ Cheat Code:
 - room one to room two entrance is at the top of room one
 - room two to room three entrance is at the top righ tof room two
 - npc room and miniboss room are found in the right and left doorways roughly in the middle y level in room two respectively
+- killing miniboss grants weapon upgrade that deals more damage and makes boss easier
 - boss room is found in room one and is unlocked via key found in room three
 - room three needs a shrinking potion to access the top and find the key
 
@@ -65,4 +66,5 @@ Art credit:
  * Other art, Leonardo Ai and ChatGPT
 
 Author Paul
+
 
