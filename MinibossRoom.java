@@ -179,7 +179,7 @@ public class MinibossRoom extends GameWorld {
         
         // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 450, 80, 140},   // Left door
+            {70, 450, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -270,7 +270,7 @@ public class MinibossRoom extends GameWorld {
     
     private void createInteractiveDoors() {
         int[][] doorRegions = {
-            {50, 450, 80, 140},   // Left door
+            {70, 450, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {

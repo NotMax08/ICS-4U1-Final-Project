@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Player
-comment0.text=\n\ The\ Player\ class\ is\ a\ ScrollingActor\ that\ the\ camera\ tracks\ as\ it\ moves\ around\ the\ map\n\ The\ user\ will\ control\ the\ player\ class\ to\ \n\ Controls\ such\ as\ movement\ and\ abilities\n\ \n\ Images\ generated\ by\ Leonardo.ai\n\ \n\ @author\ Julian,\ Robin,\ and\ Paul,\ assisted\ by\ Claude\n
+comment0.text=\n\ The\ Player\ class\ manages\ controls\ related\ to\ the\ Player\ character\n\ Controls\ such\ as\ movement\ and\ abilities\n\ \n\ Images\ generated\ by\ Leonardo.ai\n\ \n\ @author\ Julian,\ Robin,\ and\ Paul,\ assisted\ by\ Claude\n
 comment1.params=camera
 comment1.target=Player(Camera)
 comment1.text=\n\ Main\ constructor\ for\ player\n\ \n\ @param\ Camera\ \ \ \ tracks\ the\ player\ \n
