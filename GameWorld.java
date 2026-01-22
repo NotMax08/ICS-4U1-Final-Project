@@ -61,9 +61,13 @@ public abstract class GameWorld extends World {
         setPaintOrder();
     }
 
-    protected void setPaintOrder(){
+    protected void setPaintOrder() {
         setPaintOrder(
             TextBox.class,
+            ShieldPotion.class,
+            StrengthPotion.class,
+            ShrinkPotion.class,
+            Key.class,
             ShopItems.class,
             ShopIcons.class,
             ShopUI.class,
@@ -74,7 +78,8 @@ public abstract class GameWorld extends World {
             HealthDisplay.class,
             ManaDisplay.class,
             SlashAnimation.class,
-            Player.class
+            Player.class,
+            Platform.class 
         );
     }
 
@@ -168,7 +173,7 @@ public abstract class GameWorld extends World {
 
         initalizeDisplays();
     }
-    
+
     public Camera getCamera() { return camera; }
 
     public MapGrid getMapGrid() { return mapGrid; }

@@ -3,13 +3,16 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * Write a description of class ShieldPotion here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Julian 
+ * @version 2026
+ * 
+ * Rafaelchm on OpenGameArt.org
  */
 public class ShieldPotion extends ShopItems
 {
-    public ShieldPotion()
+    public ShieldPotion(boolean isInInventory)
     {
+        super(isInInventory);
         image = new GreenfootImage("pt2.png");
         image.scale(image.getWidth()/4, image.getHeight()/4);
         setImage(image);

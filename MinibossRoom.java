@@ -73,6 +73,7 @@ public class MinibossRoom extends GameWorld {
         Miniboss mini = new Miniboss(player);
         addObject(mini, getWidth()/2, 500);
         SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
+        setPaintOrder(); 
     }
     
     public MinibossRoom() {

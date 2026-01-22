@@ -8,14 +8,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Key extends ShopItems
 {
-    /**
-     * Act - do whatever the Key wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
+    public Key(boolean isInInventory)
+    {
+        super(isInInventory);
+        image = new GreenfootImage("key.png");
+        image.scale(image.getWidth()/5, image.getHeight()/5);
+        setImage(image);
+    }
     public void act()
     {
-        image = new GreenfootImage("key.png");
-        image.scale(image.getWidth()/3, image.getHeight()/3);
-        setImage(image);
+    
     }
 }

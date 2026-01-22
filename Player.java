@@ -36,7 +36,7 @@ public class Player extends ScrollingActor {
     private int maxHealth = STARTING_HEALTH_POINTS;
     private int currentHealth = maxHealth;
     private int currentMana = 0;
-    private int currency = 0;
+    private static int currency = 1000;
 
     // Character states 
     private boolean onGround = false;
@@ -100,7 +100,13 @@ public class Player extends ScrollingActor {
     private GreenfootImage[] fallingLeft;
 
     //Item data
-    public int[] itemCount = new int[4];
+    public static int[] itemCount = new int[4];
+
+    // Shrink effect
+    private boolean isShrunk = false;
+    private int shrinkTimer = 0;
+    private static final int SHRINK_DURATION = 600; // acts (~10 sec)
+    private static final double SHRINK_SCALE = 0.6;
 
     /**
      * Main constructor for player
@@ -126,7 +132,7 @@ public class Player extends ScrollingActor {
         createMirroredImages();
         setupAnimationArrays();
         setImage(standingRight);
-        
+
         soundManager.loadSound("slash_enemy", "Slash.mp3", 10);
 
     }
@@ -148,6 +154,7 @@ public class Player extends ScrollingActor {
         moveVertical();
         countItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
+        updateShrink();
     }
 
     public void countItems(){
@@ -167,6 +174,11 @@ public class Player extends ScrollingActor {
             //prevents negative items
             if (itemCount[index] < 0) itemCount[index] = 0;
         }
+    }
+
+    public static void resetInventoryAndMoney() {
+        currency = 0;
+        itemCount = new int[4];
     }
 
     private void checkHealth(){
@@ -221,6 +233,73 @@ public class Player extends ScrollingActor {
         jumpR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
         fallR1.scale(P_WIDTH + 30,P_HEIGHT - 20);
         fallR2.scale(P_WIDTH + 30,P_HEIGHT - 20);
+    }
+
+    public void shrinkPlayer() {
+        if (isShrunk) return;
+
+        isShrunk = true;
+        shrinkTimer = SHRINK_DURATION;
+
+        scaleAllImages(SHRINK_SCALE);
+    }
+
+    private void restorePlayerSize() {
+        isShrunk = false;
+        scaleAllImages(1.0);
+        // Shift player up slightly so the larger hitbox doesn't get stuck in the floor
+        worldY -= (P_HEIGHT * (1.0 - SHRINK_SCALE)); 
+    }
+
+    private void scaleAllImages(double scale) {
+        // IMPORTANT: We reload the images from the files each time we scale.
+        // If you scale an already-scaled image, it becomes blurry.
+        standingRight = new GreenfootImage("standingRight.png");
+        standingLeft = new GreenfootImage("standingLeft.png");
+
+        runningR1 = new GreenfootImage("running1.png");
+        runningR2 = new GreenfootImage("running2.png");
+        runningR3 = new GreenfootImage("running3.png");
+        runningR4 = new GreenfootImage("running4.png");
+
+        jumpR1 = new GreenfootImage("jump1.png");
+        jumpR2 = new GreenfootImage("jump2.png");
+
+        fallR1 = new GreenfootImage("fall1.png");
+        fallR2 = new GreenfootImage("fall2.png");
+
+        // Re-scale everything from scratch
+        int width = (int)(P_WIDTH * scale);
+        int height = (int)(P_HEIGHT * scale);
+
+        standingRight.scale(width, height);
+        standingLeft.scale(width, height);
+
+        // Scale animations (adding the offset you had in original code)
+        int animW = width + (int)(30 * scale);
+        int animH = height - (int)(20 * scale);
+
+        runningR1.scale(animW, animH);
+        runningR2.scale(animW, animH);
+        runningR3.scale(animW, animH);
+        runningR4.scale(animW, animH);
+        jumpR1.scale(animW, animH);
+        jumpR2.scale(animW, animH);
+        fallR1.scale(animW, animH);
+        fallR2.scale(animW, animH);
+
+        // Re-mirror and re-setup arrays
+        createMirroredImages();
+        setupAnimationArrays();
+    }
+
+    private void updateShrink() {
+        if (!isShrunk) return;
+
+        shrinkTimer--;
+        if (shrinkTimer <= 0) {
+            restorePlayerSize();
+        }
     }
 
     private void createMirroredImages(){

@@ -88,6 +88,7 @@ public class RoomThree extends GameWorld {
         fungi6.setWorldPosition(1323, 780);
         
         SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
+        setPaintOrder(); 
     }
     public void spawnFog() {
         // Spawn fog at different depths
