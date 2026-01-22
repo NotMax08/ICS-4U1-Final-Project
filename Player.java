@@ -116,7 +116,7 @@ public class Player extends ScrollingActor {
     // Constants for duration (60 acts per second)
     private static final int SPEED_BOOST_DURATION = 3600; // 60 seconds
     private static final int STRENGTH_BOOST_DURATION = 1800; // 30 seconds
-    private static final int SHRINK_DURATION = 6666600; // 10 seconds
+    private static final int SHRINK_DURATION = 600; // 10 seconds
     private static final double SHRINK_SCALE = 0.6;
 
     /**
