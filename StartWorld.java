@@ -21,7 +21,9 @@ public class StartWorld extends World
         super(800, 600, 1); 
         setBackground(startworld);
         Button start = new Button ("Start", 65, 200, Color.WHITE, 4, Color.BLACK, 35, Color.BLACK, "startworld", false );
+        Button lb = new Button ("Leaderboard", 65, 250, Color.WHITE, 4, Color.BLACK, 35, Color.BLACK, "lb", false );
         addObject(start,getWidth()/2,(getHeight()/4) * 3); 
+        addObject(lb, getWidth()/2, ((getHeight()/4) * 3) + 80);
         GreenfootImage bg = getBackground();
         title.scale(500,250);
         bg.drawImage(title, (getWidth()/4)-40,getHeight()/7);

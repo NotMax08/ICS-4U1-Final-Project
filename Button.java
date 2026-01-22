@@ -197,7 +197,10 @@ public class Button extends Actor
             Greenfoot.setWorld(new StartWorld());
             return;
         }
-        
+        if (buttonID.equals("lb")){
+            Greenfoot.setWorld(new LeaderboardScreen());
+            return;
+        }
     }
     private Button findContinueButton(World world) {
         for (Button button : world.getObjects(Button.class)) {
