@@ -200,6 +200,10 @@ public class Button extends Actor
             Greenfoot.setWorld(new LeaderboardScreen());
             return;
         }
+        if (buttonID.equals("guide")){
+            Greenfoot.setWorld(new GuideScreen());
+            return;
+        }
     }
     private Button findContinueButton(World world) {
         for (Button button : world.getObjects(Button.class)) {

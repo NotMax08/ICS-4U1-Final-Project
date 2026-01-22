@@ -9,13 +9,18 @@ import greenfoot.*;
  * 2. Check console output for spawn position safety
  * 3. Press 'T' in-game to visualize spawn markers
  * 
+ * not perfectly functional
+ * 
  * @author Paul assisted by Claude
  */
 public class SpawnPositionTester extends Actor {
     private GameWorld world;
     private boolean showMarkers = false;
     private java.util.List<SpawnMarker> markers;
-    
+    /**
+     * constuctor for debug class
+     * @param world world for reference
+     */
     public SpawnPositionTester(GameWorld world) {
         this.world = world;
         this.markers = new java.util.ArrayList<>();
@@ -26,7 +31,9 @@ public class SpawnPositionTester extends Actor {
         // Test all spawn positions for this room
         testSpawnPositions();
     }
-    
+    /**
+     * checks for key input to use
+     */
     public void act() {
         if (Greenfoot.isKeyDown("y")) {
             toggleMarkers();
@@ -112,6 +119,9 @@ public class SpawnPositionTester extends Actor {
  * Visual marker for spawn positions
  */
 class SpawnMarker extends ScrollingActor {
+    /**
+     * constructor for marker
+     */
     public SpawnMarker(Camera camera, boolean isSafe, String sourceRoom) {
         super(camera);
         
@@ -135,7 +145,9 @@ class SpawnMarker extends ScrollingActor {
         
         setImage(img);
     }
-    
+    /**
+     * updates screen position with camera
+     */
     public void act() {
         updateScreenPosition();
     }

@@ -2,24 +2,35 @@ import greenfoot.*;
 import java.util.*;
 
 /**
- * @author Claude prompted by Paul
+ * @author Claude and paul
  */
 public abstract class ScrollingActor extends SuperSmoothMover {
     protected int worldX, worldY;
     protected Camera camera;
-    
+    /**
+     * contructor for superclass for all actors in scrolling worlds
+     * 
+     * @param Camera camera for reference
+     */
     public ScrollingActor(Camera camera) {
         this.camera = camera;
         this.worldX = 0;
         this.worldY = 0;
     }
-    
+    /**
+     * sets position in world coordinates for larger maps not screen coordinates
+     * 
+     * @param x world x to set
+     * @param y world y to set
+     */
     public void setWorldPosition(int x, int y) {
         this.worldX = x;
         this.worldY = y;
         updateScreenPosition();
     }
-    
+    /**
+     * updates screen position for camera to show items as the camera moves
+     */
     public void updateScreenPosition() {
         if (camera != null) {
             int screenX = camera.worldToScreenX(worldX);
@@ -27,20 +38,28 @@ public abstract class ScrollingActor extends SuperSmoothMover {
             setLocation(screenX, screenY);
         }
     }
-    
+    /**
+     * getters
+     */
     public int getWorldX() { return worldX; }
     public int getWorldY() { return worldY; }
     public Camera getCamera() { return camera; }
-    
+    /**
+     * sets camera for referencing
+     */
     public void setCamera(Camera newCamera) {
         this.camera = newCamera;
     }
-    
+    /**
+     * getter for world coordinate x
+     */
     @Override
     public int getX(){
         return worldX;
     }
-    
+    /**
+     * getter for world coordinate y
+     */
     @Override
     public int getY(){
         return worldY;
@@ -259,11 +278,15 @@ public abstract class ScrollingActor extends SuperSmoothMover {
     }
     
     protected boolean isFacingRight = true;
-    
+    /**
+     * returns direction facing
+     */
     public boolean isFacingRight() {
         return isFacingRight;
     }
-    
+    /**
+     * sets direction facing
+     */
     public void setFacingRight(boolean facingRight) {
         this.isFacingRight = facingRight;
     }

@@ -48,7 +48,9 @@ public class MapDisplay extends Display {
             setImage(mapImage);
         }
     }
-
+    /**
+     * checks if map is opened and updates display if it is
+     */
     @Override
     public void act(){
         checkMapPress();

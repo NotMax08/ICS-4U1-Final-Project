@@ -69,9 +69,9 @@ public class RoomOne extends GameWorld {
         addObject(fly2, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fly2.setWorldPosition(800, 320);
         
-        Fungi fungi1 = new Fungi(camera);
-        addObject(fungi1, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-        fungi1.setWorldPosition(888, 680 - 100);
+        BasicFly fly3 = new BasicFly(camera, 1200, 1600, 500);
+        addObject(fly3, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+        fly3.setWorldPosition(1400, 500);
         
         if (camera != null && player != null) {
             camera.centerOn(player.getWorldX(), player.getWorldY());

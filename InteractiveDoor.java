@@ -10,7 +10,15 @@ class InteractiveDoor extends ScrollingActor {
     private boolean showingMessage = false;
     private Message messageActor = null;
     private boolean debugVisuals;
-    
+    Player player;
+    /**
+     * constructor for doors that are opened via key f
+     * 
+     * @param camera camera for reference
+     * @param width width of door
+     * @param height height of door
+     * @param id id to know which door to enter specific rooms
+     */
     public InteractiveDoor(Camera camera, int width, int height, String id) {
         super(camera);
         this.width = width;
@@ -31,11 +39,15 @@ class InteractiveDoor extends ScrollingActor {
             setImage(img);
         }
     }
-    
+    /**
+     * handles input if player is tocuhing door 
+     */
     public void act(){
         handleInput();
     }
-    
+    /**
+     * checks for which tiles are set to interactive door
+     */
     public boolean containsWorldPoint(int worldX, int worldY) {
         GameWorld world = (GameWorld) getWorld();
         int tileX = world.worldToTileX(worldX);
@@ -44,7 +56,9 @@ class InteractiveDoor extends ScrollingActor {
         int tileType = world.getMapGrid().getTileAt(tileX, tileY);
         return tileType == 5; // 5 = interactive door
     }
-    
+    /**
+     * checks for touching door and spawn enter prompt
+     */
     public void handleInput(){
         World world = getWorld();
         if (world == null) return;
@@ -100,9 +114,20 @@ class InteractiveDoor extends ScrollingActor {
      * Transition to the appropriate room based on door ID
      */
     private void transitionToRoom(String doorId, String sourceRoom) {
+        // Get player reference from world
+        GameWorld world = (GameWorld) getWorld();
+        if (world == null) return;
+        
+        Player player = world.getObjects(Player.class).isEmpty() ? null : world.getObjects(Player.class).get(0);
+        if (player == null) return;
         switch(doorId) {
             case "roomone":
-                Greenfoot.setWorld(new BossRoom(sourceRoom));
+                if(player.getItemCount(3) == 1){
+                    Greenfoot.setWorld(new BossRoom(sourceRoom));
+                } else{
+                    TimedMessage msg = new TimedMessage("You need a key to enter", 150);
+                    world.addObject(msg, world.getWidth()/2, world.getHeight()/2);
+                }
                 break;
             case "backtormone":
                 Greenfoot.setWorld(new RoomOne(sourceRoom));
@@ -127,7 +152,9 @@ class InteractiveDoor extends ScrollingActor {
                 break;
         }
     }
-    
+    /**
+     * getters
+     */
     public int getWidth() { 
         return width; 
     }

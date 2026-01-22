@@ -1,18 +1,24 @@
 #BlueJ class context
 comment0.target=Camera
-comment0.text=\r\n\ @author\ Claude\ prompted\ by\ Paul\r\n
+comment0.text=\r\n\ Used\ to\ display\ a\ portion\ of\ a\ larger\ map\ and\ updates\ when\ player\ moves\r\n\ \r\n\ @author\ Claude\ prompted\ by\ Paul\r\n
 comment1.params=screenW\ screenH\ worldW\ worldH
 comment1.target=Camera(int,\ int,\ int,\ int)
+comment1.text=\r\n\ Camera\ constructor\ for\ scrolling\ actors\ to\ use\r\n
 comment2.params=worldX\ worldY
 comment2.target=void\ centerOn(int,\ int)
+comment2.text=\r\n\ centers\ on\ player\r\n\ \r\n\ @param\ worldX\ world\ coordinate\ x\ \r\n\ @param\ worldY\ world\ coordinate\ y\r\n
 comment3.params=
 comment3.target=int\ getX()
+comment3.text=\r\n\ getters\ for\ coordinates\r\n
 comment4.params=
 comment4.target=int\ getY()
 comment5.params=worldX
 comment5.target=int\ worldToScreenX(int)
+comment5.text=\r\n\ converts\ world\ to\ screen\ x\ coord\r\n\ \r\n\ @param\ worldX\ world\ x\ coord\r\n
 comment6.params=worldY
 comment6.target=int\ worldToScreenY(int)
+comment6.text=\r\n\ converts\ world\ to\ screen\ coords\ for\ y\r\n\ @param\ worldY\ world\ y\ coord\r\n
 comment7.params=worldX\ worldY\ width\ height
 comment7.target=boolean\ isVisible(int,\ int,\ int,\ int)
+comment7.text=\r\n\ checks\ if\ world\ position\ is\ visible\ in\ camera\r\n\ @param\ worldX\ world\ x\ coord\r\n\ @param\ worldY\ world\ y\ coord\r\n\ @param\ width\ width\ of\ camera\ screen\r\n\ @param\ height\ height\ of\ camera\ screen\r\n
 numComments=8

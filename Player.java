@@ -116,7 +116,7 @@ public class Player extends ScrollingActor {
     // Constants for duration (60 acts per second)
     private static final int SPEED_BOOST_DURATION = 3600; // 60 seconds
     private static final int STRENGTH_BOOST_DURATION = 1800; // 30 seconds
-    private static final int SHRINK_DURATION = 600; // 10 seconds
+    private static final int SHRINK_DURATION = 6666600; // 10 seconds
     private static final double SHRINK_SCALE = 0.6;
 
     /**
@@ -163,15 +163,13 @@ public class Player extends ScrollingActor {
         checkDoor();
         moveHorizontal();
         moveVertical();
-        countItems();
+
         //System.out.println(getWorldX() + ", " + getWorldY());
         updateBoostTimers();
         updateShrink();
     }
 
-    public void countItems(){
-
-    }
+    
 
     /**
      * changes the count of a specific item in index
@@ -618,6 +616,8 @@ public class Player extends ScrollingActor {
                     ((Boss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
                 } else if(target instanceof Miniboss){
                     ((Miniboss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
+                }else if(target instanceof Spawner){
+                    ((Spawner) target).takeDamage(MAGIC_ATTACK_DAMAGE);
                 }
             }
         }
@@ -640,6 +640,7 @@ public class Player extends ScrollingActor {
         targets.addAll(world.getObjects(BaseEnemy.class));
         targets.addAll(world.getObjects(Boss.class));
         targets.addAll(world.getObjects(Miniboss.class));
+        targets.addAll(world.getObjects(Spawner.class));
 
         for (Actor target : targets) {
             int targetX, targetY;
@@ -675,6 +676,8 @@ public class Player extends ScrollingActor {
                     ((Boss) target).takeDamage(damage);
                 } else if(target instanceof Miniboss){
                     ((Miniboss) target).takeDamage(damage);
+                }else if(target instanceof Spawner){
+                    ((Spawner) target).takeDamage(damage);
                 }
 
                 soundManager.playSound("slash_enemy");

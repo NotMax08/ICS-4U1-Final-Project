@@ -13,7 +13,12 @@ public class MapGridDebugOverlay extends ScrollingActor {
     private int tileSize;
     private int tilesWide;
     private int tilesHigh;
-    
+    /**
+     * constructor for debug overlay
+     * 
+     * @param world world reference
+     * @param mapGrid grid that its drawing
+     */
     public MapGridDebugOverlay(GameWorld world, MapGrid mapGrid) {
         super(world.camera);
         this.world = world;
@@ -29,7 +34,9 @@ public class MapGridDebugOverlay extends ScrollingActor {
         setImage(img);
         redraw();
     }
-    
+    /**
+     * updates screen based on camera to show different parts of grid
+     */
     public void act() {
         // Update screen position based on camera
         updateScreenPosition();

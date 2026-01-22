@@ -39,7 +39,6 @@ public class Fog extends Actor {
      * Creates fog using concentric circles (MUCH faster than pixel-by-pixel)
      */
     private void createOptimizedFog() {
-        System.out.println("Creating optimized fog...");
         
         fogImage = new GreenfootImage(SCREEN_WIDTH, SCREEN_HEIGHT);
         int centerX = SCREEN_WIDTH / 2;

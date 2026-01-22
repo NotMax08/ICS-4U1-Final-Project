@@ -133,16 +133,26 @@ public class MapGrid
             }
         }
     }
+    /**
+     * getter for tile map
+     */
     public int[][] getTileMap() {
         return tileMap;
     }
-    
+    /**
+     * getter for specific tile
+     * @param x tile at x position
+     * @param y tile at y position
+     */
     public int getTileAt(int x, int y) {
         if (x >= 0 && x < TILES_WIDE && y >= 0 && y < TILES_HIGH) {
             return tileMap[x][y];
         }
         return -1; // or 1 for solid wall outside bounds
     }
+    /** 
+     * getters for tile map tiles width, height and specific tile height and width
+     */
     public int getTilesWide() { 
         return TILES_WIDE; 
     }

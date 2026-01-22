@@ -53,7 +53,7 @@ public class RoomThree extends GameWorld {
         // Create fog world effect to reduce visibility
         //Fog fog = new Fog();
         //addObject(fog, 400, 300);
-        spawnFog();
+        //spawnFog();
         
         initalizeDisplays();
         
@@ -90,6 +90,23 @@ public class RoomThree extends GameWorld {
         Fungi fungi6 = new Fungi(camera);
         addObject(fungi6, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
         fungi6.setWorldPosition(1323, 780);
+        
+        // World coordinates where you want the spawner
+        int spawnerWorldX = 1600;
+        int spawnerWorldY = 200;
+        
+        // Convert to screen coordinates
+        int spawnerScreenX = camera.worldToScreenX(spawnerWorldX);
+        int spawnerScreenY = camera.worldToScreenY(spawnerWorldY);
+        
+        // Create and add spawner
+        Spawner spawner = new Spawner(camera);
+        addObject(spawner, spawnerScreenX, spawnerScreenY);
+        spawner.setWorldPosition(spawnerWorldX, spawnerWorldY);
+        
+        CollectibleKey key = new CollectibleKey(camera);
+        addObject(key, camera.worldToScreenX(1400), camera.worldToScreenY(200));
+        key.setWorldPosition(1400, 200);
         
         SoundManager.getInstance().playBackgroundMusic("Room3Music.mp3");
         setPaintOrder(); 
@@ -202,6 +219,8 @@ public class RoomThree extends GameWorld {
             {52, 52, 33},
             {53, 53, 34},
             {54, 54, 35}, 
+            {92,95, 33},
+            
         };
         
         // Convert platforms to tiles
@@ -283,7 +302,26 @@ public class RoomThree extends GameWorld {
             {41, 41, 10, 36},
             {111, 111, 8, 22},
             {29, 29, 43, 43},
-            {72, 72, 44, 44}
+            {72, 72, 44, 44},
+            {91, 91, 28, 32},
+            {95,95,32,32},
+            {38,38,40,40},
+            {39,39,41,41},
+            {40,40,42,42},
+            {41,41,43,43},
+            {42,42,44,44},
+            {43,43,44,44},
+            {44,44,43,43},
+            {45,45,42,42},
+            {46,46,41,41},
+            {43,43,36,36},
+            {44,44,37,37},
+            {45,45,38,38},
+            {46,46,39,39},
+            {46,46,40,40},
+            {42,42,36,36},
+            
+            
         };
         
         int totalWallTiles = 0;

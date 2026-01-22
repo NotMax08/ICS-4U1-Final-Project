@@ -9,5 +9,5 @@ comment2.target=void\ started()
 comment2.text=\r\n\ starts\ sound\ when\ instance\ starts\r\n
 comment3.params=
 comment3.target=void\ stopped()
-comment3.text=\r\n\ \r\n
+comment3.text=\r\n\ stops\ sound\ when\ instance\ paused\r\n
 numComments=4
