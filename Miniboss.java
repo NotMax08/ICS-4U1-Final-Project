@@ -309,7 +309,7 @@ public class Miniboss extends Actor {
         if (attackTimer <= 0) {
             if (state == BossState.ALERT) {
                 attackNum = Greenfoot.getRandomNumber(3) + 1;
-                knightCounter = room.getObjects(Knight.class).size();
+                knightCounter = getWorld().getObjects(Knight.class).size();
                 if(knightCounter == 2){
                     attackNum = 1;
                 }
