@@ -23,6 +23,9 @@ public class BossWeapon extends Actor
     private int attackCounter;
     private int playerLocation;
     
+    private GreenfootSound strikeSound = new GreenfootSound("strikeSound.wav");
+    private GreenfootSound throwSound = new GreenfootSound("throwSound.wav");
+    
     /**
      * Boss weapon constructor
      *
@@ -116,6 +119,7 @@ public class BossWeapon extends Actor
     private void attackFlying1(boolean left){
         if (attackCounter == 0){
             lethal = true;
+            throwSound.play();
         }
         
         if (attackCounter <= 13){
@@ -168,6 +172,7 @@ public class BossWeapon extends Actor
         attack2=true; // State
         attackCounter = 0;
         playerLocation = BossRoom.player.getX();
+        strikeSound.play();
     }
     
     /**

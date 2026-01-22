@@ -9,6 +9,9 @@ public class BossWeaponEffect extends Actor
     private int type;
     private boolean lethal;
     
+    private GreenfootSound electricBolt = new GreenfootSound("electricBolt.wav");
+    private GreenfootSound bzztSound = new GreenfootSound("BzztSound.wav");
+    
     /**
      * Boss weapon effect constructor
      *
@@ -23,6 +26,7 @@ public class BossWeaponEffect extends Actor
         else if (type==2){
             setI("Down2");
             lethal = true;
+            bzztSound.play();
         }
         else if (type==3){
             setI("Motion1");
@@ -153,6 +157,7 @@ public class BossWeaponEffect extends Actor
         }
         else if (type==3 || type==4){
             if (counter==60){
+                electricBolt.play();
                 this.getImage().setTransparency(255);
                 lethal = true;
             }
