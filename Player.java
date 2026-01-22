@@ -45,7 +45,7 @@ public class Player extends ScrollingActor {
     private boolean isStunned = false;
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
-    private boolean attackUpgraded = false;
+    private static boolean attackUpgraded = false;
     private static boolean magicUnlocked = true;
     private boolean isHealing = false;
 
@@ -339,7 +339,7 @@ public class Player extends ScrollingActor {
 
     private void handleAbility(){
         if(abilityCooldownCounter.isZero()){
-            if(Greenfoot.isKeyDown("h") && currentMana >= 4 && currentHealth < maxHealth){
+            if(Greenfoot.isKeyDown("h") || Greenfoot.isKeyDown("q") && currentMana >= 4 && currentHealth < maxHealth){
                 isHealing = true;
             }
             if(Greenfoot.isKeyDown("j") || Greenfoot.isKeyDown("e")){
@@ -459,6 +459,7 @@ public class Player extends ScrollingActor {
         ArrayList<Actor> targets = new ArrayList<>();
         targets.addAll(world.getObjects(BaseEnemy.class));
         targets.addAll(world.getObjects(Boss.class));
+        targets.addAll(world.getObjects(Miniboss.class));
 
         for (Actor target : targets) {
             int targetX, targetY;
@@ -504,6 +505,7 @@ public class Player extends ScrollingActor {
         ArrayList<Actor> targets = new ArrayList<>();
         targets.addAll(world.getObjects(BaseEnemy.class));
         targets.addAll(world.getObjects(Boss.class));
+        targets.addAll(world.getObjects(Miniboss.class));
 
         for (Actor target : targets) {
             int targetX, targetY;
@@ -534,6 +536,8 @@ public class Player extends ScrollingActor {
                     ((BaseEnemy) target).takeDamage(damage);
                 } else if (target instanceof Boss) {
                     ((Boss) target).takeDamage(damage);
+                } else if(target instanceof Miniboss){
+                    ((Miniboss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
                 }
 
                 soundManager.playSound("slash_enemy");

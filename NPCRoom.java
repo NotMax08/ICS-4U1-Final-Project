@@ -18,17 +18,28 @@ public class NPCRoom extends GameWorld {
     private static final int ENTRY_SPAWN_X = 150;
     private static final int ENTRY_SPAWN_Y = 500;
     
+    private boolean debugVisuals;
+    
+    GreenfootImage door = new GreenfootImage("doorway.png");
     public NPCRoom(String sourceRoom) {
         super(); // This creates the camera
         
         camera.centerOn(NPC_WORLD_WIDTH / 2, NPC_WORLD_HEIGHT / 2);
         
+        setPaintOrder(Player.class,Miniboss.class,SummonBackground.class);
+        
         fullBackground = new GreenfootImage("npcroom.jpg");
+        door.scale(200,350);
+        fullBackground.drawImage(door, -40, 300);
         fullBackground.scale(NPC_WORLD_WIDTH, NPC_WORLD_HEIGHT);
         
         initializeMapGrid();
-        //createPlatformVisuals();
-        createInteractiveDoorVisuals();
+        
+        debugVisuals = false;
+        if(debugVisuals){
+            createPlatformVisuals();
+        }
+        createInteractiveDoors();
         
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -170,7 +181,7 @@ public class NPCRoom extends GameWorld {
         
         // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 500, 80, 140},   // Left door
+            {50, 450, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -259,9 +270,9 @@ public class NPCRoom extends GameWorld {
         }
     }
     
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
         int[][] doorRegions = {
-            {50, 500, 80, 140},   // Left door
+            {50, 450, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {
