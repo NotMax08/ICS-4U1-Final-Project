@@ -12,7 +12,7 @@ public class Key extends ShopItems
     {
         super(isInInventory);
         image = new GreenfootImage("key.png");
-        image.scale(image.getWidth()/3, image.getHeight()/3);
+        image.scale(image.getWidth()/5, image.getHeight()/5);
         setImage(image);
     }
     public void act()

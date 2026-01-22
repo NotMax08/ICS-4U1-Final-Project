@@ -17,8 +17,13 @@ public class ShrinkPotion extends ShopItems
         image.scale(image.getWidth()/4, image.getHeight()/4);
         setImage(image);
     }
-    public void act()
+    
+    @Override
+    public void effect(Player player)
     {
-        // Add your action code here.
+        player.shrinkPlayer();
+        player.updateItemCount(2, -1); // decrease count at index 2
+        System.out.println("Shrink Potion Used!");
     }
 }
+

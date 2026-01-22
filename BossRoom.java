@@ -83,6 +83,7 @@ public class BossRoom extends GameWorld {
         addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn boss off screen
         
         SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
+        setPaintOrder(); 
     }
     
     public BossRoom() {

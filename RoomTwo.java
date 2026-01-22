@@ -88,6 +88,7 @@ public class RoomTwo extends GameWorld {
         //knight2.setWorldPosition(1700, 250);
         
         SoundManager.getInstance().playBackgroundMusic("Room2Music.mp3");
+        setPaintOrder(); 
     }
     
     // Default constructor for new game

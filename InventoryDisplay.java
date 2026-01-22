@@ -16,11 +16,17 @@ public class InventoryDisplay extends Display {
 
     private boolean isOpen = false;
     private boolean tabWasDown = false;
+    
+    // Tracking variable to detect when an item is used/bought so we can refresh the Actors
+    private int lastTotalCount = -1; 
 
     private Player player;
 
-    // Inventory utility - Now using ShopItems instead of InventoryItem helper class
-    private ArrayList<ShopItems> items;
+    // Inventory utility - Using real ShopItems actors to allow clicking
+    private ArrayList<ShopItems> activeItems = new ArrayList<ShopItems>();
+    // List for the quantity labels using the custom TextBox class
+    private ArrayList<TextBox> activeLabels = new ArrayList<TextBox>(); 
+    
     private int[][] slotLocations; 
     private final int maxSlots = 15;
     private final int COLS = 3;
@@ -34,7 +40,8 @@ public class InventoryDisplay extends Display {
      */
     public InventoryDisplay(int screenX, int screenY, Camera camera, Player player) {
         super(screenX, screenY, camera);
-        this.items = new ArrayList<ShopItems>();
+        this.activeItems = new ArrayList<ShopItems>();
+        this.activeLabels = new ArrayList<TextBox>();
         this.player = player;
 
         closedInv = scaleImage("closedInv.png", 100, 100, 225);
@@ -50,8 +57,8 @@ public class InventoryDisplay extends Display {
         slotLocations = new int[15][2]; // Fixed: 15 slots, 2 coordinates each
 
         // Adjust these values to match where your grid starts in openInv.png
-        int startX = 325; // X position of first slot
-        int startY = 120;  // Y position of first slot
+        int startX = 325; // X position of first slot relative to top-left of UI
+        int startY = 120; // Y position of first slot relative to top-left of UI
         int slotSpacing = 90; // Space between slot centers
         int slotsPerRow = 3;
 
@@ -66,117 +73,149 @@ public class InventoryDisplay extends Display {
 
     @Override
     protected void updateDisplay(){
-        syncWithPlayerInventory(); // Updated logic to use ShopItems
-
         if(!isOpen){
             setLocation(screenX, screenY);
             setImage(closedInv);
-        }else {
-            setLocation(screenX + 350, screenY - 250);
+            clearItemsFromWorld(); // Remove actors when closed
+            lastTotalCount = -1;   // Reset tracker
+        } else {
+            // Position the inventory UI
+            int invX = screenX + 350;
+            int invY = screenY - 250;
+            setLocation(invX, invY);
+            setImage(openInv);
 
-            // Create image with items
-            GreenfootImage canvas = new GreenfootImage(openInv);
-            drawItems(canvas);
-            setImage(canvas);
+            // Calculate current total items to see if one was just used or bought
+            int currentTotal = player.getItemCount(0) + player.getItemCount(1) + 
+                               player.getItemCount(2) + player.getItemCount(3);
+
+            // Check if we have entered a new room (World Change)
+            // If our actors belong to an old world, they won't be visible in the new one
+            boolean worldChanged = false;
+            if (!activeItems.isEmpty() && activeItems.get(0).getWorld() != getWorld()) {
+                worldChanged = true;
+            }
+
+            // Re-sync items if count changed, if UI just opened, or if we switched rooms
+            if (currentTotal != lastTotalCount || activeItems.isEmpty() || worldChanged) {
+                refreshInventoryItems();
+                lastTotalCount = currentTotal;
+            }
+            
+            // Move real actors to follow the scrolling UI and slot locations
+            positionItems(invX, invY);
         }
     }
 
-    // Draws items on the inventory
-    private void drawItems(GreenfootImage img){
-        for (int i = 0; i < items.size(); i++) {
-            if (i >= maxSlots) break;
+    /**
+     * Rebuilds the list of real ShopItem actors and TextBox labels based on player inventory
+     */
+    private void refreshInventoryItems() {
+        clearItemsFromWorld();
+        
+        if (getWorld() == null) return; // Safety check
 
-            ShopItems item = items.get(i);
-            GreenfootImage icon = item.getImage(); 
+        // 1. Identify which items the player has and add to list
+        // Index 0: Strength, 1: Shield, 2: Shrink, 3: Key
+        if (player.getItemCount(0) > 0) activeItems.add(new StrengthPotion(true));
+        if (player.getItemCount(1) > 0) activeItems.add(new ShieldPotion(true));
+        if (player.getItemCount(2) > 0) activeItems.add(new ShrinkPotion(true));
+        if (player.getItemCount(3) > 0) activeItems.add(new Key(true));
 
-            int x = slotLocations[i][0];
-            int y = slotLocations[i][1];
-
-            int iconX = x - (icon.getWidth() / 2);
-            int iconY = y - (icon.getHeight() / 2);
-
-            img.drawImage(icon, iconX, iconY);
-
+        // 2. For every item added, create a matching TextBox label for the quantity
+        for (int i = 0; i < activeItems.size(); i++) {
+            ShopItems item = activeItems.get(i);
+            getWorld().addObject(item, 0, 0); 
+            
+            // Get correct count for the specific item type
             int count = 0;
-            if (item instanceof StrengthPotion) {
-                count = player.getItemCount(0);
-            } else if (item instanceof ShieldPotion) {
-                count = player.getItemCount(1);
-            } else if (item instanceof ShrinkPotion) {
-                count = player.getItemCount(2);
-            } else if (item instanceof Key) {
-                count = player.getItemCount(3); // Changed from 2 to 3
-            }
-
-            // Draw quantity text
-            img.setFont(new Font("Arial", true, false, 24)); 
-            img.setColor(Color.WHITE);
-            img.drawString(String.valueOf(count), x + 15, y + 35);
+            if (item instanceof StrengthPotion) count = player.getItemCount(0);
+            else if (item instanceof ShieldPotion) count = player.getItemCount(1);
+            else if (item instanceof ShrinkPotion) count = player.getItemCount(2);
+            else if (item instanceof Key) count = player.getItemCount(3);
+            
+            // Create the TextBox using the custom retro font class
+            TextBox label = new TextBox(String.valueOf(count), 18);
+            activeLabels.add(label);
+            getWorld().addObject(label, 0, 0);
         }
+    }
+
+    /**
+     * Keeps the potion actors and text labels attached to the inventory UI
+     */
+    private void positionItems(int invX, int invY) {
+        // Find top-left corner of the background image (UI is 600x600, half is 300)
+        int topLeftX = invX - 300;
+        int topLeftY = invY - 300;
+
+        for (int i = 0; i < activeItems.size(); i++) {
+            int targetX = topLeftX + slotLocations[i][0];
+            int targetY = topLeftY + slotLocations[i][1];
+            
+            // Move Potion Actor
+            ShopItems item = activeItems.get(i);
+            if (item != null && item.getWorld() != null) {
+                item.setLocation(targetX, targetY);
+            }
+            
+            // Move Label Actor (Offset to bottom right of the slot)
+            TextBox label = activeLabels.get(i);
+            if (label != null && label.getWorld() != null) {
+                label.setLocation(targetX + 25, targetY + 30);
+            }
+        }
+    }
+
+    /**
+     * Removes all potion actors and text labels from the world
+     */
+    private void clearItemsFromWorld() {
+        // Remove Potion Actors
+        for (ShopItems item : activeItems) {
+            if (item != null && item.getWorld() != null) {
+                getWorld().removeObject(item);
+            }
+        }
+        activeItems.clear();
+
+        // Remove TextBox Labels
+        for (TextBox label : activeLabels) {
+            if (label != null && label.getWorld() != null) {
+                getWorld().removeObject(label);
+            }
+        }
+        activeLabels.clear();
     }
 
     @Override
     public void act(){
-        checkMouseClick();
         checkTabPress();
         updateDisplay();
     }
 
-    private void checkMouseClick(){
-        boolean mouseClickedInv = Greenfoot.mousePressed(this);
-        boolean mouseIsDown = Greenfoot.mousePressed(null);
-
-        if(!isOpen){
-            if(mouseClickedInv) isOpen = true;
-        }else {
-            if(!mouseClickedInv && mouseIsDown) isOpen = false;
-        }
-    }
-
     private void checkTabPress(){
         boolean tabIsDown = Greenfoot.isKeyDown("tab");
-        if (tabIsDown && !tabWasDown) isOpen = !isOpen;
+        if (tabIsDown && !tabWasDown) {
+            isOpen = !isOpen;
+            if (isOpen) {
+                activeItems.clear(); // Force refresh on open
+            }
+        }
         tabWasDown = tabIsDown;
-    }
-
-    /**
-     * Logic to refresh the items list based on player inventory counts
-     */
-    private void syncWithPlayerInventory() {
-        items.clear();
-
-        // ID 0: Strength Potion
-        if (player.getItemCount(0) > 0) {
-            items.add(new StrengthPotion(true));
-        }
-
-        // ID 1: Shield Potion
-        if (player.getItemCount(1) > 0) {
-            items.add(new ShieldPotion(true));
-        }
-
-        // ID 2: Shrink Potion
-        if (player.getItemCount(2) > 0) {
-            items.add(new ShrinkPotion(true));
-        }
-
-        // ID 3: Key
-        if (player.getItemCount(3) > 0) {
-            items.add(new Key(true));
-        }
     }
 
     // --- Helper methods kept for compatibility ---
 
     public int getItemCount() {
-        return items.size();
+        return activeItems.size();
     }
 
     public boolean isFull() {
-        return items.size() >= maxSlots;
+        return activeItems.size() >= maxSlots;
     }
 
     public void clear() {
-        items.clear();
+        clearItemsFromWorld();
     }
 }
