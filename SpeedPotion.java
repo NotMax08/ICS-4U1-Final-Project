@@ -10,6 +10,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class SpeedPotion extends Items
 {
+    /**
+     * @param isInInventory -> true if the object is in 
+     * player's inventory 
+     */
     public SpeedPotion(boolean isInInventory)
     {
         super(isInInventory);
@@ -18,10 +22,14 @@ public class SpeedPotion extends Items
         setImage(image);
     }
     
-        public void effect(Player player)
+    /**
+     * effect that increases player speed and lasts 60s
+     * @param player -> player that gets the buff
+     */
+    @Override
+    protected void effect(Player player)
     {
         player.activateSpeedBoost(); 
         player.updateItemCount(1, -1);
-        System.out.println("Speed Potion Activated!");
     }
 }

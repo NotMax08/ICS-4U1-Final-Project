@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class ShrinkPotionIcon here.
+ *  Icon that displays Shrink potion and its description
  * 
  * @author Julian
  * @version 2025
@@ -9,6 +9,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class ShrinkPotionIcon extends ShopIcons
 {
     private ShrinkPotion shrinkPotion;
+    /** 
+     * Constructor for the Shrink Potion Icon
+     */
     public ShrinkPotionIcon()
     {
         image = new GreenfootImage("shrinkptIcon.jpg");
@@ -22,7 +25,9 @@ public class ShrinkPotionIcon extends ShopIcons
         this.description = "Shrinks player| Purchase for 15 orbs?"; 
     }
 
-
+    /**
+     * Writes the description of the Potion
+     */
     protected void description()
     {
         textWriter(description, true);
@@ -30,7 +35,11 @@ public class ShrinkPotionIcon extends ShopIcons
             getWorld().addObject(shrinkPotion, getWorld().getWidth()/2 + potionX, getWorld().getHeight()/2 + potionY);
         }
     }
-
+    
+    /**
+     * Cleans everything up once mouse stops hovering over icon or
+     * player closes store
+     */
     protected void cleanUp()
     {
         removeText();
@@ -38,11 +47,5 @@ public class ShrinkPotionIcon extends ShopIcons
         {
             getWorld().removeObject(shrinkPotion);
         }
-    }
-
-    public void removeIcon()
-    {
-        cleanUp();
-        getWorld().removeObject(this);
     }
 }

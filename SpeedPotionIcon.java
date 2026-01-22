@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class SpeedPotionIcon here.
+ * Icon that displays Speed potion and its description
  * 
  * @author Julian
  * @version 2026
@@ -10,6 +10,9 @@ public class SpeedPotionIcon extends ShopIcons
 {
     private SpeedPotion speedPotion; 
     
+    /**
+     * constructor for speed potion
+     */
     public SpeedPotionIcon()
     {
         image = new GreenfootImage("shieldptIcon.jpg");
@@ -28,6 +31,9 @@ public class SpeedPotionIcon extends ShopIcons
         super.act();
     }
     
+    /**
+     * writes the description of the potion
+     */
     protected void description()
     {
         textWriter(description, true);
@@ -36,6 +42,9 @@ public class SpeedPotionIcon extends ShopIcons
         }
     }
     
+    /**
+     * cleans everything up
+     */
     protected void cleanUp()
     {
         removeText();
@@ -43,11 +52,5 @@ public class SpeedPotionIcon extends ShopIcons
         {
             getWorld().removeObject(speedPotion);
         }
-    }
-    
-    public void removeIcon()
-    {
-        cleanUp();
-        getWorld().removeObject(this);
     }
 }

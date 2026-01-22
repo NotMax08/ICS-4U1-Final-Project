@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class StrengthPotionIcon here.
+ * Icon that displays Strength potion and its description
  * 
  * @author Julian 
  * @version 2026
@@ -9,6 +9,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class StrengthPotionIcon extends ShopIcons
 {
     private StrengthPotion strengthPotion;
+    
+    /** 
+     * constructor for Strength potion
+     */
     public StrengthPotionIcon()
     {
         image = new GreenfootImage("strengthptIcon.jpg");
@@ -22,7 +26,9 @@ public class StrengthPotionIcon extends ShopIcons
         this.description = "Increases damage to enemies|Purchase for 25?";
     }
     
-    
+    /**
+     * write the description for strength potion
+     */
     protected void description()
     {
         textWriter(description, true);
@@ -31,6 +37,9 @@ public class StrengthPotionIcon extends ShopIcons
         }
     }
     
+    /** 
+     * cleans everything up
+     */
     protected void cleanUp()
     {
         removeText();
@@ -38,11 +47,5 @@ public class StrengthPotionIcon extends ShopIcons
         {
             getWorld().removeObject(strengthPotion);
         }
-    }
-    
-    public void removeIcon()
-    {
-        cleanUp();
-        getWorld().removeObject(this);
     }
 }

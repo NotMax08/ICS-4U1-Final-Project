@@ -188,10 +188,10 @@ public class Player extends ScrollingActor {
     }
 
     public static void resetInventoryAndMoney() {
-        currency = 1000; // You had this at 0, set it to your starting amount
+        currency = 0;
         itemCount = new int[4];
-        attackUpgraded = false; // Reset these so a new game starts fresh
-        magicUnlocked = false;  // Or true, depending on your game start
+        attackUpgraded = false;
+        magicUnlocked = false;
     }
 
     private void checkHealth(){
@@ -281,9 +281,12 @@ public class Player extends ScrollingActor {
         if (strengthBoostTimer > 0) strengthBoostTimer--;
     }
 
+    /**
+     * method that shrinks all image for the shrink potion
+     * 
+     * @param scale to shrink all images down to
+     */
     private void scaleAllImages(double scale) {
-        // IMPORTANT: We reload the images from the files each time we scale.
-        // If you scale an already-scaled image, it becomes blurry.
         standingRight = new GreenfootImage("standingRight.png");
         standingLeft = new GreenfootImage("standingLeft.png");
 
@@ -968,7 +971,11 @@ public class Player extends ScrollingActor {
     public void unlockMagicAttack(){
         magicUnlocked = true;
     }
-
+    
+    /**
+     * Adds or subtracts a number to the currency
+     * @param num -> number to add or subtract (use '-') to subtract
+     */
     public void addToCurrency(int num)
     {
         currency += num;
@@ -1068,11 +1075,17 @@ public class Player extends ScrollingActor {
     public int getAbilityCooldown(){
         return abilityCooldownCounter.getCount();
     }
-
+    
+    /**
+     * the number of specific items a player has
+     */
     public int getItemCount(int item){
         return itemCount[item];
     }
-
+    
+    /**
+     * @return the amount of money player has
+     */
     public int getCurrency()
     {
         return currency;
