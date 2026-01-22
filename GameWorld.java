@@ -68,7 +68,7 @@ public abstract class GameWorld extends World {
             StrengthPotion.class,
             ShrinkPotion.class,
             Key.class,
-            ShopItems.class,
+            Items.class,
             ShopIcons.class,
             ShopUI.class,
             MapGridDebugOverlay.class,

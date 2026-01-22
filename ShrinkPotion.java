@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * 
  * Credits: Rafaelchm on OpenGameArt.org 
  */
-public class ShrinkPotion extends ShopItems
+public class ShrinkPotion extends Items
 {
     public ShrinkPotion(boolean isInInventory)
     {

@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * 
  * Credits: Rafaelchm on OpenGameArt.org
  */
-public class StrengthPotion extends ShopItems
+public class StrengthPotion extends Items
 {
     public StrengthPotion(boolean isInInventory)
     {
@@ -17,10 +17,7 @@ public class StrengthPotion extends ShopItems
         image.scale(image.getWidth()/4, image.getHeight()/4);
         setImage(image);
     }
-    public void act()
-    {
-        // Add your action code here.
-    }
+    
     @Override
     public void effect(Player player) {
         player.activateStrengthBoost(); 

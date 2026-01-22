@@ -1,19 +1,19 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Potions here.
+ * Items class 
  * 
  * @author Julian
  * @version 2026
  * 
  * 
  */
-public abstract class ShopItems extends Actor
+public abstract class Items extends Actor
 {
     protected GreenfootImage image; 
     protected boolean isInInventory;
     
-    public ShopItems(boolean isInInventory) {
+    public Items(boolean isInInventory) {
         this.isInInventory = isInInventory;
     }
     

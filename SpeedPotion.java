@@ -8,7 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * 
  * Rafaelchm on OpenGameArt.org
  */
-public class SpeedPotion extends ShopItems
+public class SpeedPotion extends Items
 {
     public SpeedPotion(boolean isInInventory)
     {
@@ -16,10 +16,6 @@ public class SpeedPotion extends ShopItems
         image = new GreenfootImage("pt2.png");
         image.scale(image.getWidth()/4, image.getHeight()/4);
         setImage(image);
-    }
-    public void act()
-    {
-        // Add your action code here.
     }
     
         public void effect(Player player)

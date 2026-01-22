@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Julian 
  * @version 2026
  */
-public class Key extends ShopItems
+public class Key extends Items
 {
     public Key(boolean isInInventory)
     {

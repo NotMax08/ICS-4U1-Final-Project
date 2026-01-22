@@ -22,11 +22,6 @@ public class ShrinkPotionIcon extends ShopIcons
         this.description = "Shrinks player| Purchase for 15 orbs?"; 
     }
 
-    public void act()
-    {
-        super.act();
-
-    }
 
     protected void description()
     {

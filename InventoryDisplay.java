@@ -22,8 +22,8 @@ public class InventoryDisplay extends Display {
 
     private Player player;
 
-    // Inventory utility - Using real ShopItems actors to allow clicking
-    private ArrayList<ShopItems> activeItems = new ArrayList<ShopItems>();
+    // Inventory utility - Using real Items actors to allow clicking
+    private ArrayList<Items> activeItems = new ArrayList<Items>();
     // List for the quantity labels using the custom TextBox class for retro font
     private ArrayList<TextBox> activeLabels = new ArrayList<TextBox>(); 
     
@@ -40,7 +40,7 @@ public class InventoryDisplay extends Display {
      */
     public InventoryDisplay(int screenX, int screenY, Camera camera, Player player) {
         super(screenX, screenY, camera);
-        this.activeItems = new ArrayList<ShopItems>();
+        this.activeItems = new ArrayList<Items>();
         this.activeLabels = new ArrayList<TextBox>();
         this.player = player;
 
@@ -126,7 +126,7 @@ public class InventoryDisplay extends Display {
 
         // 2. For every item added, create a matching TextBox label for the quantity
         for (int i = 0; i < activeItems.size(); i++) {
-            ShopItems item = activeItems.get(i);
+            Items item = activeItems.get(i);
             getWorld().addObject(item, 0, 0); 
             
             // Get correct count for the specific item type from static player data
@@ -156,7 +156,7 @@ public class InventoryDisplay extends Display {
             int targetY = topLeftY + slotLocations[i][1];
             
             // Move Potion Actor
-            ShopItems item = activeItems.get(i);
+            Items item = activeItems.get(i);
             if (item != null && item.getWorld() != null) {
                 item.setLocation(targetX, targetY);
             }
@@ -174,7 +174,7 @@ public class InventoryDisplay extends Display {
      */
     private void clearItemsFromWorld() {
         // Remove Potion Actors
-        for (ShopItems item : activeItems) {
+        for (Items item : activeItems) {
             if (item != null && item.getWorld() != null) {
                 getWorld().removeObject(item);
             }

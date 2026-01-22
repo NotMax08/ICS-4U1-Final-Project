@@ -22,10 +22,6 @@ public class StrengthPotionIcon extends ShopIcons
         this.description = "Increases damage to enemies|Purchase for 25?";
     }
     
-    public void act()
-    {
-        super.act();
-    }
     
     protected void description()
     {
