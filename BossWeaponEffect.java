@@ -68,6 +68,7 @@ public class BossWeaponEffect extends Actor
      */
     public boolean checkCollision3(){
         if (lethal==true){
+            // Zig zag points
             int[] points = {395, -265,
                             -395, -223,
                             395, -153,
@@ -76,13 +77,15 @@ public class BossWeaponEffect extends Actor
                             -395, 129,
                             395, 221,
                             0, 266};
-                            
+            
             if (type == 4) {
+                // Invert points if 'inverted' type
                 for (int i = 0; i < points.length; i += 2) {
                     points[i] = -points[i];
                 }
             }
-                            
+            
+            // Check points
             for (int i=0; i<points.length-2; i+=2)
             {
                 int startX = points[i];
@@ -141,6 +144,7 @@ public class BossWeaponEffect extends Actor
             checkCollision3();
         }
         
+        // Timer to remove effects
         if (type==1 && counter == 7){
             getWorld().removeObject(this);
         }
