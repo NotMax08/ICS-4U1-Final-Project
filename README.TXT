@@ -5,7 +5,7 @@ Instructions:
 Play the game as intended with several tries for the best experience. Intended to be difficult and rewarding to complete. Main point is to explore all rooms and fight final boss to win.
 Keybinds: 
 -> Movement: space jump, a/d or left/right arrow keys for direction
--> Attack: k or e for basic attack, k for magic attack.
+-> Attack: k or e for basic attack, k or shift for magic attack.
 -> Abilities:  q or h to heal, hold for 2 seconds
 -? Inventory: tab (empty by default, does not count your weapon)
 ->Debug: g for map grid and y for room position entry testing, platform and interactive door debug visuals are booleans set in constructors
