@@ -119,6 +119,10 @@ public abstract class GameWorld extends World {
             int currentTime = HighScoreManager.getCurrentRunTime();
             showText("Time: " + HighScoreManager.formatTime(currentTime), 700, 30);
         }
+        
+        // God Mode display
+        String str = player.isGodMode() ? "Activated" : "Deactivated";
+        showText("God mode " + str, SCREEN_WIDTH - 150, 100); 
     }
 
     /**

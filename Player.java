@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class Player extends ScrollingActor {
     // God mode
     private static boolean godMode = false;
+    private boolean pWasDown = false; 
 
     // Movement constants
     private double velocityX = 0;
@@ -471,9 +472,13 @@ public class Player extends ScrollingActor {
     }
 
     private void checkGodMode(){
-        if(Greenfoot.isKeyDown("p")){
-            godMode = true;
+        boolean pIsDown = Greenfoot.isKeyDown("p");
+        
+        if(pIsDown && !pWasDown){
+            godMode = !godMode;
         }
+        
+        pWasDown = pIsDown;
     }
 
     private void basicAttack(){
@@ -982,6 +987,12 @@ public class Player extends ScrollingActor {
     }
 
     // Getters
+    /**
+     * Checks if god mode is turned on
+     */
+    public boolean isGodMode(){
+        return godMode;
+    }
     /**
      * Checks if the basic attack is upgraded
      * @return True if attack is upgraded 
