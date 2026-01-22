@@ -1,26 +1,26 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class ShieldPotionIcon here.
+ * Write a description of class SpeedPotionIcon here.
  * 
  * @author Julian
  * @version 2026
  */
-public class ShieldPotionIcon extends ShopIcons
+public class SpeedPotionIcon extends ShopIcons
 {
-    private ShieldPotion shieldPotion; 
+    private SpeedPotion speedPotion; 
     
-    public ShieldPotionIcon()
+    public SpeedPotionIcon()
     {
         image = new GreenfootImage("shieldptIcon.jpg");
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
         
-        shieldPotion = new ShieldPotion();
+        speedPotion = new SpeedPotion(false);
         
         this.price = 10;
         this.itemIndex = 1;
-        this.description = "Gives player shield|Purchase for $10?";
+        this.description = "Gives player speed|Purchase for $10?";
     }
     
     public void act()
@@ -31,17 +31,17 @@ public class ShieldPotionIcon extends ShopIcons
     protected void description()
     {
         textWriter(description, true);
-        if (shieldPotion != null && shieldPotion.getWorld() == null) {
-            getWorld().addObject(shieldPotion, getWorld().getWidth()/2 + potionX, getWorld().getHeight()/2 + potionY);
+        if (speedPotion != null && speedPotion.getWorld() == null) {
+            getWorld().addObject(speedPotion, getWorld().getWidth()/2 + potionX, getWorld().getHeight()/2 + potionY);
         }
     }
     
     protected void cleanUp()
     {
         removeText();
-        if(getWorld() != null && shieldPotion != null && shieldPotion.getWorld() != null)
+        if(getWorld() != null && speedPotion != null && speedPotion.getWorld() != null)
         {
-            getWorld().removeObject(shieldPotion);
+            getWorld().removeObject(speedPotion);
         }
     }
     

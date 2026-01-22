@@ -16,10 +16,10 @@ public class KeyIcon extends ShopIcons
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
         
-        key = new Key();
+        key = new Key(false);
         
         this.price = 0;
-        this.itemIndex = 1;
+        this.itemIndex = 3;
         this.description = "???";
     }
     

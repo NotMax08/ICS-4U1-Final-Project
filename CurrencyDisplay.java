@@ -34,7 +34,7 @@ public class CurrencyDisplay extends Display
             getX(), 
             getY(),
             700,
-            65,
+            90,
             content,
             30,
             false

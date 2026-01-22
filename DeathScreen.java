@@ -27,6 +27,8 @@ public class DeathScreen extends World
         addObject(backToStart, getWidth()/2, (getHeight()/4) * 3);
         
         SoundManager.getInstance().playBackgroundMusic("DeathScreenMusic.mp3");
+        
+        Player.resetInventoryAndMoney();
     }
     /**
      * Starts background music when world is spawned and instance is started

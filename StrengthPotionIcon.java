@@ -15,17 +15,13 @@ public class StrengthPotionIcon extends ShopIcons
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
         
-        strengthPotion = new StrengthPotion();
+        strengthPotion = new StrengthPotion(false);
         
         this.price = 25;
-        this.itemIndex = 3;
+        this.itemIndex = 0;
         this.description = "Increases damage to enemies|Purchase for 25?";
     }
     
-    public void act()
-    {
-        super.act();
-    }
     
     protected void description()
     {
