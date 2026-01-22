@@ -9,6 +9,7 @@ Keybinds:
 -> Abilities:  q or h to heal, hold for 2 seconds and shift or k for magic ability
 -? Inventory: tab (empty by default, does not count your weapon)
 -> Map: m to open
+-> Interactive Doors: f to open
 -> Items: buying and using items are done with mouse click in shop and inventory ui respectively (resets when moving rooms)
 ->Debug: g for map grid and y for room position entry testing, platform and interactive door debug visuals are booleans set in constructors
 Recommended Keybinds:
@@ -67,6 +68,7 @@ Art credit:
  * Other art, Leonardo Ai and ChatGPT
 
 Author Paul
+
 
 
 
