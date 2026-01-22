@@ -9,6 +9,7 @@ Keybinds:
 -> Abilities:  q or h to heal, hold for 2 seconds and shift or k for magic ability
 -? Inventory: tab (empty by default, does not count your weapon)
 -> Map: m to open
+-> Items: buying and using items are done with mouse click in shop and inventory ui respectively (only one potion active at once and resets when moving rooms)
 ->Debug: g for map grid and y for room position entry testing, platform and interactive door debug visuals are booleans set in constructors
 Recommended Keybinds:
 The keybinds are made to support both arrow key movement and a/d movement so double keybinds are used to make either easy to use.
@@ -66,5 +67,6 @@ Art credit:
  * Other art, Leonardo Ai and ChatGPT
 
 Author Paul
+
 
 
