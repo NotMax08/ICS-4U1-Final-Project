@@ -10,6 +10,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class StrengthPotion extends Items
 {
+    /**
+     * @param isInInventory -> true if the object is in 
+     * player's inventory 
+     */
     public StrengthPotion(boolean isInInventory)
     {
         super(isInInventory);
@@ -18,6 +22,10 @@ public class StrengthPotion extends Items
         setImage(image);
     }
     
+    /**
+     * effect that increases player damage by 3 and lasts 30s
+     * @param player -> player that gets the buff
+     */
     @Override
     public void effect(Player player) {
         player.activateStrengthBoost(); 

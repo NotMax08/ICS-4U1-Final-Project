@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class CurrencyDisplay here.
+ * Displays player currency at the top right corner of the screen
  * 
  * @author Julian
  * @version 2026

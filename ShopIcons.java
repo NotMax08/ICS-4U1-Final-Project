@@ -32,6 +32,7 @@ public abstract class ShopIcons extends Actor
     
     //declare and intialize text manager;
     private TextManager textManager = new TextManager();
+    
     public void act()
     {
         hoverEffect();
@@ -73,7 +74,13 @@ public abstract class ShopIcons extends Actor
         //sets the starting image
         setImage(image);
     }
-
+    
+    /**
+     * Mangages the hovering effect
+     * When player mouse is hovering above the icons
+     * it shows white border and when 
+     * mouse is removed from icon, it returns to original state
+     */
     private void hoverEffect()
     {
         if(Greenfoot.mouseMoved(this))
@@ -126,5 +133,11 @@ public abstract class ShopIcons extends Actor
             p.updateItemCount(itemIndex,1); // adds 1 to item count in inventory
             p.addToCurrency(-price); // removes money from player profile
         }
+    }
+    
+    public void removeIcon()
+    {
+        cleanUp();
+        getWorld().removeObject(this);
     }
 }

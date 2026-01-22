@@ -2,7 +2,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.*;
 
 /**
- * Write a description of class PotionShop here.
+ * User interface class that allows player to view and purchase
+ * a variety of potions. 
+ * Manages background visuals of shop and initializes the specific
+ * icon for each one.
  * 
  * @author Julian
  * @version 2026
@@ -33,7 +36,6 @@ public class PotionShop extends ShopUI
         items.add(new ShrinkPotionIcon());
         items.add(new SpeedPotionIcon());
         items.add(new StrengthPotionIcon());
-        items.add(new KeyIcon());
         // Call the manager from the superclass
         iconManager(items);
     }

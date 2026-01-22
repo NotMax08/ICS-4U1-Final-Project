@@ -1,6 +1,7 @@
 import greenfoot.*;  
 /**
- * The potion merchant in the game
+ * The potion merchant in the game 
+ * Interacts with player and sells Items
  * 
  * @author Julian
  * @version 2026
@@ -11,8 +12,11 @@ import greenfoot.*;
 public class PotionMerchant extends NPC
 {   
     private boolean textVisible = false;
-    PotionShop shop;
-
+    PotionShop shop; //opens the shop Object if player chooses to
+    
+    /** 
+     * constructor for potion merchant
+     */
     public PotionMerchant()
     {
         image = new GreenfootImage("potionMerchant.png");
@@ -20,6 +24,9 @@ public class PotionMerchant extends NPC
         setImage(image);
     }
 
+    /**
+     * Gives player option whether they want to open shop or not
+     */
     public void dialogue()
     {
         //if there is no text show question

@@ -10,6 +10,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class ShrinkPotion extends Items
 {
+    /**
+     * @param isInInventory -> true if the object is in 
+     * player's inventory 
+     */
     public ShrinkPotion(boolean isInInventory)
     {
         super(isInInventory);
@@ -18,12 +22,15 @@ public class ShrinkPotion extends Items
         setImage(image);
     }
     
+    /**
+     * effect that shrinks player size down for 10 seconds
+     * @param player -> player that gets the buff
+     */
     @Override
-    public void effect(Player player)
+    protected void effect(Player player)
     {
         player.shrinkPlayer();
         player.updateItemCount(2, -1); // decrease count at index 2
-        System.out.println("Shrink Potion Used!");
     }
 }
 

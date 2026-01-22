@@ -13,13 +13,13 @@ public class ManaDisplay extends Display
 {
     // Images
     private GreenfootImage[] manaImages;
-    
+
     // Constants
     private static final int MANA_WIDTH = 300;
     private static final int MANA_HEIGHT = 55;
-    
+
     private int previousMana = -1;
-    
+
     /**
      * Main constructor for Mana display
      * @param screenX   X screen position
@@ -29,10 +29,10 @@ public class ManaDisplay extends Display
      */
     public ManaDisplay(int screenX, int screenY, Camera camera, Player player){
         super(screenX, screenY, camera, player);
-        
+
         initializeImages();
     }
-    
+
     private void initializeImages(){
         manaImages = new GreenfootImage[9]; // 0 through 8
         for(int i = 0; i < manaImages.length; i++){
@@ -41,11 +41,11 @@ public class ManaDisplay extends Display
         }
         updateDisplay();
     }
-    
+
     @Override
     protected void updateDisplay(){
-        int currentMana = Math.min(player.getMana(), 8);
-        
+        int currentMana = Math.max(0, Math.min(player.getMana(), 8));
+
         if(currentMana != previousMana){
             setImage(manaImages[currentMana]);
             previousMana = currentMana;
