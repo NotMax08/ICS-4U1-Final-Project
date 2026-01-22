@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=RoomOne
-comment0.text=\n\ @author\ Paul\ assisted\ by\ Claude\n
+comment0.text=\r\n\ @author\ Paul\ assisted\ by\ Claude\r\n
 comment1.params=sourceRoom
 comment1.target=RoomOne(java.lang.String)
 comment2.params=

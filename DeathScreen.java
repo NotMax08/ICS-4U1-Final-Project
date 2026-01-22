@@ -11,6 +11,9 @@ public class DeathScreen extends World
     GreenfootImage death = new GreenfootImage("deathscreen.jpg");
     GreenfootImage youdied = new GreenfootImage("youdied.png");
     Button backToStart;
+    /**
+     * Death screen trigger by player dying at any point.
+     */
     public DeathScreen()
     {    
         super(800, 600, 1); 
@@ -25,11 +28,15 @@ public class DeathScreen extends World
         
         SoundManager.getInstance().playBackgroundMusic("DeathScreenMusic.mp3");
     }
-    
+    /**
+     * Starts background music when world is spawned and instance is started
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("DeathScreenMusic.mp3");
     }
-    
+    /**
+     * Stops music when instance is paused
+     */
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }

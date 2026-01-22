@@ -14,11 +14,13 @@ import greenfoot.*;
  * "electricBolt" by @PNMCarrieRailfan on freesound.org
  * "strike" by SoundFlakes on freesound.org
  * "throw" by Anton on freesound.org
+ * "Bzzt" sound by @danielpodlovics on freesound
  * BossMusic by @Komiku on chosic
  * All other background music by @Teecup_Thief on itch.io
  * 
  * Art credit:
  * Boss art by Angelina
+ * Other art, Leonardo Ai and ChatGPT
  * 
  * @author Paul and Robin
  */
@@ -50,7 +52,9 @@ public abstract class GameWorld extends World {
 
     // Background
     protected GreenfootImage fullBackground;
-
+    /**
+     * Super class constructor for all room worlds
+     */
     public GameWorld() {
         super(SCREEN_WIDTH, SCREEN_HEIGHT, 1, false);
         camera = new Camera(SCREEN_WIDTH, SCREEN_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);

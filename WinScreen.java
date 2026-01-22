@@ -10,6 +10,9 @@ public class WinScreen extends World
     GreenfootImage win = new GreenfootImage("winscreen.jpg");
     GreenfootImage youwin = new GreenfootImage("youwin.png");
     Button backToStart;
+    /**
+     * Screen triggered by defeating boss
+     */
     public WinScreen()
     {    
         super(800, 600, 1); 
@@ -24,11 +27,15 @@ public class WinScreen extends World
         
         SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
-    
+    /**
+     * Starts background music when world is spawned and instance is started
+     */
     public void started() {
         SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
-    
+    /**
+     * Stops music when instance is paused
+     */    
     public void stopped() {
         SoundManager.getInstance().pauseBackgroundMusic();
     }
