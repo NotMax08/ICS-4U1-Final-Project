@@ -205,6 +205,7 @@ public class Player extends ScrollingActor {
         maxHealth = STARTING_HEALTH_POINTS;
         currentHealth = STARTING_HEALTH_POINTS;
         currentMana = 0;
+        godMode = false;
 
         Greenfoot.setWorld(new DeathScreen());
     }
