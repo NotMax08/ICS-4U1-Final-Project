@@ -117,7 +117,6 @@ public class Knight extends GroundEnemy {
         
         updateAnimation();
         updateImage();
-        System.out.println(behaviour);
     }
     
     @Override
