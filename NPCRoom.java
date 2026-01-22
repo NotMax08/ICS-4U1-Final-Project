@@ -74,7 +74,7 @@ public class NPCRoom extends GameWorld {
         PotionMerchant potionMerchant = new PotionMerchant();
         addObject(potionMerchant, getWidth()/2, getHeight()/2 + 200);
         
-        //SoundManager.getInstance().playBackgroundMusic("NPCRoomMusic.mp3");
+        SoundManager.getInstance().playBackgroundMusic("NPCRoomMusic.mp3");
     }
     
     public NPCRoom() {

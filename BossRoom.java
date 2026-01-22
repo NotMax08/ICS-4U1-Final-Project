@@ -74,7 +74,7 @@ public class BossRoom extends GameWorld {
         staBeePhaseTwo2 = new Boss(3);
         addObject(staBee, BOSS_WORLD_WIDTH / 2, -150); // Spawn boss off screen
         
-        //SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
+        SoundManager.getInstance().playBackgroundMusic("BossMusic.mp3");
     }
     
     public BossRoom() {
