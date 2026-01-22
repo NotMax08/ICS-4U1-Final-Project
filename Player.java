@@ -39,7 +39,7 @@ public class Player extends ScrollingActor {
     private int maxHealth = STARTING_HEALTH_POINTS;
     private int currentHealth = maxHealth;
     private int currentMana = 0;
-    private static int currency = 1000;
+    private static int currency = 0;
 
     // Character states 
     private boolean onGround = false;
