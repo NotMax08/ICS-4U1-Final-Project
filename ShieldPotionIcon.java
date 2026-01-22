@@ -16,7 +16,7 @@ public class ShieldPotionIcon extends ShopIcons
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
         
-        shieldPotion = new ShieldPotion();
+        shieldPotion = new ShieldPotion(false);
         
         this.price = 10;
         this.itemIndex = 1;

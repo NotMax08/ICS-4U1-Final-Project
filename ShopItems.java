@@ -6,23 +6,30 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Julian
  * @version 2026
  * 
- * Images all from Rafaelchm on OpenGameArt.org
+ * 
  */
 public abstract class ShopItems extends Actor
 {
-    public int price;
-    public boolean inInventory = false; 
-    public GreenfootImage image; 
-    public void act()
+    protected int price;
+    protected GreenfootImage image; 
+    protected boolean isInInventory;
+    public ShopItems(boolean isInInventory)
     {
-        // Add your action code here.
+        this.isInInventory = isInInventory;
     }
     
-    /**
-     * Method to make a white square border on potion image when mouse hovers over image.
-     */
-    public void hoverEffect()
+    public void act()
     {
+        if(isInInventory)
+        {
+            if(Greenfoot.mouseClicked(this))
+            {
+                effect();
+            }
+        }
+    }
+    
+    public void effect(){
         
     }
 }

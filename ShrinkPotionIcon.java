@@ -15,7 +15,7 @@ public class ShrinkPotionIcon extends ShopIcons
         image.scale(image.getWidth()/18, image.getHeight()/18);
         imageSetup(image);
         
-        shrinkPotion = new ShrinkPotion();
+        shrinkPotion = new ShrinkPotion(false);
         
         this.price = 15;
         this.itemIndex = 2;
