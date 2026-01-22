@@ -39,7 +39,7 @@ public class Boss extends Actor
     // Modifyable variables
     public static double teleportFrames = 25; // Number of frames it takes to teleport
     private int enterSpeedMultiplier = 4; // How fast the boss enters the screen
-    private static final int totalHealth = 60; // Boss total starting health
+    private static final int totalHealth = 120; // Boss total starting health
     
     // Other variables
     private static int bossesDefeated; // When counter reaches 3, win screen is triggered
@@ -132,16 +132,20 @@ public class Boss extends Actor
      * Action method for entering
      */
     private void entering(){
+        // Gradually enter screen
         this.setLocation(this.getX(),this.getY()+enterSpeedMultiplier);
+        // If at desired location
         if (this.getY() >= 300){
+            // Create boss health bar
             bossHealthBar = new SuperStatBar(totalHealth, totalHealth, null, 400, 30, 0, green, black, false, black, 3);
             if (variant == 3){
+                // If phase two, create the second boss' health bar below the first so it is visible
                 getWorld().addObject(bossHealthBar,400,50);
             }
             else{
                 getWorld().addObject(bossHealthBar,400,85);
             }
-            entering = false;
+            entering = false; // State
         }
     }
     
@@ -170,12 +174,15 @@ public class Boss extends Actor
      */
     private void teleporting(int x, int y, String newPose){
         int newTransparency;
+        // Gradually fade in/out
         if (!teleported){
            newTransparency = this.getImage().getTransparency() - (int)(255/(teleportFrames/2));
         }
         else{
            newTransparency = this.getImage().getTransparency() + (int)(255/(teleportFrames/2));
         }
+        
+        // Once transparent, teleport to new location
         if (newTransparency <= 0){
             newTransparency = 0;
             this.setI(newPose);
@@ -183,8 +190,9 @@ public class Boss extends Actor
             teleported = true;
         }
         else if(newTransparency >= 255){
+            // Once teleport is complete
             newTransparency = 255;
-            teleporting = false;
+            teleporting = false; // State
         }
         this.getImage().setTransparency(newTransparency);
     }
@@ -195,7 +203,7 @@ public class Boss extends Actor
      * @param frames Number of frames to pause for
      */
     private void waitFrames(int frames){
-        waiting = true;
+        waiting = true; // State
         attackCounter = 0;
         waitFrames = frames;
     }
@@ -247,7 +255,7 @@ public class Boss extends Actor
             weapon.attackFly1(attackDirectionLeft);
         }
         if(attackCounter==62){
-            attackOne = false;
+            attackOne = false; // State
         }
         attackCounter++;
     }
@@ -257,7 +265,7 @@ public class Boss extends Actor
      */
     private void attack2(){
         attackCounter = 0;
-        attackTwo = true;
+        attackTwo = true; // State
         
         // Initial teleport
         int playerLocation = BossRoom.player.getX();
@@ -276,7 +284,7 @@ public class Boss extends Actor
             setI("DownDown");
         }
         if(attackCounter==139){
-            attackTwo = false;
+            attackTwo = false; // State
         }
         attackCounter++;
     }
@@ -289,7 +297,7 @@ public class Boss extends Actor
      */
     private void attack3(boolean teleport,boolean invert){
         attackCounter = 0;
-        attackThree = true;
+        attackThree = true; // State
         int type;
         
         // Initial teleport
@@ -297,6 +305,7 @@ public class Boss extends Actor
             teleport(400,300,"FrontUp");
             weapon.teleport(490,280,true,270);
         }
+        // Direction of attack
         if (!invert){
             type=3;
         }
@@ -311,7 +320,7 @@ public class Boss extends Actor
      */
     private void attackingThree(){
         if (attackCounter==66){
-            attackThree = false;
+            attackThree = false; // State
         }
         attackCounter++;
     }
@@ -322,10 +331,12 @@ public class Boss extends Actor
     private void attackSequence(){
         int attackType=-1;
         
+        // Loops attack sequence if final attack has been completed
         if (attackNumber == attackPattern.length){
             attackNumber=0;
         }
         
+        // If previous attack is complete, begin the next one
         if (!isAttacking()){
             attackType = attackPattern[attackNumber];
             attackNumber++;
@@ -366,11 +377,14 @@ public class Boss extends Actor
      * @param damage Number of damage points to take
      */
     public void takeDamage(int damage){
+        // Boss will not take damage while entering
         if (!entering){
             currentHealth -= damage;
             bossHealthBar.update(currentHealth);
+            // Remove boss from world if defeated
             if (currentHealth <= 0){
                 if (variant == 1){
+                    // Spawn phase two if phase one is defeated
                     getWorld().addObject(BossRoom.staBeePhaseTwo1,200,-150);
                     getWorld().addObject(BossRoom.staBeePhaseTwo2,600,-150);
                 }
@@ -380,6 +394,7 @@ public class Boss extends Actor
                 getWorld().removeObject(this);
                 weapon.removeSelf();
                 if (bossesDefeated == 3) {
+                    // Transition to win screen if phase two is defeated
                     Greenfoot.setWorld(new WinScreen());
                 }
             }

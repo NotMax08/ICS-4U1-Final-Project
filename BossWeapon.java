@@ -23,6 +23,9 @@ public class BossWeapon extends Actor
     private int attackCounter;
     private int playerLocation;
     
+    private GreenfootSound strikeSound = new GreenfootSound("strikeSound.wav");
+    private GreenfootSound throwSound = new GreenfootSound("throwSound.wav");
+    
     /**
      * Boss weapon constructor
      *
@@ -74,19 +77,23 @@ public class BossWeapon extends Actor
      */
     private void teleporting(int x, int y, boolean left){
         int newTransparency;
+        // Fade in/out
         if (!teleported){
            newTransparency = this.getImage().getTransparency() - (int)(255/(teleportFrames/2));
         }
         else{
            newTransparency = this.getImage().getTransparency() + (int)(255/(teleportFrames/2));
         }
+        
         if (newTransparency <= 0){
+            // If invisible, teleport to new location
             newTransparency = 0;
             this.setLocation(teleportX,teleportY);
             this.setRotation(teleportRotation);
             teleported = true;
         }
         else if(newTransparency >= 255){
+            // If teleport is complete
             newTransparency = 255;
             teleporting = false;
         }
@@ -112,8 +119,11 @@ public class BossWeapon extends Actor
     private void attackFlying1(boolean left){
         if (attackCounter == 0){
             lethal = true;
+            throwSound.play();
         }
+        
         if (attackCounter <= 13){
+            // Travel horizontally
             if (left){
                 this.setLocation(this.getX() + weaponSpeed, this.getY());
             }
@@ -125,6 +135,7 @@ public class BossWeapon extends Actor
             setI(left);
         }
         else if (attackCounter <= 21){
+            // Travel diagonally downwards
             if (left){
                 this.setRotation(344);
                 this.setLocation(this.getX() - 38, this.getY() + 19);
@@ -135,6 +146,7 @@ public class BossWeapon extends Actor
             }
         }
         else if (attackCounter <= 30){
+            // Travel diagonally upwards
             if (left){
                 this.setRotation(16);
                 this.setLocation(this.getX() - 38, this.getY() - 19);
@@ -145,7 +157,8 @@ public class BossWeapon extends Actor
             }
         }
         else if (attackCounter == 31){
-            attack1 = false;
+            // Finish attack
+            attack1 = false; // State
             lethal = false;
             BossRoom.staBee.setAttackOneState(false);
         }
@@ -156,9 +169,10 @@ public class BossWeapon extends Actor
      * To call action in attack sequence & set initial values
      */
     public void attackFly2(){
-        attack2=true;
+        attack2=true; // State
         attackCounter = 0;
         playerLocation = BossRoom.player.getX();
+        strikeSound.play();
     }
     
     /**
@@ -168,18 +182,23 @@ public class BossWeapon extends Actor
         if (attackCounter == 45){
             lethal = true;
         }
+        
         if (attackCounter >= 45 && attackCounter<=52){
+            // Travel downwards
             this.setLocation(this.getX(), this.getY() + weaponSpeed + 2);
         }
         else if (attackCounter == 53){
+            // Initial barrier stopping weapon's movement
             lethal=false;
             getWorld().addObject(new BossWeaponEffect(1), playerLocation, 500);
         }
         else if (attackCounter == 118){
+            // Lethal magic effect
             getWorld().addObject(new BossWeaponEffect(2), playerLocation, 531);
         }
         else if (attackCounter == 138){
-            attack2 = false;
+            // Complete attack
+            attack2 = false; // State
         }
         attackCounter++;
     }

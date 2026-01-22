@@ -24,6 +24,8 @@ public class BossRoom extends GameWorld {
     private static final int ENTRY_SPAWN_X = 150;
     private static final int ENTRY_SPAWN_Y = 500;
     
+    private boolean debugVisuals;
+    GreenfootImage door = new GreenfootImage("doorway.png");
     public BossRoom(String sourceRoom) {
         super(); // This creates the camera
         
@@ -31,11 +33,17 @@ public class BossRoom extends GameWorld {
         camera.centerOn(BOSS_WORLD_WIDTH / 2, BOSS_WORLD_HEIGHT / 2);
         
         fullBackground = new GreenfootImage("bossroom.jpg");
+        door.scale(200,350);
+        fullBackground.drawImage(door, -20, 500);
         fullBackground.scale(BOSS_WORLD_WIDTH, BOSS_WORLD_HEIGHT);
         
         initializeMapGrid();
-        createPlatformVisuals();
-        createInteractiveDoorVisuals();
+        
+        debugVisuals = false;
+        if(debugVisuals){
+            createPlatformVisuals();
+        }
+        createInteractiveDoors();
  
         // Determine spawn position
         int spawnX = DEFAULT_SPAWN_X;
@@ -181,7 +189,7 @@ public class BossRoom extends GameWorld {
         
         // Interactive Doors - safe to spawn near these
         int[][] interactiveData = {
-            {50, 500, 80, 140},   // Left door
+            {70, 450, 80, 140},   // Left door
         };
         
         // Convert doors to tiles
@@ -270,9 +278,9 @@ public class BossRoom extends GameWorld {
         }
     }
     
-    private void createInteractiveDoorVisuals() {
+    private void createInteractiveDoors() {
         int[][] doorRegions = {
-            {50, 500, 80, 140},   // Left door
+            {70, 450, 80, 140},   // Left door
         };
         
         for(int[] region : doorRegions) {
