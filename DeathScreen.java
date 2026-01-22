@@ -2,15 +2,20 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)"
  /**
  * If you die this screen spawns.
  * 
+ * Images from Leonardo Ai and ChatGPT
+ * 
  * @author Paul
  */
 public class DeathScreen extends World
 {
     GreenfootImage death = new GreenfootImage("deathscreen.jpg");
+    GreenfootImage youdied = new GreenfootImage("youdied.png");
     Button backToStart;
     public DeathScreen()
     {    
         super(800, 600, 1); 
+        youdied.scale(200,100);
+        death.drawImage(youdied, (getWidth()/2) - 230, (getHeight()/7));
         death.scale(800,600);
         setBackground(death);
         

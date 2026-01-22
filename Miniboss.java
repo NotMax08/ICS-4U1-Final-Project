@@ -485,6 +485,12 @@ public class Miniboss extends Actor {
             getWorld().removeObject(currentSummonBg);
         }
         
+        
+        if (player != null) {
+            player.upgradeBasicAttack();
+            String text = "You Have Received a Weapon Upgrade";
+            getWorld().showText(text, getWorld().getWidth()/2, getWorld().getHeight()/2);
+        }
         getWorld().removeObject(this);
     }
 }

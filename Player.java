@@ -45,7 +45,7 @@ public class Player extends ScrollingActor {
     private boolean isStunned = false;
     private boolean isAttacking = false;
     private boolean isTakingDamage = false;
-    private boolean attackUpgraded = false;
+    private static boolean attackUpgraded = false;
     private static boolean magicUnlocked = true;
     private boolean isHealing = false;
 
