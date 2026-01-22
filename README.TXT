@@ -9,6 +9,8 @@ Keybinds:
 -> Abilities:  q or h to heal, hold for 2 seconds and shift or k for magic ability
 -? Inventory: tab (empty by default, does not count your weapon)
 -> Map: m to open
+-> Interactive Doors: f to open
+-> Items: buying and using items are done with mouse click in shop and inventory ui respectively (resets when moving rooms)
 ->Debug: g for map grid and y for room position entry testing, platform and interactive door debug visuals are booleans set in constructors
 Recommended Keybinds:
 The keybinds are made to support both arrow key movement and a/d movement so double keybinds are used to make either easy to use.
@@ -22,6 +24,7 @@ Cheat Code:
 - room one to room two entrance is at the top of room one
 - room two to room three entrance is at the top righ tof room two
 - npc room and miniboss room are found in the right and left doorways roughly in the middle y level in room two respectively
+- killing miniboss grants weapon upgrade that deals more damage and makes boss easier
 - boss room is found in room one and is unlocked via key found in room three
 - room three needs a shrinking potion to access the top and find the key
 
@@ -65,4 +68,8 @@ Art credit:
  * Other art, Leonardo Ai and ChatGPT
 
 Author Paul
+
+
+
+
 
