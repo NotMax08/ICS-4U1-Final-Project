@@ -35,6 +35,9 @@ public abstract class Display extends ScrollingActor
         this.player = player;
     }
     
+    /**
+     * Main act method
+     */
     public void act()
     {
         maintainScreenPosition();
