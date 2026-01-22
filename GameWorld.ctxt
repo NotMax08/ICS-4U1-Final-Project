@@ -1,8 +1,9 @@
 #BlueJ class context
 comment0.target=GameWorld
-comment0.text=\r\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\r\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\r\n\ \r\n\ Sound\ credits\:\r\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\r\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\r\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\r\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\r\n\ "hit"\ \ \ \ by\ @mixkit\r\n\ "damage"\ by\ @freesound_community\ on\ pixabay\r\n\ "electricBolt"\ by\ @PNMCarrieRailfan\ on\ freesound.org\r\n\ "strike"\ by\ SoundFlakes\ on\ freesound.org\r\n\ "throw"\ by\ Anton\ on\ freesound.org\r\n\ BossMusic\ by\ @Komiku\ on\ chosic\r\n\ All\ other\ background\ music\ by\ @Teecup_Thief\ on\ itch.io\r\n\ \r\n\ Art\ credit\:\r\n\ Boss\ art\ by\ Angelina\r\n\ \r\n\ @author\ Paul\ and\ Robin\r\n
+comment0.text=\r\n\ Abstract\ base\ class\ for\ all\ game\ worlds/levels\r\n\ Handles\ common\ functionality\ like\ camera,\ displays\ and\ player\ tracking\r\n\ \r\n\ Sound\ credits\:\r\n\ "sword"\ \ by\ @freesound_community\ on\ pixabay\r\n\ "magic"\ \ by\ @yodguard\ on\ pixabay\r\n\ "heal"\ \ \ by\ @yodguard\ on\ pixabay\r\n\ "jump"\ \ \ by\ @Jofae\ on\ pixabay\r\n\ "hit"\ \ \ \ by\ @mixkit\r\n\ "damage"\ by\ @freesound_community\ on\ pixabay\r\n\ "electricBolt"\ by\ @PNMCarrieRailfan\ on\ freesound.org\r\n\ "strike"\ by\ SoundFlakes\ on\ freesound.org\r\n\ "throw"\ by\ Anton\ on\ freesound.org\r\n\ \r\n\ BossMusic\ by\ @Komiku\ on\ chosic\r\n\ All\ other\ background\ music\ by\ @Teecup_Thief\ on\ itch.io\r\n\ \r\n\ Art\ credit\:\r\n\ Boss\ art\ by\ Angelina\r\n\ Other\ art,\ Leonardo\ Ai\ and\ ChatGPT\r\n\ \r\n\ @author\ Paul\ and\ Robin\r\n
 comment1.params=
 comment1.target=GameWorld()
+comment1.text=\r\n\ Super\ class\ constructor\ for\ all\ room\ worlds\r\n
 comment10.params=
 comment10.target=MapGrid\ getMapGrid()
 comment11.params=
