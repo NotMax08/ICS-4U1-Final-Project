@@ -26,12 +26,10 @@ public class StartWorld extends World
         title.scale(500,250);
         bg.drawImage(title, (getWidth()/4)-40,getHeight()/7);
         setBackground(bg);
-        
-        //SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
     
     public void started() {
-        //SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
+        SoundManager.getInstance().playBackgroundMusic("Room1Music.mp3");
     }
     
     public void stopped() {

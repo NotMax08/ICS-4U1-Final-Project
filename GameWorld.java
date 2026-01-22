@@ -11,6 +11,14 @@ import greenfoot.*;
  * "jump"   by @Jofae on pixabay
  * "hit"    by @mixkit
  * "damage" by @freesound_community on pixabay
+ * "electricBolt" by @PNMCarrieRailfan on freesound.org
+ * "strike" by SoundFlakes on freesound.org
+ * "throw" by Anton on freesound.org
+ * BossMusic by @Komiku on chosic
+ * All other background music by @Teecup_Thief on itch.io
+ * 
+ * Art credit:
+ * Boss art by Angelina
  * 
  * @author Paul and Robin
  */
