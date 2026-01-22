@@ -21,4 +21,9 @@ public class StrengthPotion extends ShopItems
     {
         // Add your action code here.
     }
+    @Override
+    public void effect(Player player) {
+        player.activateStrengthBoost(); 
+        player.updateItemCount(0, -1); 
+    }
 }

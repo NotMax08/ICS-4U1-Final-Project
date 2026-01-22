@@ -24,7 +24,7 @@ public class InventoryDisplay extends Display {
 
     // Inventory utility - Using real ShopItems actors to allow clicking
     private ArrayList<ShopItems> activeItems = new ArrayList<ShopItems>();
-    // List for the quantity labels using the custom TextBox class
+    // List for the quantity labels using the custom TextBox class for retro font
     private ArrayList<TextBox> activeLabels = new ArrayList<TextBox>(); 
     
     private int[][] slotLocations; 
@@ -79,7 +79,7 @@ public class InventoryDisplay extends Display {
             clearItemsFromWorld(); // Remove actors when closed
             lastTotalCount = -1;   // Reset tracker
         } else {
-            // Position the inventory UI
+            // Position the inventory UI (Accounting for camera scroll)
             int invX = screenX + 350;
             int invY = screenY - 250;
             setLocation(invX, invY);
@@ -92,8 +92,10 @@ public class InventoryDisplay extends Display {
             // Check if we have entered a new room (World Change)
             // If our actors belong to an old world, they won't be visible in the new one
             boolean worldChanged = false;
-            if (!activeItems.isEmpty() && activeItems.get(0).getWorld() != getWorld()) {
-                worldChanged = true;
+            if (!activeItems.isEmpty()) {
+                if (activeItems.get(0).getWorld() != getWorld()) {
+                    worldChanged = true;
+                }
             }
 
             // Re-sync items if count changed, if UI just opened, or if we switched rooms
@@ -102,7 +104,7 @@ public class InventoryDisplay extends Display {
                 lastTotalCount = currentTotal;
             }
             
-            // Move real actors to follow the scrolling UI and slot locations
+            // Move real actors to follow the UI position and slot locations
             positionItems(invX, invY);
         }
     }
@@ -113,12 +115,12 @@ public class InventoryDisplay extends Display {
     private void refreshInventoryItems() {
         clearItemsFromWorld();
         
-        if (getWorld() == null) return; // Safety check
+        if (getWorld() == null) return; 
 
         // 1. Identify which items the player has and add to list
         // Index 0: Strength, 1: Shield, 2: Shrink, 3: Key
         if (player.getItemCount(0) > 0) activeItems.add(new StrengthPotion(true));
-        if (player.getItemCount(1) > 0) activeItems.add(new ShieldPotion(true));
+        if (player.getItemCount(1) > 0) activeItems.add(new SpeedPotion(true));
         if (player.getItemCount(2) > 0) activeItems.add(new ShrinkPotion(true));
         if (player.getItemCount(3) > 0) activeItems.add(new Key(true));
 
@@ -127,10 +129,10 @@ public class InventoryDisplay extends Display {
             ShopItems item = activeItems.get(i);
             getWorld().addObject(item, 0, 0); 
             
-            // Get correct count for the specific item type
+            // Get correct count for the specific item type from static player data
             int count = 0;
             if (item instanceof StrengthPotion) count = player.getItemCount(0);
-            else if (item instanceof ShieldPotion) count = player.getItemCount(1);
+            else if (item instanceof SpeedPotion) count = player.getItemCount(1);
             else if (item instanceof ShrinkPotion) count = player.getItemCount(2);
             else if (item instanceof Key) count = player.getItemCount(3);
             
@@ -142,7 +144,7 @@ public class InventoryDisplay extends Display {
     }
 
     /**
-     * Keeps the potion actors and text labels attached to the inventory UI
+     * Keeps the potion actors and text labels attached to the inventory UI as it scrolls
      */
     private void positionItems(int invX, int invY) {
         // Find top-left corner of the background image (UI is 600x600, half is 300)
@@ -159,7 +161,7 @@ public class InventoryDisplay extends Display {
                 item.setLocation(targetX, targetY);
             }
             
-            // Move Label Actor (Offset to bottom right of the slot)
+            // Move Label Actor (Offset to bottom right of the icon)
             TextBox label = activeLabels.get(i);
             if (label != null && label.getWorld() != null) {
                 label.setLocation(targetX + 25, targetY + 30);
@@ -168,7 +170,7 @@ public class InventoryDisplay extends Display {
     }
 
     /**
-     * Removes all potion actors and text labels from the world
+     * Removes all potion actors and text labels from the current world
      */
     private void clearItemsFromWorld() {
         // Remove Potion Actors
@@ -199,7 +201,7 @@ public class InventoryDisplay extends Display {
         if (tabIsDown && !tabWasDown) {
             isOpen = !isOpen;
             if (isOpen) {
-                activeItems.clear(); // Force refresh on open
+                activeItems.clear(); // Force refresh on open to show current items
             }
         }
         tabWasDown = tabIsDown;

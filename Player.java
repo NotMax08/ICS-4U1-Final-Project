@@ -108,7 +108,14 @@ public class Player extends ScrollingActor {
     // Shrink effect
     private boolean isShrunk = false;
     private int shrinkTimer = 0;
-    private static final int SHRINK_DURATION = 600; // acts (~10 sec)
+
+    private int speedBoostTimer = 0;
+    private int strengthBoostTimer = 0;
+
+    // Constants for duration (60 acts per second)
+    private static final int SPEED_BOOST_DURATION = 3600; // 60 seconds
+    private static final int STRENGTH_BOOST_DURATION = 1800; // 30 seconds
+    private static final int SHRINK_DURATION = 600; // 10 seconds
     private static final double SHRINK_SCALE = 0.6;
 
     /**
@@ -157,6 +164,7 @@ public class Player extends ScrollingActor {
         moveVertical();
         countItems();
         //System.out.println(getWorldX() + ", " + getWorldY());
+        updateBoostTimers();
         updateShrink();
     }
 
@@ -180,8 +188,10 @@ public class Player extends ScrollingActor {
     }
 
     public static void resetInventoryAndMoney() {
-        currency = 0;
+        currency = 1000; // You had this at 0, set it to your starting amount
         itemCount = new int[4];
+        attackUpgraded = false; // Reset these so a new game starts fresh
+        magicUnlocked = false;  // Or true, depending on your game start
     }
 
     private void checkHealth(){
@@ -255,6 +265,19 @@ public class Player extends ScrollingActor {
         scaleAllImages(1.0);
         // Shift player up slightly so the larger hitbox doesn't get stuck in the floor
         worldY -= (P_HEIGHT * (1.0 - SHRINK_SCALE)); 
+    }
+
+    public void activateSpeedBoost() {
+        speedBoostTimer = SPEED_BOOST_DURATION;
+    }
+
+    public void activateStrengthBoost() {
+        strengthBoostTimer = STRENGTH_BOOST_DURATION;
+    }
+
+    private void updateBoostTimers() {
+        if (speedBoostTimer > 0) speedBoostTimer--;
+        if (strengthBoostTimer > 0) strengthBoostTimer--;
     }
 
     private void scaleAllImages(double scale) {
@@ -350,7 +373,13 @@ public class Player extends ScrollingActor {
         handleAbility();
     }
 
+    /**
+     * Handles player left/right movement and jumping logic
+     */
     private void handleMovement(){
+        // Calculate speed based on speed boost potion
+        double effectiveSpeed = (speedBoostTimer > 0) ? MOVE_SPEED * 1.2 : MOVE_SPEED;
+
         // check if in air
         if(!onGround){
             // reset ground counter when in the air
@@ -368,10 +397,10 @@ public class Player extends ScrollingActor {
             // Moving in the air
             if (Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("left")) {
                 direction = false;
-                velocityX = -MOVE_SPEED * 0.85; // Slightly reduced horizontal movement speed while in the air
+                velocityX = -effectiveSpeed * 0.85; // Uses boosted air speed
             } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
-                velocityX = MOVE_SPEED * 0.85;
+                velocityX = effectiveSpeed * 0.85; // Uses boosted air speed
             } else {
                 velocityX = 0;
             }
@@ -382,12 +411,12 @@ public class Player extends ScrollingActor {
             // Normal ground movement
             if (Greenfoot.isKeyDown("a") || Greenfoot.isKeyDown("left")) {
                 direction = false;
-                velocityX = -MOVE_SPEED;
+                velocityX = -effectiveSpeed;
                 animateRunning();
                 soundManager.playSound("run");
             } else if (Greenfoot.isKeyDown("d") || Greenfoot.isKeyDown("right")) {
                 direction = true;
-                velocityX = MOVE_SPEED;
+                velocityX = effectiveSpeed;
                 animateRunning();
                 soundManager.playSound("run");
             } else {
@@ -585,6 +614,9 @@ public class Player extends ScrollingActor {
         }
     }
 
+    /**
+     * Checks if the basic attack slash collides with enemies and applies damage
+     */
     private void checkSlashHit(int attackWorldX, int attackWorldY, int width, int height, World world){
         if(world == null) return;
 
@@ -621,8 +653,11 @@ public class Player extends ScrollingActor {
 
             if (slashLeft < targetRight && slashRight > targetLeft && slashTop < targetBottom && slashBottom > targetTop) {
 
-                // Calculate damage based on player upgrades
-                int damage = attackUpgraded ? BASIC_ATTACK_DAMAGE * 2 : BASIC_ATTACK_DAMAGE;
+                // Calculate base damage including strength potion boost
+                int baseDamageValue = (strengthBoostTimer > 0) ? BASIC_ATTACK_DAMAGE + 3 : BASIC_ATTACK_DAMAGE;
+
+                // Apply damage based on player upgrades
+                int damage = attackUpgraded ? baseDamageValue * 2 : baseDamageValue;
 
                 // Apply damage using type-specific methods
                 if (target instanceof BaseEnemy) {
@@ -630,7 +665,7 @@ public class Player extends ScrollingActor {
                 } else if (target instanceof Boss) {
                     ((Boss) target).takeDamage(damage);
                 } else if(target instanceof Miniboss){
-                    ((Miniboss) target).takeDamage(MAGIC_ATTACK_DAMAGE);
+                    ((Miniboss) target).takeDamage(damage);
                 }
 
                 soundManager.playSound("slash_enemy");
